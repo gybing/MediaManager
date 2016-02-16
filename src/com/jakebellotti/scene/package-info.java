@@ -3,4 +3,4 @@
  * @date Feb 16, 2016
  *
  */
-package com.jakebellotti;
+package com.jakebellotti.scene;

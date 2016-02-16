@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jakebellotti.LauncherController">
+   <children>
+      <Separator layoutX="3.0" layoutY="37.0" prefHeight="14.0" prefWidth="501.0" />
+      <Separator layoutY="74.0" prefHeight="14.0" prefWidth="501.0" />
+      <Label alignment="CENTER" layoutY="44.0" prefHeight="37.0" prefWidth="501.0" text="Memory Options">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <Separator layoutY="109.0" prefHeight="14.0" prefWidth="501.0" />
+      <CheckBox fx:id="memorySaverModeCheckBox" layoutX="14.0" layoutY="88.0" mnemonicParsing="false" text="Memory Saver Mode">
+         <tooltip>
+            <Tooltip text="Skip loading" />
+         </tooltip>
+      </CheckBox>
+      <Button fx:id="launchButton" layoutX="-1.0" layoutY="446.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="251.0" text="Launch">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="exitButton" layoutX="249.0" layoutY="446.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="252.0" text="Exit">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Label alignment="CENTER" prefHeight="43.0" prefWidth="500.0" text="Tip: Hover over any option to see it'd description in the tooltip" />
+   </children>
+</AnchorPane>
