@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jakebellotti.LauncherController">
+<AnchorPane maxHeight="500.0" maxWidth="500.0" minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jakebellotti.scene.launcher.LauncherController">
    <children>
       <Separator layoutX="3.0" layoutY="37.0" prefHeight="14.0" prefWidth="501.0" />
       <Separator layoutY="74.0" prefHeight="14.0" prefWidth="501.0" />
