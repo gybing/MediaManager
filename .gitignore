@@ -49,6 +49,7 @@ Temporary Items
 about.txt
 bin/
 data/
+lib/
 .settings/org.eclipse.jdt.core.prefs
 .project
 .classpath
