@@ -2,6 +2,7 @@ package com.jakebellotti;
 
 import java.util.Optional;
 
+import com.jakebellotti.io.DatabaseConnection;
 import com.jakebellotti.io.DefinitionRetriever;
 import com.jakebellotti.scene.launcher.Launcher;
 
@@ -14,8 +15,10 @@ import com.jakebellotti.scene.launcher.Launcher;
 public class MediaManager {
 	
 	private static DefinitionRetriever definitionRetriever;
+	private static DatabaseConnection database = new DatabaseConnection();
 	
 	public static void main(String[] arguments) {
+		database.connect();
 		Launcher.main(arguments);
 	}
 

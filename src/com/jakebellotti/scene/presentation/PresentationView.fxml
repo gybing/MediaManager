@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="615.0" minWidth="1300.0" prefHeight="615.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jakebellotti.scene.presentation.PresentationViewController">
+   <children>
+      <ComboBox fx:id="viewTypeComboBox" layoutX="14.0" layoutY="25.0" prefHeight="31.0" prefWidth="267.0" />
+      <Label alignment="CENTER" layoutX="14.0" layoutY="4.0" prefHeight="21.0" prefWidth="267.0" text="View Type" />
+      <StackPane layoutX="14.0" layoutY="176.0" prefHeight="374.0" prefWidth="267.0" AnchorPane.bottomAnchor="65.0" AnchorPane.topAnchor="176.0">
+         <children>
+            <ListView fx:id="movieList" prefHeight="359.0" prefWidth="267.0" style="-fx-background-radius: 0;" />
+         </children>
+      </StackPane>
+      <TextField fx:id="searchTextField" layoutX="14.0" layoutY="146.0" prefHeight="31.0" prefWidth="211.0" promptText="Search" style="-fx-background-radius: 0;" />
+      <Button fx:id="resetFiltersButton" layoutX="224.0" layoutY="116.0" mnemonicParsing="false" style="-fx-background-radius: 0;" text="Reset" />
+      <Button fx:id="manageFiltersButton" layoutX="14.0" layoutY="116.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="211.0" style="-fx-background-radius: 0;" text="Manage Filters" />
+      <ComboBox fx:id="orderByComboBox" layoutX="14.0" layoutY="87.0" prefHeight="31.0" prefWidth="267.0" style="-fx-background-radius: 0;" />
+      <Label alignment="CENTER" layoutX="14.0" layoutY="64.0" prefHeight="21.0" prefWidth="267.0" text="Order By" />
+      <StackPane layoutX="14.0" layoutY="548.0" AnchorPane.bottomAnchor="36.0">
+         <children>
+            <Button fx:id="upMoviesButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="267.0" style="-fx-background-radius: 0;" text="▲">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </StackPane>
+      <StackPane layoutX="14.0" layoutY="578.0" AnchorPane.bottomAnchor="6.0">
+         <children>
+            <Button fx:id="downMoviesButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="267.0" style="-fx-background-radius: 0;" text="▼">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </StackPane>
+      <StackPane layoutX="308.0" layoutY="58.0" minWidth="300.0" AnchorPane.bottomAnchor="112.0" AnchorPane.topAnchor="58.0">
+         <children>
+            <ImageView fx:id="moviePoster" fitHeight="445.0" fitWidth="300.0" pickOnBounds="true" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="308.0" prefHeight="58.0" prefWidth="990.0" style="-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),        linear-gradient(#020b02, #3a3a3a),        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%); -fx-background-radius: 15;" AnchorPane.leftAnchor="308.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="movieNameLabel" alignment="CENTER" prefHeight="58.0" style="-fx-text-fill: white; -fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , -1 );" text="Road To Perdition (2002)">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+      <StackPane layoutX="308.0" layoutY="506.0" AnchorPane.bottomAnchor="86.0">
+         <children>
+            <ProgressBar prefHeight="23.0" prefWidth="300.0" progress="0.72" style="-fx-accent: yellow;" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="308.0" layoutY="527.0" prefHeight="23.0" prefWidth="300.0" AnchorPane.bottomAnchor="65.0">
+         <children>
+            <ProgressBar prefHeight="23.0" prefWidth="347.0" progress="0.77" style="-fx-accent: green;" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="620.0" layoutY="85.0" AnchorPane.leftAnchor="620.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="85.0">
+         <children>
+            <Label fx:id="movieInfoLabel" alignment="CENTER" prefHeight="21.0" prefWidth="655.0" text="PG-13  |  106 min  |  Drama, Sci-Fi, Thriller  |  2 August 2002 (USA)" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="620.0" layoutY="384.0" prefHeight="195.0" prefWidth="655.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="620.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="384.0">
+         <children>
+            <ListView fx:id="movieActorListView" prefHeight="142.0" prefWidth="655.0" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="626.0" layoutY="363.0" AnchorPane.leftAnchor="626.0" AnchorPane.rightAnchor="19.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="21.0" prefWidth="655.0" text="Actors" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="308.0" layoutY="548.0" AnchorPane.bottomAnchor="36.0">
+         <children>
+            <Button fx:id="manuallyModifyDataButton" mnemonicParsing="false" style="-fx-background-radius: 0;" text="Manually Modify Data" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="473.0" layoutY="548.0" AnchorPane.bottomAnchor="36.0">
+         <children>
+            <Button fx:id="retrieveDataButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="134.0" style="-fx-background-radius: 0;" text="Retrieve Data" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="620.0" layoutY="159.0" AnchorPane.leftAnchor="620.0" AnchorPane.rightAnchor="25.0">
+         <children>
+            <TextArea fx:id="moviePlotTextArea" prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="620.0" layoutY="138.0" AnchorPane.leftAnchor="620.0" AnchorPane.rightAnchor="25.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="21.0" prefWidth="655.0" text="Plot" />
+         </children>
+      </StackPane>
+      <Button fx:id="clearSearchButton" layoutX="224.0" layoutY="146.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="57.0" style="-fx-background-radius: 0;" text="Clear" />
+      <StackPane layoutX="308.0" layoutY="578.0" prefHeight="31.0" prefWidth="299.0" AnchorPane.bottomAnchor="6.0">
+         <children>
+            <Button fx:id="openMovieButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="656.0" style="-fx-background-radius: 0;" text="Open Movie" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="620.0" layoutY="108.0" AnchorPane.leftAnchor="620.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="108.0">
+         <children>
+            <Label fx:id="movieAuthorLabel" alignment="CENTER" prefHeight="21.0" prefWidth="655.0" text="Director: Jake Bellotti | Writer: Jake Bellotti" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="626.0" layoutY="578.0" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="197.0">
+         <children>
+            <Label fx:id="automatedDataLabel" alignment="CENTER_RIGHT" prefHeight="31.0" prefWidth="477.0" text="Automated data search selected this movie out of 6 others." />
+         </children>
+      </StackPane>
+      <StackPane layoutX="1109.0" layoutY="578.0" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="25.0">
+         <children>
+            <Button fx:id="automatedDataButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="166.0" text="Select Another One→" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="620.0" layoutY="64.0" AnchorPane.leftAnchor="620.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="64.0">
+         <children>
+            <Label fx:id="fileInfoLabel" alignment="CENTER" prefHeight="21.0" prefWidth="655.0" text="mymovie.mp4 | MP4 File | 5056.08mb" />
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>
