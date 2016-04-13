@@ -1,5 +1,7 @@
 package com.jakebellotti.scene.launcher;
 
+import com.jakebellotti.MediaManager;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,7 +17,6 @@ import javafx.stage.Stage;
 public class Launcher extends Application {
 	
 	private static final FXMLLoader launcherLoader = new FXMLLoader();
-	private static Stage mainFrameStage = null;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -23,15 +24,11 @@ public class Launcher extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		mainFrameStage = stage;
+		MediaManager.setMainFrameStage(stage);
 		final Parent root = launcherLoader.load(Launcher.class.getResource("Launcher.fxml").openStream());
-		mainFrameStage.setScene(new Scene(root));
-		mainFrameStage.show();
+		MediaManager.getMainFrameStage().setScene(new Scene(root));
+		MediaManager.getMainFrameStage().show();
 		//TODO center on screen
-	}
-	
-	public static Stage getMainFrameStage() {
-		return mainFrameStage;
 	}
 
 	public static FXMLLoader getLauncherLoader() {

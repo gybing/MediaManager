@@ -6,6 +6,8 @@ import com.jakebellotti.io.DataScraper;
 import com.jakebellotti.io.DatabaseConnection;
 import com.jakebellotti.scene.launcher.Launcher;
 
+import javafx.stage.Stage;
+
 /**
  * A central location for the parts of this program.
  * @author Jake Bellotti
@@ -16,6 +18,7 @@ public class MediaManager {
 	
 	private static DataScraper definitionRetriever;
 	private static DatabaseConnection database = new DatabaseConnection();
+	private static Stage mainFrameStage = null;
 	
 	public static void main(String[] arguments) {
 		Launcher.main(arguments);
@@ -33,6 +36,20 @@ public class MediaManager {
 	
 	public static void connectDatabase() {
 		database.connect();
+	}
+
+	/**
+	 * @return the mainFrameStage
+	 */
+	public static Stage getMainFrameStage() {
+		return mainFrameStage;
+	}
+
+	/**
+	 * @param mainFrameStage the mainFrameStage to set
+	 */
+	public static void setMainFrameStage(Stage mainFrameStage) {
+		MediaManager.mainFrameStage = mainFrameStage;
 	}
 
 }

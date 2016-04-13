@@ -1,6 +1,8 @@
 package com.jakebellotti.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * Holds all the media data for this program.
@@ -20,6 +22,18 @@ public class MediaRepository {
 	 * The list of filters for movie entries.
 	 */
 	private static final ArrayList<ListFilter<MovieEntry>> movieEntryFilters = new ArrayList<>();
+	/**
+	 * A HashMap to hold all of the MovieDefinition objects.
+	 */
+	private static final HashMap<Integer, MovieDefinition> movieDefinitions = new HashMap<>();
+	
+	public static final void assignMovieDefinition(int id, MovieDefinition definition) {
+		movieDefinitions.put(id, definition);
+	}
+	
+	public static final Optional<MovieDefinition> getMovieDefinition(int id) {
+		return Optional.ofNullable(movieDefinitions.get(id));
+	}
 
 	/**
 	 * 

@@ -1,6 +1,7 @@
 package com.jakebellotti.model;
 
 import java.io.File;
+import java.util.Optional;
 
 /**
  * 
@@ -21,16 +22,16 @@ public class MovieEntry {
 	/**
 	 * The definition of the movie.
 	 */
-	private final MovieDefinition definition;
+	private final int movieDefinitionID;
 	/**
 	 * Creates a new Movie File.
 	 * @param file
 	 * @param definition
 	 */
-	public MovieEntry(int id, File file, MovieDefinition definition) {
+	public MovieEntry(int id, String fileLocation, int definitionID) {
 		this.databaseID = id;
-		this.file = file;
-		this.definition = definition;
+		this.file = new File(fileLocation);
+		this.movieDefinitionID = definitionID;
 	}
 	/**
 	 * 
@@ -43,15 +44,15 @@ public class MovieEntry {
 	 * 
 	 * @return The movie definition.
 	 */
-	public MovieDefinition getDefinition() {
-		return definition;
+	public Optional<MovieDefinition> getDefinition() {
+		return MediaRepository.getMovieDefinition(movieDefinitionID);
 	}
 	/**
 	 * Returns the name of the file if there is no definition found, else it just returns the movie title.
 	 */
 	@Override
 	public String toString() {
-		return definition == null? file.getName() : definition.getTitle();
+		return movieDefinitionID == 0? file.getName() : getDefinition().get().getTitle();
 	}
 	/**
 	 * @return the databaseID

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="300.0" minWidth="300.0" prefHeight="310.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="cancelButton" layoutX="14.0" layoutY="271.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="273.0" text="Cancel" />
+      <ProgressBar fx:id="loadingBar" layoutX="14.0" layoutY="25.0" prefHeight="23.0" prefWidth="273.0" progress="0.0" />
+      <ListView fx:id="finishedTaskListView" layoutX="14.0" layoutY="69.0" prefHeight="200.0" prefWidth="273.0" />
+      <Label fx:id="currentTaskDescriptionLabel" alignment="CENTER" layoutX="14.0" layoutY="48.0" prefHeight="21.0" prefWidth="273.0" text="Loading media library" />
+      <Label fx:id="taskStatusLabel" alignment="CENTER" layoutX="14.0" layoutY="4.0" prefHeight="21.0" prefWidth="273.0" text="Task 0 of 10">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
