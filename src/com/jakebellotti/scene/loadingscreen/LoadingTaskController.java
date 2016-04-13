@@ -9,16 +9,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 /**
  * @author Jake Bellotti
  * @date Apr 13, 2016
  */
-public class LoadingTaskController {
+public abstract class LoadingTaskController {
 
 	private final ArrayList<LoadingTask> tasks;
+	private final Stage stage;
 
-	public LoadingTaskController(ArrayList<LoadingTask> tasks) {
+	public LoadingTaskController(Stage stage, ArrayList<LoadingTask> tasks) {
+		this.stage = stage;
 		this.tasks = tasks;
 	}
 
@@ -42,6 +45,10 @@ public class LoadingTaskController {
 
 	int totalTasks = 0;
 	int currentTaskNumber = 1;
+	
+	public void tasksCompleted(Stage stage) {
+		
+	}
 
 	@FXML
 	public void initialize() {
@@ -59,6 +66,7 @@ public class LoadingTaskController {
 			this.taskStatusLabel.setText("Done");
 			this.currentTaskDescriptionLabel.setText("");
 			this.canCancel = true;
+			tasksCompleted(stage);
 			return;
 		}
 		
@@ -93,7 +101,6 @@ public class LoadingTaskController {
 	private void cancelButtonClicked(MouseEvent e) {
 		if (canCancel) {
 			currentLoadingTask.onCancel();
-			System.out.println("you just cancelled");
 		}
 			
 	}

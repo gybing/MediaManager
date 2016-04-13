@@ -3,7 +3,6 @@ package com.jakebellotti.scene.loadingscreen;
 import java.util.ArrayList;
 
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,6 +19,7 @@ public class LoadingScreen {
 	private final FXMLLoader loader = new FXMLLoader();
 	private Parent root = null;
 	private final ArrayList<LoadingTask> tasks = new ArrayList<>();
+	private Stage stage = null;
 
 	/**
 	 * The default constructor, for when you want to add tasks after
@@ -39,33 +39,40 @@ public class LoadingScreen {
 			this.tasks.add(currentTask);
 	}
 
+	public void onFinish(Stage stage) {
+
+	}
+
 	/**
 	 * Opens the LoadingScreen on top of the given stage.
 	 * 
 	 * @param currentStage
 	 */
 	public void open(Stage currentStage) {
+		stage = new Stage();
 		try {
-			LoadingTaskController controller = new LoadingTaskController(tasks);
+			LoadingTaskController controller = new LoadingTaskController(stage, tasks) {
+
+				@Override
+				public void tasksCompleted(Stage stage) {
+					onFinish(stage);
+				}
+
+			};
 			loader.setController(controller);
 			load();
 
-			Stage newStage = new Stage();
-			newStage.initOwner(currentStage);
-			newStage.initModality(Modality.WINDOW_MODAL);
-			newStage.setScene(new Scene(loader.getRoot()));
-			newStage.addEventHandler(WindowEvent.WINDOW_SHOWN, new EventHandler<WindowEvent>() {
-				@Override
-				public void handle(WindowEvent window) {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							controller.performTasks();
-						}
-					});
-				}
+			stage.initOwner(currentStage);
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.setScene(new Scene(loader.getRoot()));
+
+			stage.setOnCloseRequest((event) -> event.consume());
+			stage.addEventHandler(WindowEvent.WINDOW_SHOWN, (event) -> {
+				Platform.runLater(() -> {
+					controller.performTasks();
+				});
 			});
-			newStage.showAndWait();
+			stage.showAndWait();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -78,6 +85,14 @@ public class LoadingScreen {
 
 	public void addTask(LoadingTask task) {
 		this.tasks.add(task);
+	}
+
+	public Stage getStage() {
+		return stage;
+	}
+
+	public void setStage(Stage stage) {
+		this.stage = stage;
 	}
 
 }

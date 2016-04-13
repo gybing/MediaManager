@@ -3,14 +3,15 @@ package com.jakebellotti.scene.launcher;
 import com.jakebellotti.MediaManager;
 import com.jakebellotti.Settings;
 import com.jakebellotti.io.SettingsIO;
+import com.jakebellotti.scene.launcher.loadingtask.*;
 import com.jakebellotti.scene.loadingscreen.LoadingScreen;
-import com.jakebellotti.scene.loadingscreen.LoadingTask;
 import com.jakebellotti.scene.main.MainWindowFrame;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 /**
  * 
@@ -59,104 +60,23 @@ public class LauncherController {
 	}
 
 	private void launchButtonOnMouseClicked(MouseEvent event) {
-		SettingsIO.saveSettings();
-		MainWindowFrame.load(MediaManager.getMainFrameStage());
+		final LoadingScreen loadingScreen = new LoadingScreen() {
+			@Override
+			public void onFinish(Stage stage) {
+				stage.close();
+				MainWindowFrame.load(MediaManager.getMainFrameStage());
+			}
+		};
+		loadingScreen.addTask(new SettingsIOSaveLoadingTask());
+		loadingScreen.addTask(new DeserializeIndexedMediaLoadingTask());
+		loadingScreen.addTask(new DeserializeMediaDataLoadingTask());
+		loadingScreen.addTask(new FinishingDelayLoadingTask());
+		
+		loadingScreen.open(MediaManager.getMainFrameStage());
 	}
 
 	private void exitButtonOnMouseClicked(MouseEvent event) {
-//		System.exit(0);
-		LoadingScreen screen = new LoadingScreen();
-		screen.addTask(new LoadingTask(){
-
-			@Override
-			public String taskDescription() {
-				return "Doing task 1";
-			}
-
-			@Override
-			public String getFinishText() {
-				return "Finished task 1";
-			}
-
-			@Override
-			public boolean canCancel() {
-				return false;
-			}
-
-			@Override
-			public void onCancel() {
-			}
-
-			@Override
-			public void doTask() {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}});
-		
-		screen.addTask(new LoadingTask(){
-
-			@Override
-			public String taskDescription() {
-				return "Doing task 2";
-			}
-
-			@Override
-			public String getFinishText() {
-				return "Finished task 2";
-			}
-
-			@Override
-			public boolean canCancel() {
-				return false;
-			}
-
-			@Override
-			public void onCancel() {
-			}
-
-			@Override
-			public void doTask() {
-				try {
-					Thread.sleep(4000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}});
-		
-		screen.addTask(new LoadingTask(){
-
-			@Override
-			public String taskDescription() {
-				return "Doing task 3";
-			}
-
-			@Override
-			public String getFinishText() {
-				return "Finished task 3";
-			}
-
-			@Override
-			public boolean canCancel() {
-				return false;
-			}
-
-			@Override
-			public void onCancel() {
-			}
-
-			@Override
-			public void doTask() {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}});
-		
-		screen.open(MediaManager.getMainFrameStage());
+		System.exit(0);
 	}
 
 	private void memorySaverCheckBoxSelectionProperty(boolean newValue) {
