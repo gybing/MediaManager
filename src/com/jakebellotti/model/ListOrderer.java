@@ -9,7 +9,7 @@ import java.util.List;
  * @date Mar 21, 2016
  */
 
-public interface MovieListOrderer {
+public interface ListOrderer<T extends Object> {
 	/**
 	 * 
 	 * @return The name/description of this orderer.
@@ -21,6 +21,6 @@ public interface MovieListOrderer {
 	 * 
 	 * @return The new, ordered list.
 	 */
-	public List<MovieDefinition> order();
+	public List<T> order();
 
 }

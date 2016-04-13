@@ -1,5 +1,6 @@
 package com.jakebellotti.scene.launcher;
 
+import com.jakebellotti.MediaManager;
 import com.jakebellotti.Settings;
 import com.jakebellotti.io.SettingsIO;
 import com.jakebellotti.scene.main.MainWindowFrame;
@@ -28,6 +29,7 @@ public class LauncherController {
 
 	@FXML
 	public void initialize() {
+		MediaManager.connectDatabase();
 		Launcher.getMainFrameStage().setResizable(false);
 		Launcher.getMainFrameStage().sizeToScene();
 		Launcher.getMainFrameStage().setTitle("Media Manager Launcher");
@@ -60,7 +62,7 @@ public class LauncherController {
 	}
 
 	private void exitButtonOnMouseClicked(MouseEvent event) {
-
+		System.exit(0);
 	}
 
 	private void memorySaverCheckBoxSelectionProperty(boolean newValue) {

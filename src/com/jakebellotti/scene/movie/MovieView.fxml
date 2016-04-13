@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="root" minHeight="615.0" minWidth="1300.0" prefHeight="615.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jakebellotti.scene.presentation.PresentationViewController">
+<AnchorPane fx:id="root" minHeight="615.0" minWidth="1300.0" prefHeight="615.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jakebellotti.scene.movie.MovieViewController">
    <children>
       <ComboBox fx:id="viewTypeComboBox" layoutX="14.0" layoutY="25.0" prefHeight="31.0" prefWidth="267.0" />
       <Label alignment="CENTER" layoutX="14.0" layoutY="4.0" prefHeight="21.0" prefWidth="267.0" text="View Type" />

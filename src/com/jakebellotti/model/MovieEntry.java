@@ -8,8 +8,12 @@ import java.io.File;
  * @date Mar 21, 2016
  */
 
-public class MovieFile {
+public class MovieEntry {
 	
+	/**
+	 * The ID of this entry in the database.
+	 */
+	private final int databaseID;
 	/**
 	 * The File location of the movie.
 	 */
@@ -23,7 +27,8 @@ public class MovieFile {
 	 * @param file
 	 * @param definition
 	 */
-	public MovieFile(File file, MovieDefinition definition) {
+	public MovieEntry(int id, File file, MovieDefinition definition) {
+		this.databaseID = id;
 		this.file = file;
 		this.definition = definition;
 	}
@@ -47,6 +52,12 @@ public class MovieFile {
 	@Override
 	public String toString() {
 		return definition == null? file.getName() : definition.getTitle();
+	}
+	/**
+	 * @return the databaseID
+	 */
+	public int getDatabaseID() {
+		return databaseID;
 	}
 
 }

@@ -10,39 +10,46 @@ import org.apache.derby.jdbc.EmbeddedDriver;
 
 import com.jakebellotti.DatabaseTableConstants;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 /**
  * 
  * @author Jake Bellotti
  * @date Mar 21, 2016
  */
-//connect 'jdbc:derby:../data/db;create=true';
+
 public class DatabaseConnection {
+	//st.execute(sql, Statement.RETURN_GENERATED_KEYS);
+	//ResultSet keys = st.getGeneratedKeys();
 
 	private static final String DATABASE_LOC = "./data/db/";
+	private static final Logger logger = new Logger(DatabaseConnection.class); 
 	private Connection conn;
 
 	public void connect() {
 		try {
 			DriverManager.registerDriver(new EmbeddedDriver());
 			conn = DriverManager.getConnection(getConnectionString());
-			System.out.println(getConnectionString());
-			
-			System.out.println(createTable(DatabaseTableConstants.createMovieListEntryTable()));
-//			executeQuery("SELECT * FROM SYS.SYSTABLES").ifPresent(rs->{
-//				System.out.println("Got result set.");
-//				try {
-//					while(rs.next()) {
-//						
-//						System.out.println(rs.getString(2));
-//					}
-//				} catch (Exception e1) {
-//					e1.printStackTrace();
-//				}
-//			});;
+			createRequiredTables();
 		} catch (SQLException e) {
-			System.out.println("Air?: " +DerbyUtils.anotherInstanceRunningInExceptionSeries(e));
+			if(DerbyUtils.anotherInstanceRunningInExceptionSeries(e)) {
+				Alert errorAlert = new Alert(AlertType.ERROR);
+				errorAlert.setTitle("Another instance running");
+				errorAlert.setContentText("Another instance of this program is running. Closing program now.");
+				errorAlert.showAndWait();
+				System.exit(0);
+			}
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Creates the required tables for this program to run.
+	 * @return
+	 */
+	public void createRequiredTables() {
+		logger.println(createTable(DatabaseTableConstants.createMovieListEntryTable()));
 	}
 	
 	/**
@@ -91,4 +98,16 @@ public class DatabaseConnection {
 		return "jdbc:derby:;shutdown=true";
 	}
 
+//	executeQuery("SELECT * FROM SYS.SYSTABLES").ifPresent(rs->{
+//	System.out.println("Got result set.");
+//	try {
+//		while(rs.next()) {
+//			
+//			System.out.println(rs.getString(2));
+//		}
+//	} catch (Exception e1) {
+//		e1.printStackTrace();
+//	}
+//});;
+	
 }

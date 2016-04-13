@@ -6,6 +6,6 @@ package com.jakebellotti.io;
  * @date Feb 21, 2016
  */
 
-public interface DefinitionRetriever {
+public interface DataScraper {
 
 }

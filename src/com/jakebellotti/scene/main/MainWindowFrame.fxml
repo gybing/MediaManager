@@ -23,8 +23,17 @@
                         <MenuItem mnemonicParsing="false" text="Delete" />
                      </items>
                   </Menu>
+                  <Menu mnemonicParsing="false" text="Window">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Switch To Movie Manager" />
+                        <MenuItem mnemonicParsing="false" text="Switch To TV Series Manager" />
+                        <MenuItem mnemonicParsing="false" text="Switch To Music Manager" />
+                        <MenuItem mnemonicParsing="false" text="Switch To Media Center Mode" />
+                     </items>
+                  </Menu>
                   <Menu mnemonicParsing="false" text="Help">
                      <items>
+                        <MenuItem mnemonicParsing="false" text="Settings" />
                         <MenuItem mnemonicParsing="false" text="About" />
                      </items>
                   </Menu>

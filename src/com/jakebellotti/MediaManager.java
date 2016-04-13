@@ -2,8 +2,8 @@ package com.jakebellotti;
 
 import java.util.Optional;
 
+import com.jakebellotti.io.DataScraper;
 import com.jakebellotti.io.DatabaseConnection;
-import com.jakebellotti.io.DefinitionRetriever;
 import com.jakebellotti.scene.launcher.Launcher;
 
 /**
@@ -14,22 +14,25 @@ import com.jakebellotti.scene.launcher.Launcher;
 
 public class MediaManager {
 	
-	private static DefinitionRetriever definitionRetriever;
+	private static DataScraper definitionRetriever;
 	private static DatabaseConnection database = new DatabaseConnection();
 	
 	public static void main(String[] arguments) {
-		database.connect();
 		Launcher.main(arguments);
 	}
 
-	public static Optional<DefinitionRetriever> getDefinitionRetriever() {
+	public static Optional<DataScraper> getDefinitionRetriever() {
 		return Optional.ofNullable(definitionRetriever);
 	}
 
-	public static void setDefinitionRetriever(DefinitionRetriever definitionRetriever) {
+	public static void setDefinitionRetriever(DataScraper definitionRetriever) {
 		if(definitionRetriever != null) {
 			MediaManager.definitionRetriever = definitionRetriever;
 		}
+	}
+	
+	public static void connectDatabase() {
+		database.connect();
 	}
 
 }

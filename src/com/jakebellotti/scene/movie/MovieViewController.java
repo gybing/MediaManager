@@ -1,12 +1,12 @@
-package com.jakebellotti.scene.presentation;
+package com.jakebellotti.scene.movie;
 
 import java.io.File;
 
 import org.controlsfx.control.textfield.TextFields;
 
-import com.jakebellotti.model.MovieFile;
+import com.jakebellotti.model.MovieEntry;
 import com.jakebellotti.model.MovieDefinition;
-import com.jakebellotti.model.MovieListOrderer;
+import com.jakebellotti.model.ListOrderer;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -25,13 +25,13 @@ import javafx.scene.layout.AnchorPane;
  * @date Mar 20, 2016
  */
 
-public class PresentationViewController {
+public class MovieViewController {
 
 	@FXML
 	private AnchorPane root;
 
 	@FXML
-	private ListView<MovieFile> movieList;
+	private ListView<MovieEntry> movieList;
 	/**
 	 * Allows the user to select how they want to view the movie list, for
 	 * example text with a thumbnail or just text.
@@ -59,7 +59,7 @@ public class PresentationViewController {
 	 * Where the user can select how they want to order their movie list by.
 	 */
 	@FXML
-	private ComboBox<MovieListOrderer> orderByComboBox;
+	private ComboBox<ListOrderer<MovieEntry>> orderByComboBox;
 	/**
 	 * Moves up one in the movie list.
 	 */
@@ -135,7 +135,7 @@ public class PresentationViewController {
 		Image image = new Image(file.toURI().toString());
 		moviePoster.setImage(image);
 		
-		this.movieList.getItems().add(new MovieFile(file, new MovieDefinition("Road To Perdition", 1998, "", "", "", "",
+		this.movieList.getItems().add(new MovieEntry(0, file, new MovieDefinition("Road To Perdition", 1998, "", "", "", "",
 				"", "", "", "", "", "", "",
 				"", 100, 6.7, "", "")));
 		this.moviePlotTextArea.setText("1931. Mike Sullivan and Connor Rooney are two henchmen of elderly Chicago-based Irish-American mobster John Rooney, Connor's father. In many respects, John treats Mike more as his son, who he raised as his own after Mike was orphaned, than the volatile Connor, who nonetheless sees himself as the heir apparent to the family business. One evening, Mike's eldest son, twelve year old Michael Sullivan Jr., who has no idea what his father does for a living, witnesses Connor and his father gun down an associate and his men, the situation gone wrong initiated from an action by Connor. Caught witnessing the incident, Michael is sworn to secrecy about what he saw. Regardless, Connor, not wanting any loose ends, makes an attempt to kill Mike, his wife and their two sons. Mike and the surviving members of his family know that they need to go on the run as Connor, who has gone into hiding, will be protected through mob loyalty, especially by John, who cannot turn on his own flesh and blood. Still, Mike has to figure out a way for retribution for what Connor did, while still protecting him and his family, not only from Connor, but from John and his fellow associates. Through it all, Mike wants those in his family that had no say in what he chose as a living, to have some redemption for their eternal souls.");

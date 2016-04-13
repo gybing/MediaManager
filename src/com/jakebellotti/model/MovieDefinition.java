@@ -49,14 +49,6 @@ public class MovieDefinition {
 		this.imdbVotes = imdbVotes;
 		this.imdbID = imdbID;
 	}
-	
-//	public static final void addDefinition(File file, MovieDefinition def) {
-//		movieDefinition.put(file, def);
-//	}
-//	
-//	public static final Optional<MovieDefinition> getDefinition(File file) {
-//		return Optional.ofNullable(movieDefinition.get(file));
-//	}
 
 	public String getTitle() {
 		return title;

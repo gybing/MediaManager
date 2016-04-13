@@ -1,5 +1,12 @@
-/*Describes the date of a movie. Does not generally have to refer to an imdb definition, as the user can add their own data in if need be.*/
+DROP TABLE tblMovieEntry;
 DROP TABLE tblMovieDefinition;
+DROP TABLE tblMovieEntrySearch;
+
+CREATE TABLE tblMovieEntry(
+	ID 					INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	fileLocation		VARCHAR(100)
+);
+
 CREATE TABLE tblMovieDefinition(
 	ID 					INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
 	imdbID				VARCHAR(9),
@@ -8,17 +15,18 @@ CREATE TABLE tblMovieDefinition(
 	rating				VARCHAR(10),
 	released			VARCHAR(20),
 	runtime				VARCHAR(10),
-	genre				VARCHAR(255)
+	genre				VARCHAR(255),
+	plot				VARCHAR(1000)
 );
 
-/*Describes a movie file entry. Does not have to have any data assigned to it by default.*/
-DROP TABLE tblMovieEntry;
-CREATE TABLE tblMovieEntry(
+CREATE TABLE tblMovieEntrySearch(
 	ID 					INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-	fileLocation		VARCHAR(100),
-	tblMovieDefinitionID INTEGER NOT NULL,
-	FOREIGN KEY (tblMovieDefinitionID) REFERENCES tblMovieDefinition(ID)
+	tblMovieEntryID		INTEGER NOT NULL,
+	FOREIGN KEY(tblMovieEntryID) REFERENCES tblMovieEntry(ID)
 );
+
+DECLARE lastID integer;
+
 /*
 fields:
 	private final String genre;

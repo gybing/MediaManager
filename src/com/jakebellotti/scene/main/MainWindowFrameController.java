@@ -1,13 +1,8 @@
 package com.jakebellotti.scene.main;
 
-import com.jakebellotti.scene.presentation.PresentationView;
+import com.jakebellotti.scene.movie.MovieView;
 
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.SubScene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -19,7 +14,7 @@ import javafx.scene.layout.StackPane;
 public class MainWindowFrameController {
 	
 	/**
-	 * The stackpane where all the content goes
+	 * The StackPane where all the content goes
 	 */
     @FXML
     private StackPane contentWindow;
@@ -30,7 +25,7 @@ public class MainWindowFrameController {
 	@FXML
 	public void initialize() {
 //		contentWindow.getChildren().add(new SubScene(PresentationView.getScene(), 1300, 615));
-		contentWindow.getChildren().add(PresentationView.getAnchorPane());
+		contentWindow.getChildren().add(MovieView.getAnchorPane());
 	}
 
 }
