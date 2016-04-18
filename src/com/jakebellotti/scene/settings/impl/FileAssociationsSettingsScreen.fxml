@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="520.0" minWidth="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),        linear-gradient(#020b02, #3a3a3a),        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);">
+         <children>
+            <Label alignment="CENTER" minHeight="40.0" minWidth="600.0" prefWidth="0.0" style="-fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , -1 ); -fx-text-fill: white;" text="Video File Associations">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutY="260.0" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),        linear-gradient(#020b02, #3a3a3a),        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);">
+         <children>
+            <Label alignment="CENTER" minHeight="40.0" minWidth="600.0" prefWidth="0.0" style="-fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , -1 ); -fx-text-fill: white;" text="Music File Associations">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <ListView fx:id="videoFileAssociationsListView" layoutY="40.0" minWidth="600.0" prefHeight="127.0" prefWidth="600.0" />
+      <Button fx:id="videoFileAssociationsDefaultButton" layoutX="150.0" layoutY="228.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="300.0" text="Reset To Defaults" />
+      <Button fx:id="videoFileAssociationsAddButton" layoutX="150.0" layoutY="167.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="300.0" text="Add" />
+      <Button fx:id="videoFileAssociationsRemoveButton" layoutX="150.0" layoutY="197.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="300.0" text="Remove" />
+      <ListView fx:id="musicFileAssociationsListView" layoutY="299.0" minWidth="600.0" prefHeight="125.0" prefWidth="300.0" />
+      <Button fx:id="musicFileAssociationsDefaultButton" layoutX="150.0" layoutY="485.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="300.0" text="Reset To Defaults" />
+      <Button fx:id="musicFileAssociationsAddButton" layoutX="150.0" layoutY="424.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="300.0" text="Add" />
+      <Button fx:id="musicFileAssociationsRemoveButton" layoutX="150.0" layoutY="454.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="300.0" text="Remove" />
+   </children>
+</AnchorPane>

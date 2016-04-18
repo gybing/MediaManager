@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ListView fx:id="settingCategoryListView" prefHeight="560.0" prefWidth="200.0" />
+      <Pane layoutX="200.0" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: gray; -fx-border-color: black;">
+         <children>
+            <Label fx:id="settingCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="600.0" style="-fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , 2);" text="File Associations" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="28.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <AnchorPane fx:id="settingsWindowContentPane" layoutX="200.0" layoutY="40.0" prefHeight="520.0" prefWidth="600.0" />
+      <ButtonBar layoutY="560.0" prefHeight="40.0" prefWidth="800.0" style="-fx-background-color: gray; -fx-border-color: black;">
+         <buttons>
+            <Button fx:id="applySettingsButton" mnemonicParsing="false" text="Apply Settings">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button fx:id="cancelButton" mnemonicParsing="false" text="Cancel">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+         </buttons>
+      </ButtonBar>
+   </children>
+</AnchorPane>

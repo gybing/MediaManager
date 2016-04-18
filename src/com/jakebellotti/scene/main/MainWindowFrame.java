@@ -25,6 +25,7 @@ public class MainWindowFrame {
 			final Parent root = loader.load(MainWindowFrame.class.getResource("MainWindowFrame.fxml").openStream());
 			stage.setScene(new Scene(root));
 			stage.setResizable(true);
+			
 			stage.show();
 			stage.sizeToScene();
 			stage.setMinHeight(stage.getHeight());

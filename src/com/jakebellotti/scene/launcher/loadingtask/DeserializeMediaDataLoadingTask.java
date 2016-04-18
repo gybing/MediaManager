@@ -1,5 +1,6 @@
 package com.jakebellotti.scene.launcher.loadingtask;
 
+import com.jakebellotti.MediaManager;
 import com.jakebellotti.scene.loadingscreen.LoadingTask;
 
 /**
@@ -31,6 +32,7 @@ public class DeserializeMediaDataLoadingTask implements LoadingTask {
 	@Override
 	public void doTask() {
 		//TODO load from database
+		System.out.println(MediaManager.getDatabase().getAllMovieEntries().size() + " movie entries");
 	}
 
 }

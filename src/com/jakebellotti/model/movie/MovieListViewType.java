@@ -1,4 +1,4 @@
-package com.jakebellotti.model;
+package com.jakebellotti.model.movie;
 
 /**
  * 

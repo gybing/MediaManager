@@ -8,7 +8,9 @@ package com.jakebellotti;
 
 public class Settings {
 	
-	private static boolean memorySaverMode = false;
+	private static boolean memorySaverMode = DefaultSettings.MEMORY_SAVER_MODE;
+	
+	private static String[] videoFileAssociations = DefaultSettings.DEFAULT_VIDEO_EXTENSIONS;
 
 	public static boolean isMemorySaverMode() {
 		return memorySaverMode;
@@ -16,6 +18,14 @@ public class Settings {
 
 	public static void setMemorySaverMode(boolean memorySaverMode) {
 		Settings.memorySaverMode = memorySaverMode;
+	}
+
+	public static String[] getVideoFileAssociations() {
+		return videoFileAssociations;
+	}
+
+	public static void setVideoFileAssociations(String[] videoFileAssociations) {
+		Settings.videoFileAssociations = videoFileAssociations;
 	}
 
 }

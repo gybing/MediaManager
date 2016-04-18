@@ -11,7 +11,7 @@
       <StackPane fx:id="contentWindow" layoutY="33.0" prefHeight="617.0" prefWidth="1300.0" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0" />
       <StackPane fx:id="menuBarPane" prefHeight="35.0" prefWidth="1300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <MenuBar>
+            <MenuBar fx:id="menuBar">
                <menus>
                   <Menu mnemonicParsing="false" text="File">
                      <items>

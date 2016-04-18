@@ -3,6 +3,7 @@ package com.jakebellotti.scene.main;
 import com.jakebellotti.scene.movie.MovieView;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.MenuBar;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -12,20 +13,29 @@ import javafx.scene.layout.StackPane;
  */
 
 public class MainWindowFrameController {
-	
+
 	/**
 	 * The StackPane where all the content goes
 	 */
-    @FXML
-    private StackPane contentWindow;
+	@FXML
+	private StackPane contentWindow;
 
-    @FXML
-    private StackPane menuBarPane;
-	
+	@FXML
+	private StackPane menuBarPane;
+
+	@FXML
+	private MenuBar menuBar;
+
 	@FXML
 	public void initialize() {
-//		contentWindow.getChildren().add(new SubScene(PresentationView.getScene(), 1300, 615));
-		contentWindow.getChildren().add(MovieView.getAnchorPane());
+		// TODO determine the screen to show
+		if (true) {
+			contentWindow.getChildren().clear();
+			contentWindow.getChildren().add(MovieView.getAnchorPane());
+			this.menuBar.getMenus().clear();
+			MovieView.getController().addMenuBarItems(menuBar);
+		}
+
 	}
 
 }

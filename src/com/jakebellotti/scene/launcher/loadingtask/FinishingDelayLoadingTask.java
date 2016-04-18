@@ -33,7 +33,7 @@ public class FinishingDelayLoadingTask implements LoadingTask {
 	@Override
 	public void doTask() {
 		try {
-			Thread.sleep(500);
+			Thread.sleep(0);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
+import com.jakebellotti.model.movie.MovieDefinition;
+import com.jakebellotti.model.movie.MovieEntry;
+
 /**
  * Holds all the media data for this program.
  * 
@@ -35,6 +38,14 @@ public class MediaRepository {
 		return Optional.ofNullable(movieDefinitions.get(id));
 	}
 
+	public static final void addMovieEntry(MovieEntry movieEntry) {
+		loadedMovieEntries.add(movieEntry);
+	}
+	
+	public static final ArrayList<MovieEntry> getLoadedMovieEntries() {
+		return loadedMovieEntries;
+	}
+	
 	/**
 	 * 
 	 * @return An ArrayList of MovieEntry objects, that have passed the filter

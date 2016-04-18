@@ -1,4 +1,4 @@
-package com.jakebellotti.model;
+package com.jakebellotti.model.movie;
 
 /**
  * Defines a movie.
@@ -8,6 +8,7 @@ package com.jakebellotti.model;
 
 public class MovieDefinition {
 
+	private final int databaseID;
 	private final String title;
 	private final int year;
 	private final String rated;
@@ -27,9 +28,10 @@ public class MovieDefinition {
 	private final String imdbVotes;
 	private final String imdbID;
 
-	public MovieDefinition(String title, int year, String rated, String released, String runtime, String genre,
+	public MovieDefinition(int databaseID, String title, int year, String rated, String released, String runtime, String genre,
 			String director, String writer, String actors, String plot, String language, String country, String awards,
 			String poster, int metascore, double imdbRating, String imdbVotes, String imdbID) {
+		this.databaseID = databaseID;
 		this.title = title;
 		this.year = year;
 		this.rated = rated;
@@ -120,6 +122,10 @@ public class MovieDefinition {
 
 	public String getImdbID() {
 		return imdbID;
+	}
+
+	public int getDatabaseID() {
+		return databaseID;
 	}
 
 }

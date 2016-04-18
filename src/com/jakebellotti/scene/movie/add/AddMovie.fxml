@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="285.0" minWidth="604.0" prefHeight="616.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView fx:id="outputDataTableView" layoutX="14.0" layoutY="363.0" prefHeight="200.0" prefWidth="576.0">
+        <columns>
+          <TableColumn fx:id="outputDataFileLocationColumn" editable="false" minWidth="288.0" prefWidth="114.0" sortable="false" text="File Location" />
+          <TableColumn fx:id="outputDataExtractedNameColumn" editable="false" minWidth="286.0" prefWidth="127.0" sortable="false" text="Extracted Name" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <Button fx:id="discardEntriesButton" layoutX="14.0" layoutY="570.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="250.0" text="Discard Entries" />
+      <Button fx:id="addEntriesButton" layoutX="343.0" layoutY="570.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="250.0" text="Add Entries" />
+      <Label fx:id="outputDataLabel" alignment="CENTER" layoutX="14.0" layoutY="322.0" prefHeight="31.0" prefWidth="576.0" text="Output data">
+         <font>
+            <Font name="System Bold" size="21.0" />
+         </font>
+      </Label>
+      <ListView fx:id="availableFiltersListView" layoutX="15.0" layoutY="74.0" prefHeight="200.0" prefWidth="250.0" />
+      <Button fx:id="addOneAvailableFiltersButton" layoutX="281.0" layoutY="74.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="49.0" text="&gt;">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="addAllAvailableFiltersButton" layoutX="281.0" layoutY="115.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="49.0" text="&gt;&gt;">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="removeOneSelectedFiltersButton" layoutX="281.0" layoutY="196.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="49.0" text="&lt;">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="removeAllSelectedFiltersButton" layoutX="281.0" layoutY="237.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="49.0" text="&lt;&lt;">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+      </Button>
+      <ListView fx:id="selectedFiltersListView" layoutX="346.0" layoutY="74.0" prefHeight="200.0" prefWidth="250.0" />
+      <Button fx:id="availableFiltersSelectAllButton" layoutX="15.0" layoutY="281.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="117.0" text="Select All" />
+      <Button fx:id="availableFiltersDeselectAllButton" layoutX="148.0" layoutY="281.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="117.0" text="Deselect All" />
+      <Button fx:id="selectedFiltersSelectAllButton" layoutX="346.0" layoutY="281.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="117.0" text="Select All" />
+      <Button fx:id="selectedFiltersDeselectAllButton" layoutX="479.0" layoutY="281.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="117.0" text="Deselect All" />
+      <Label alignment="CENTER" layoutX="15.0" layoutY="47.0" prefHeight="21.0" prefWidth="250.0" text="Available Filters">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="346.0" layoutY="47.0" prefHeight="21.0" prefWidth="250.0" text="Selected Filters">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="14.0" layoutY="6.0" prefHeight="27.0" prefWidth="576.0" text="Movie Name Filters">
+         <font>
+            <Font name="System Bold" size="21.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

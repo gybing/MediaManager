@@ -49,7 +49,7 @@
       </StackPane>
       <StackPane layoutX="308.0" prefHeight="58.0" prefWidth="990.0" style="-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),        linear-gradient(#020b02, #3a3a3a),        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%); -fx-background-radius: 15;" AnchorPane.leftAnchor="308.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="movieNameLabel" alignment="CENTER" prefHeight="58.0" style="-fx-text-fill: white; -fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , -1 );" text="Road To Perdition (2002)">
+            <Label fx:id="movieNameLabel" alignment="CENTER" prefHeight="58.0" style="-fx-text-fill: white; -fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , -1 );" text="Movie Title">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>
@@ -58,17 +58,17 @@
       </StackPane>
       <StackPane layoutX="308.0" layoutY="506.0" AnchorPane.bottomAnchor="86.0">
          <children>
-            <ProgressBar prefHeight="23.0" prefWidth="300.0" progress="0.72" style="-fx-accent: yellow;" />
+            <ProgressBar prefHeight="23.0" prefWidth="300.0" progress="0.0" style="-fx-accent: yellow;" />
          </children>
       </StackPane>
       <StackPane layoutX="308.0" layoutY="527.0" prefHeight="23.0" prefWidth="300.0" AnchorPane.bottomAnchor="65.0">
          <children>
-            <ProgressBar prefHeight="23.0" prefWidth="347.0" progress="0.77" style="-fx-accent: green;" />
+            <ProgressBar prefHeight="23.0" prefWidth="347.0" progress="0.0" style="-fx-accent: green;" />
          </children>
       </StackPane>
       <StackPane layoutX="620.0" layoutY="85.0" AnchorPane.leftAnchor="620.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="85.0">
          <children>
-            <Label fx:id="movieInfoLabel" alignment="CENTER" prefHeight="21.0" prefWidth="655.0" text="PG-13  |  106 min  |  Drama, Sci-Fi, Thriller  |  2 August 2002 (USA)" />
+            <Label fx:id="movieInfoLabel" alignment="CENTER" prefHeight="21.0" prefWidth="655.0" text="Rating  |  Runtime  |  Genre  |  Release Date" />
          </children>
       </StackPane>
       <StackPane layoutX="620.0" layoutY="384.0" prefHeight="195.0" prefWidth="655.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="620.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="384.0">
@@ -108,7 +108,7 @@
       </StackPane>
       <StackPane layoutX="620.0" layoutY="108.0" AnchorPane.leftAnchor="620.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="108.0">
          <children>
-            <Label fx:id="movieAuthorLabel" alignment="CENTER" prefHeight="21.0" prefWidth="655.0" text="Director: Jake Bellotti | Writer: Jake Bellotti" />
+            <Label fx:id="movieAuthorLabel" alignment="CENTER" prefHeight="21.0" prefWidth="655.0" text="Director: | Writer:" />
          </children>
       </StackPane>
       <StackPane layoutX="626.0" layoutY="578.0" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="197.0">

@@ -10,8 +10,9 @@ import java.util.Optional;
 import org.apache.derby.jdbc.EmbeddedDriver;
 
 import com.jakebellotti.DatabaseTableConstants;
-import com.jakebellotti.model.MovieEntry;
+import com.jakebellotti.model.movie.MovieEntry;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -40,7 +41,7 @@ public class DatabaseConnection {
 				errorAlert.setTitle("Another instance running");
 				errorAlert.setContentText("Another instance of this program is running. Closing program now.");
 				errorAlert.showAndWait();
-				System.exit(0);
+				Platform.exit();
 			}
 			e.printStackTrace();
 		}

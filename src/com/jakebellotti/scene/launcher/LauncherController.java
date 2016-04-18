@@ -36,7 +36,6 @@ public class LauncherController {
 		MediaManager.getMainFrameStage().setResizable(false);
 		MediaManager.getMainFrameStage().sizeToScene();
 		MediaManager.getMainFrameStage().setTitle("Media Manager Launcher");
-		SettingsIO.loadSettings();
 		applySettingsToScene();
 		addEventHandlers();
 	}

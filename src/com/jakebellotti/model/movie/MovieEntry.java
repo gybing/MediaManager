@@ -1,7 +1,9 @@
-package com.jakebellotti.model;
+package com.jakebellotti.model.movie;
 
 import java.io.File;
 import java.util.Optional;
+
+import com.jakebellotti.model.MediaRepository;
 
 /**
  * 

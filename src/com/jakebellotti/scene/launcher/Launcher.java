@@ -25,10 +25,13 @@ public class Launcher extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		MediaManager.setMainFrameStage(stage);
+		
 		final Parent root = launcherLoader.load(Launcher.class.getResource("Launcher.fxml").openStream());
+		launcherLoader.setController(MediaManager.getMaincontroller());
+		
+		
 		MediaManager.getMainFrameStage().setScene(new Scene(root));
 		MediaManager.getMainFrameStage().show();
-		//TODO center on screen
 	}
 
 	public static FXMLLoader getLauncherLoader() {
