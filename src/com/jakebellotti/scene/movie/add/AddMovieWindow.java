@@ -1,14 +1,16 @@
 package com.jakebellotti.scene.movie.add;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.jakebellotti.model.FileNameCleanser;
 import com.jakebellotti.model.movie.NewMovieEntry;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -19,15 +21,20 @@ import javafx.stage.Stage;
 public class AddMovieWindow {
 
 	private final FXMLLoader loader = new FXMLLoader();
-	private final ArrayList<FileNameCleanser> filters = new ArrayList<>();
-	private final ArrayList<File> newFiles = new ArrayList<>();
-	private final ArrayList<NewMovieEntry> newMovieEntries = new ArrayList<>();
+	private final List<FileNameCleanser> filters = new ArrayList<>();
+	private final List<File> newFiles = new ArrayList<>();
+	private final List<NewMovieEntry> newMovieEntries = new ArrayList<>();
 
-	private Parent root = null;
+	private AnchorPane root = null;
 	private AddMovieController controller = null;
 	private Stage stage = null;
+	private int addedMovies = -1;
 
-	public AddMovieWindow(ArrayList<File> newFiles, ArrayList<FileNameCleanser> cleansers) {
+	public AddMovieWindow(List<File> newFiles) {
+		this(newFiles, new ArrayList<FileNameCleanser>());
+	}
+
+	public AddMovieWindow(List<File> newFiles, List<FileNameCleanser> cleansers) {
 		for (FileNameCleanser cleanser : cleansers)
 			addFileNameCleanser(cleanser);
 		for (File file : newFiles) {
@@ -43,38 +50,38 @@ public class AddMovieWindow {
 		this.newFiles.add(file);
 	}
 
-	public ArrayList<NewMovieEntry> showAndReturnValues(Stage currentStage) {
-		try {
-			load();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public int showAndReturnValues(Stage currentStage) {
 		this.stage = new Stage();
+		load();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.initOwner(currentStage);
 		stage.setScene(new Scene(root));
 		stage.sizeToScene();
 		stage.showAndWait();
-		return newMovieEntries;
+		return addedMovies;
 	}
 
-	private void load() throws Exception {
+	private void load() {
 		if (root == null) {
-			root = loader.load(AddMovieWindow.class.getClassLoader().getResource("AddMovie.fxml").openStream());
-			setController(new AddMovieController(this));
-			loader.setController(root);
+			try {
+				setController(new AddMovieController(this));
+				loader.setController(getController());
+				root = loader.load(AddMovieWindow.class.getResource("AddMovie.fxml").openStream());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
-	public ArrayList<FileNameCleanser> getFilters() {
+
+	public List<FileNameCleanser> getFilters() {
 		return filters;
 	}
 
-	public ArrayList<File> getNewFiles() {
+	public List<File> getNewFiles() {
 		return newFiles;
 	}
 
-	public ArrayList<NewMovieEntry> getNewMovieEntries() {
+	public List<NewMovieEntry> getNewMovieEntries() {
 		return newMovieEntries;
 	}
 
@@ -84,6 +91,18 @@ public class AddMovieWindow {
 
 	public void setController(AddMovieController controller) {
 		this.controller = controller;
+	}
+	
+	public Stage getStage() {
+		return stage;
+	}
+	
+	public int getAddedMovies() {
+		return addedMovies;
+	}
+
+	public void setAddedMovies(int addedMovies) {
+		this.addedMovies = addedMovies;
 	}
 
 }

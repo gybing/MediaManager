@@ -38,6 +38,10 @@ public class MediaRepository {
 		return Optional.ofNullable(movieDefinitions.get(id));
 	}
 
+	public static final void addMovieEntries(ArrayList<MovieEntry> movieEntries) {
+		movieEntries.forEach((e) -> addMovieEntry(e));
+	}
+	
 	public static final void addMovieEntry(MovieEntry movieEntry) {
 		loadedMovieEntries.add(movieEntry);
 	}

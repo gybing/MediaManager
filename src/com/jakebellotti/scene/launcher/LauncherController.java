@@ -2,7 +2,6 @@ package com.jakebellotti.scene.launcher;
 
 import com.jakebellotti.MediaManager;
 import com.jakebellotti.Settings;
-import com.jakebellotti.io.SettingsIO;
 import com.jakebellotti.scene.launcher.loadingtask.*;
 import com.jakebellotti.scene.loadingscreen.LoadingScreen;
 import com.jakebellotti.scene.main.MainWindowFrame;

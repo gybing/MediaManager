@@ -8,6 +8,6 @@ package com.jakebellotti;
 public class DefaultSettings {
 	
 	public static final boolean MEMORY_SAVER_MODE = false;
-	public static final String[] DEFAULT_VIDEO_EXTENSIONS = {".avi", ".m4v", ".mp4", ".rmvb"};
+	public static final String[] DEFAULT_VIDEO_EXTENSIONS = {".avi", ".m4v", ".mp4", ".rmvb", ".mkv"};
 
 }

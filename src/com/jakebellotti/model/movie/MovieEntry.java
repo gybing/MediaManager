@@ -22,6 +22,10 @@ public class MovieEntry {
 	 */
 	private final File file;
 	/**
+	 * The movie name that was able to be extracted from the file name.
+	 */
+	private final String extractedMovieName;
+	/**
 	 * The definition of the movie.
 	 */
 	private final int movieDefinitionID;
@@ -30,9 +34,10 @@ public class MovieEntry {
 	 * @param file
 	 * @param definition
 	 */
-	public MovieEntry(int id, String fileLocation, int definitionID) {
+	public MovieEntry(int id, String fileLocation, String extractedMovieName, int definitionID) {
 		this.databaseID = id;
 		this.file = new File(fileLocation);
+		this.extractedMovieName = extractedMovieName;
 		this.movieDefinitionID = definitionID;
 	}
 	/**
@@ -54,13 +59,16 @@ public class MovieEntry {
 	 */
 	@Override
 	public String toString() {
-		return movieDefinitionID == 0? file.getName() : getDefinition().get().getTitle();
+		return movieDefinitionID == 0? extractedMovieName : getDefinition().get().getTitle();
 	}
 	/**
 	 * @return the databaseID
 	 */
 	public int getDatabaseID() {
 		return databaseID;
+	}
+	public String getExtractedMovieName() {
+		return extractedMovieName;
 	}
 
 }

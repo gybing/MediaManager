@@ -21,8 +21,8 @@ public class MovieView {
 		if(scene == null) {
 			try {
 				controller = new MovieViewController();
-				scene = loader.load(MovieView.class.getResource("MovieView.fxml").openStream());
 				loader.setController(controller);
+				scene = loader.load(MovieView.class.getResource("MovieView.fxml").openStream());
 				return scene;
 			} catch (IOException e) {
 				e.printStackTrace();

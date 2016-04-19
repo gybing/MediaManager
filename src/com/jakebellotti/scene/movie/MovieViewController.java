@@ -1,14 +1,17 @@
 package com.jakebellotti.scene.movie;
 
 import java.io.File;
+import java.util.List;
 
 import org.controlsfx.control.textfield.TextFields;
 
+import com.jakebellotti.scene.movie.add.AddMovieWindow;
 import com.jakebellotti.scene.settings.SettingsWindow;
 import com.jakebellotti.MediaManager;
+import com.jakebellotti.Settings;
 import com.jakebellotti.model.ListOrderer;
 import com.jakebellotti.model.MediaRepository;
-import com.jakebellotti.model.movie.MovieDefinition;
+import com.jakebellotti.model.filenamecleanser.FileNameCleanserRepository;
 import com.jakebellotti.model.movie.MovieEntry;
 
 import javafx.application.Platform;
@@ -25,6 +28,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 
 /**
  * 
@@ -138,67 +142,108 @@ public class MovieViewController {
 
 	@FXML
 	public void initialize() {
-		File file = new File("./data/testimg.jpg");
-		Image image = new Image(file.toURI().toString());
-		//moviePoster.setImage(image);
-		
-		MediaRepository.assignMovieDefinition(1, new MovieDefinition(1, "Road To Perdition", 1998, "", "", "", "","", "", "", "", "", "", "","", 100, 6.7, "", ""));
-		
-		//this.movieList.getItems().add(new MovieEntry(1, file.getAbsolutePath(), 1));
-		//this.moviePlotTextArea.setText("1931. Mike Sullivan and Connor Rooney are two henchmen of elderly Chicago-based Irish-American mobster John Rooney, Connor's father. In many respects, John treats Mike more as his son, who he raised as his own after Mike was orphaned, than the volatile Connor, who nonetheless sees himself as the heir apparent to the family business. One evening, Mike's eldest son, twelve year old Michael Sullivan Jr., who has no idea what his father does for a living, witnesses Connor and his father gun down an associate and his men, the situation gone wrong initiated from an action by Connor. Caught witnessing the incident, Michael is sworn to secrecy about what he saw. Regardless, Connor, not wanting any loose ends, makes an attempt to kill Mike, his wife and their two sons. Mike and the surviving members of his family know that they need to go on the run as Connor, who has gone into hiding, will be protected through mob loyalty, especially by John, who cannot turn on his own flesh and blood. Still, Mike has to figure out a way for retribution for what Connor did, while still protecting him and his family, not only from Connor, but from John and his fellow associates. Through it all, Mike wants those in his family that had no say in what he chose as a living, to have some redemption for their eternal souls.");
-		//this.movieActorListView.getItems().add("Tyler Hoechlin");
-		//this.movieActorListView.getItems().add("Rob Maxey");
-		//this.viewTypeComboBox.getItems().add("List");
-		MediaRepository.addMovieEntry(new MovieEntry(1, "mymovie.mp4", 0));
-		MediaRepository.addMovieEntry(new MovieEntry(2, "mymovie2.mp4", 0));
-		MediaRepository.addMovieEntry(new MovieEntry(3, "mymovie3.mp4", 1));
-		this.movieList.getItems().addAll(MediaRepository.getLoadedMovieEntries());
+		//File file = new File("./data/testimg.jpg");
+		//Image image = new Image(file.toURI().toString());
+		// moviePoster.setImage(image);
+
+//		MediaRepository.assignMovieDefinition(1, new MovieDefinition(1, "Road To Perdition", 1998, "", "", "", "", "",
+//				"", "", "", "", "", "", "", 100, 6.7, "", ""));
+
+		// this.movieList.getItems().add(new MovieEntry(1,
+		// file.getAbsolutePath(), 1));
+		// this.moviePlotTextArea.setText("1931. Mike Sullivan and Connor Rooney
+		// are two henchmen of elderly Chicago-based Irish-American mobster John
+		// Rooney, Connor's father. In many respects, John treats Mike more as
+		// his son, who he raised as his own after Mike was orphaned, than the
+		// volatile Connor, who nonetheless sees himself as the heir apparent to
+		// the family business. One evening, Mike's eldest son, twelve year old
+		// Michael Sullivan Jr., who has no idea what his father does for a
+		// living, witnesses Connor and his father gun down an associate and his
+		// men, the situation gone wrong initiated from an action by Connor.
+		// Caught witnessing the incident, Michael is sworn to secrecy about
+		// what he saw. Regardless, Connor, not wanting any loose ends, makes an
+		// attempt to kill Mike, his wife and their two sons. Mike and the
+		// surviving members of his family know that they need to go on the run
+		// as Connor, who has gone into hiding, will be protected through mob
+		// loyalty, especially by John, who cannot turn on his own flesh and
+		// blood. Still, Mike has to figure out a way for retribution for what
+		// Connor did, while still protecting him and his family, not only from
+		// Connor, but from John and his fellow associates. Through it all, Mike
+		// wants those in his family that had no say in what he chose as a
+		// living, to have some redemption for their eternal souls.");
+		// this.movieActorListView.getItems().add("Tyler Hoechlin");
+		// this.movieActorListView.getItems().add("Rob Maxey");
+		// this.viewTypeComboBox.getItems().add("List");
+	//	MediaRepository.addMovieEntry(new MovieEntry(1, "mymovie.mp4", 0));
+	//	MediaRepository.addMovieEntry(new MovieEntry(2, "mymovie2.mp4", 0));
+	//	MediaRepository.addMovieEntry(new MovieEntry(3, "mymovie3.mp4", 1));
+		this.movieList.getItems().addAll(MediaRepository.getDisplayedMovieEntries());
 		setupSearchTextField();
-		
-		//add event handlers
+
+		// add event handlers
 		this.movieList.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
 			movieListOnChangeItem(newVal);
 		});
-		
-		//Now we have loaded all data, display
+
+		// Now we have loaded all data, display
 		this.movieList.getSelectionModel().selectFirst();
 	}
-	
+
 	private void movieListOnChangeItem(MovieEntry newEntry) {
 		this.movieNameLabel.setText(newEntry.toString());
 		newEntry.getDefinition().ifPresent(def -> {
-			File imageFile = new File("./data/img/movie/img_" + newEntry.getDefinition().get().getDatabaseID() + ".jpg");
+			File imageFile = new File(
+					"./data/img/movie/img_" + newEntry.getDefinition().get().getDatabaseID() + ".jpg");
 			Image image = new Image(imageFile.toURI().toString());
 			this.moviePoster.setImage(image);
 		});
-		
-		if(!newEntry.getDefinition().isPresent()) {
-			//Update a blank
+
+		if (!newEntry.getDefinition().isPresent()) {
+			// Update a blank
 			this.moviePoster.setImage(null);
-			//TODO finish updating
+			// TODO finish updating
 		}
 	}
-	
+
 	public void addMenuBarItems(MenuBar menuBar) {
 		Menu fileMenu = new Menu("File");
-		MenuItem indexFile = new MenuItem("Index a file");
+		MenuItem indexFile = new MenuItem("Index files");
 		MenuItem indexFolder = new MenuItem("Index a folder");
 		MenuItem settings = new MenuItem("Settings");
 		MenuItem closeItem = new MenuItem("Close");
-		
-		//Add event listeners
+
+		// Add event listeners
 		indexFile.setOnAction(event -> {
-//			FileChooser fileChooser = new FileChooser();
-//			fileChooser.setTitle("Open Resource File");
-//			fileChooser.showOpenDialog(stage);
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Choose movie file");
+
+			String[] fileExtensionOptions = new String[Settings.getVideoFileAssociations().length];
+			for(int index = 0; index < Settings.getVideoFileAssociations().length; index++) {
+				fileExtensionOptions[index] = "*" + Settings.getVideoFileAssociations()[index];
+			}
+			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Video", fileExtensionOptions));
+			for (String ext : Settings.getVideoFileAssociations()) {
+				fileChooser.getExtensionFilters()
+						.add(new FileChooser.ExtensionFilter(ext.toUpperCase() + " files (*" + ext + ")", "*" + ext));
+			}
+
+			final List<File> selectedFiles = fileChooser.showOpenMultipleDialog(MediaManager.getMainFrameStage());
+			if(selectedFiles != null) {
+				AddMovieWindow addMovie = new AddMovieWindow(selectedFiles, FileNameCleanserRepository.getCleansers());
+				int added = addMovie.showAndReturnValues(MediaManager.getMainFrameStage());
+				if(added > 0) {
+					this.movieList.getItems().clear();
+					this.movieList.getItems().addAll(MediaRepository.getDisplayedMovieEntries());
+				}
+			}
 		});
 		indexFolder.setOnAction(event -> {
-			
+
 		});
 		settings.setOnAction(event -> SettingsWindow.open(MediaManager.getMainFrameStage()));
 		closeItem.setOnAction(event -> Platform.exit());
 		fileMenu.getItems().addAll(indexFile, indexFolder, settings, closeItem);
-		
+
 		menuBar.getMenus().add(fileMenu);
 	}
 
