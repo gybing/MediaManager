@@ -6,12 +6,17 @@ import java.util.List;
 import org.controlsfx.control.textfield.TextFields;
 
 import com.jakebellotti.scene.movie.add.AddMovieWindow;
+import com.jakebellotti.scene.movie.search.MovieSearchScreen;
 import com.jakebellotti.scene.settings.SettingsWindow;
 import com.jakebellotti.MediaManager;
 import com.jakebellotti.Settings;
+import com.jakebellotti.fx.ListViewModifier;
+import com.jakebellotti.fx.impl.DetailsListViewModifier;
 import com.jakebellotti.model.ListOrderer;
 import com.jakebellotti.model.MediaRepository;
 import com.jakebellotti.model.filenamecleanser.FileNameCleanserRepository;
+import com.jakebellotti.model.listfilter.AscendingAlphabeticalListOrderer;
+import com.jakebellotti.model.listfilter.DescendingAlphabeticalListOrderer;
 import com.jakebellotti.model.movie.MovieEntry;
 
 import javafx.application.Platform;
@@ -48,7 +53,7 @@ public class MovieViewController {
 	 * example text with a thumbnail or just text.
 	 */
 	@FXML
-	private ComboBox<String> viewTypeComboBox;
+	private ComboBox<ListViewModifier<MovieEntry>> viewTypeComboBox;
 	/**
 	 * Where the user can type in a search query to further filter the movies.
 	 */
@@ -142,70 +147,89 @@ public class MovieViewController {
 
 	@FXML
 	public void initialize() {
-		//File file = new File("./data/testimg.jpg");
-		//Image image = new Image(file.toURI().toString());
+		// File file = new File("./data/testimg.jpg");
+		// Image image = new Image(file.toURI().toString());
 		// moviePoster.setImage(image);
+		this.viewTypeComboBox.getItems().add(new DetailsListViewModifier());
 
-//		MediaRepository.assignMovieDefinition(1, new MovieDefinition(1, "Road To Perdition", 1998, "", "", "", "", "",
-//				"", "", "", "", "", "", "", 100, 6.7, "", ""));
+		this.orderByComboBox.getItems().add(new AscendingAlphabeticalListOrderer());
+		this.orderByComboBox.getItems().add(new DescendingAlphabeticalListOrderer());
 
-		// this.movieList.getItems().add(new MovieEntry(1,
-		// file.getAbsolutePath(), 1));
-		// this.moviePlotTextArea.setText("1931. Mike Sullivan and Connor Rooney
-		// are two henchmen of elderly Chicago-based Irish-American mobster John
-		// Rooney, Connor's father. In many respects, John treats Mike more as
-		// his son, who he raised as his own after Mike was orphaned, than the
-		// volatile Connor, who nonetheless sees himself as the heir apparent to
-		// the family business. One evening, Mike's eldest son, twelve year old
-		// Michael Sullivan Jr., who has no idea what his father does for a
-		// living, witnesses Connor and his father gun down an associate and his
-		// men, the situation gone wrong initiated from an action by Connor.
-		// Caught witnessing the incident, Michael is sworn to secrecy about
-		// what he saw. Regardless, Connor, not wanting any loose ends, makes an
-		// attempt to kill Mike, his wife and their two sons. Mike and the
-		// surviving members of his family know that they need to go on the run
-		// as Connor, who has gone into hiding, will be protected through mob
-		// loyalty, especially by John, who cannot turn on his own flesh and
-		// blood. Still, Mike has to figure out a way for retribution for what
-		// Connor did, while still protecting him and his family, not only from
-		// Connor, but from John and his fellow associates. Through it all, Mike
-		// wants those in his family that had no say in what he chose as a
-		// living, to have some redemption for their eternal souls.");
-		// this.movieActorListView.getItems().add("Tyler Hoechlin");
-		// this.movieActorListView.getItems().add("Rob Maxey");
-		// this.viewTypeComboBox.getItems().add("List");
-	//	MediaRepository.addMovieEntry(new MovieEntry(1, "mymovie.mp4", 0));
-	//	MediaRepository.addMovieEntry(new MovieEntry(2, "mymovie2.mp4", 0));
-	//	MediaRepository.addMovieEntry(new MovieEntry(3, "mymovie3.mp4", 1));
-		this.movieList.getItems().addAll(MediaRepository.getDisplayedMovieEntries());
 		setupSearchTextField();
 
 		// add event handlers
-		this.movieList.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
-			movieListOnChangeItem(newVal);
-		});
+		this.movieList.getSelectionModel().selectedItemProperty()
+				.addListener((o, oldVal, newVal) -> movieListOnChangeItem(newVal));
+		this.orderByComboBox.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> refreshMovieList(true));
+		
+		//XXX this is a test
+		this.automatedDataButton.setOnMouseClicked(e -> new MovieSearchScreen().load(MediaManager.getMainFrameStage()));
+
+		// Add data
+		refreshMovieList(false);
 
 		// Now we have loaded all data, display
 		this.movieList.getSelectionModel().selectFirst();
+		this.orderByComboBox.getSelectionModel().selectFirst();
+		this.viewTypeComboBox.getSelectionModel().selectFirst();
+	}
+
+	/**
+	 * 
+	 * @param reorder
+	 *            Whether or not the movie list should be sorted again.
+	 */
+	private final void refreshMovieList(boolean reorder) {
+		this.movieList.getItems().addAll(MediaRepository.getDisplayedMovieEntries());
+		if (reorder) {
+			ListOrderer<MovieEntry> currentOrderer = this.orderByComboBox.getSelectionModel().getSelectedItem();
+			if (currentOrderer != null) {
+				this.movieList.getItems().clear();
+				this.movieList.getItems().addAll(currentOrderer.order(MediaRepository.getDisplayedMovieEntries()));
+			}
+		}
 	}
 
 	private void movieListOnChangeItem(MovieEntry newEntry) {
+		//TODO do similar error checking code on others
+		//TODO finish updating
+		if (newEntry == null)
+			return;
+		//Update regardless of there being a definition
+		this.moviePlotTextArea.clear();
+		this.movieActorListView.getItems().clear();
 		this.movieNameLabel.setText(newEntry.toString());
+		StringBuilder fileInfo = new StringBuilder();
+		fileInfo.append(newEntry.getFile().getName() + " | ");
+		
+		final String fileName = newEntry.getFile().getName();
+		int extensionStart = fileName.lastIndexOf(".");
+		
+		String extension = (extensionStart > 0) ? fileName.substring(extensionStart): "movie";
+		fileInfo.append(extension.replace(".", "").toUpperCase() + " file | ");
+		fileInfo.append(newEntry.getFile().length() / (1024 * 1024) + "mb");
+		this.fileInfoLabel.setText(fileInfo.toString());
+		
+		//Update if there is a definition
 		newEntry.getDefinition().ifPresent(def -> {
 			File imageFile = new File(
 					"./data/img/movie/img_" + newEntry.getDefinition().get().getDatabaseID() + ".jpg");
 			Image image = new Image(imageFile.toURI().toString());
 			this.moviePoster.setImage(image);
 		});
-
+		
+		//Update if there is not a definition
 		if (!newEntry.getDefinition().isPresent()) {
 			// Update a blank
+			this.movieInfoLabel.setText("Rating  |  Runtime  |  Genre  |  Release Date");
+			this.movieAuthorLabel.setText("Director: | Writer:");
 			this.moviePoster.setImage(null);
-			// TODO finish updating
+			this.automatedDataLabel.setText("No data has been selected yet");
 		}
 	}
 
 	public void addMenuBarItems(MenuBar menuBar) {
+		//TODO redo this and remove redundant code
 		Menu fileMenu = new Menu("File");
 		MenuItem indexFile = new MenuItem("Index files");
 		MenuItem indexFolder = new MenuItem("Index a folder");
@@ -218,7 +242,7 @@ public class MovieViewController {
 			fileChooser.setTitle("Choose movie file");
 
 			String[] fileExtensionOptions = new String[Settings.getVideoFileAssociations().length];
-			for(int index = 0; index < Settings.getVideoFileAssociations().length; index++) {
+			for (int index = 0; index < Settings.getVideoFileAssociations().length; index++) {
 				fileExtensionOptions[index] = "*" + Settings.getVideoFileAssociations()[index];
 			}
 			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Video", fileExtensionOptions));
@@ -228,12 +252,11 @@ public class MovieViewController {
 			}
 
 			final List<File> selectedFiles = fileChooser.showOpenMultipleDialog(MediaManager.getMainFrameStage());
-			if(selectedFiles != null) {
+			if (selectedFiles != null) {
 				AddMovieWindow addMovie = new AddMovieWindow(selectedFiles, FileNameCleanserRepository.getCleansers());
 				int added = addMovie.showAndReturnValues(MediaManager.getMainFrameStage());
-				if(added > 0) {
-					this.movieList.getItems().clear();
-					this.movieList.getItems().addAll(MediaRepository.getDisplayedMovieEntries());
+				if (added > 0) {
+					this.refreshMovieList(true);
 				}
 			}
 		});

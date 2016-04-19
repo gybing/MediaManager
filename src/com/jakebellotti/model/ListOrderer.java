@@ -9,18 +9,22 @@ import java.util.List;
  * @date Mar 21, 2016
  */
 
-public interface ListOrderer<T extends Object> {
+public abstract class ListOrderer<T extends Object> {
 	/**
 	 * 
 	 * @return The name/description of this orderer.
 	 */
-	public String toString();
+	public String toString() {
+		return getName();
+	}
+	
+	public abstract String getName();
 
 	/**
 	 * Orders the list.
 	 * 
 	 * @return The new, ordered list.
 	 */
-	public List<T> order();
+	public abstract List<T> order(List<T> list);
 
 }

@@ -25,7 +25,6 @@ public class Launcher extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		MediaManager.setMainFrameStage(stage);
-		
 		final Parent root = launcherLoader.load(Launcher.class.getResource("Launcher.fxml").openStream());
 		launcherLoader.setController(MediaManager.getMaincontroller());
 		

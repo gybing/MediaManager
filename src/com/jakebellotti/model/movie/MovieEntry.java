@@ -40,6 +40,10 @@ public class MovieEntry {
 		this.extractedMovieName = extractedMovieName;
 		this.movieDefinitionID = definitionID;
 	}
+	
+	public File getFile() {
+		return file;
+	}
 	/**
 	 * 
 	 * @return Whether or not the file exists in it's specified location.
@@ -67,6 +71,7 @@ public class MovieEntry {
 	public int getDatabaseID() {
 		return databaseID;
 	}
+	
 	public String getExtractedMovieName() {
 		return extractedMovieName;
 	}
