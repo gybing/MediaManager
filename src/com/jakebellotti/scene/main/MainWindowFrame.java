@@ -40,6 +40,10 @@ public class MainWindowFrame {
 		}
 	}
 	
+	public static FXMLLoader getLoader() {
+		return loader;
+	}
+	
 	public static MainWindowFrameController getController() {
 		return loader.getController();
 	}

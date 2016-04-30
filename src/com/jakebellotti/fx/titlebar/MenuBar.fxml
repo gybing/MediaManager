@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="windowPane" minHeight="75.0" minWidth="175.0" prefHeight="75.0" prefWidth="175.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <StackPane fx:id="contentPane" layoutX="5.0" layoutY="36.0" prefHeight="30.0" prefWidth="167.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="36.0" />
+      <AnchorPane fx:id="titleBarPane" minWidth="175.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane layoutX="68.0" prefHeight="31.0" prefWidth="102.0" AnchorPane.rightAnchor="1.0">
+               <children>
+                  <ImageView fx:id="closeImageView" fitHeight="30.0" fitWidth="34.0" layoutX="112.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0">
+            </ImageView>
+                  <ImageView fx:id="maximiseImageView" fitHeight="30.0" fitWidth="34.0" layoutX="78.0" pickOnBounds="true" preserveRatio="true" y="1.0" AnchorPane.rightAnchor="34.0">
+            </ImageView>
+                  <ImageView fx:id="minimiseImageView" fitHeight="30.0" fitWidth="34.0" layoutX="44.0" pickOnBounds="true" preserveRatio="true" y="1.0" AnchorPane.rightAnchor="68.0">
+            </ImageView>
+               </children>
+            </AnchorPane>
+            <Label fx:id="titleLabel" layoutX="5.0" minHeight="30.0" minWidth="67.0" prefHeight="30.0" prefWidth="63.0" text="Media Manager" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="101.0" />
+         </children>
+      </AnchorPane>
+      <ImageView fx:id="resizePullerImageView" fitHeight="10.0" fitWidth="10.0" layoutX="165.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      </ImageView>
+   </children>
+</AnchorPane>

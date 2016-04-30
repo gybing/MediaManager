@@ -1,5 +1,6 @@
 package com.jakebellotti.scene.main;
 
+import com.jakebellotti.scene.MediaScene;
 import com.jakebellotti.scene.movie.MovieView;
 
 import javafx.fxml.FXML;
@@ -25,6 +26,8 @@ public class MainWindowFrameController {
 
 	@FXML
 	private MenuBar menuBar;
+	
+	private MediaScene currentSceneController = null;
 
 	@FXML
 	public void initialize() {
@@ -34,8 +37,17 @@ public class MainWindowFrameController {
 			contentWindow.getChildren().add(MovieView.getAnchorPane());
 			this.menuBar.getMenus().clear();
 			MovieView.getController().addMenuBarItems(menuBar);
+			this.setCurrentSceneController(MovieView.getController());
 		}
 
+	}
+
+	public MediaScene getCurrentSceneController() {
+		return currentSceneController;
+	}
+
+	public void setCurrentSceneController(MediaScene currentSceneController) {
+		this.currentSceneController = currentSceneController;
 	}
 
 }

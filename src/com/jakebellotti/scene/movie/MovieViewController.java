@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.controlsfx.control.textfield.TextFields;
 
+import com.jakebellotti.scene.MediaScene;
 import com.jakebellotti.scene.movie.add.AddMovieWindow;
 import com.jakebellotti.scene.movie.search.MovieSearchScreen;
 import com.jakebellotti.scene.settings.SettingsWindow;
@@ -41,7 +42,7 @@ import javafx.stage.FileChooser;
  * @date Mar 20, 2016
  */
 
-public class MovieViewController {
+public class MovieViewController implements MediaScene {
 
 	@FXML
 	private AnchorPane root;
@@ -193,8 +194,11 @@ public class MovieViewController {
 	private void movieListOnChangeItem(MovieEntry newEntry) {
 		//TODO do similar error checking code on others
 		//TODO finish updating
-		if (newEntry == null)
+		if (newEntry == null) {
+			//TODO update a blank
 			return;
+		}
+			
 		//Update regardless of there being a definition
 		this.moviePlotTextArea.clear();
 		this.movieActorListView.getItems().clear();
@@ -281,6 +285,11 @@ public class MovieViewController {
 
 		this.searchTextField = newSearchTextField;
 		this.root.getChildren().add(this.searchTextField);
+	}
+
+	@Override
+	public void refresh() {
+		this.refreshMovieList(true);
 	}
 
 }

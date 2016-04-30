@@ -2,10 +2,8 @@ package com.jakebellotti.io;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +21,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 /**
- * 
+ * TODO this could really do with a cleanup
+ * TODO change database design to delete all entries associated to a movie entry when deleted
  * @author Jake Bellotti
  * @date Mar 21, 2016
  */
@@ -77,6 +76,7 @@ public class DatabaseConnection {
 					int movieDefID = resultSet.getInt("assignedMovieDefinitionID");
 					toReturn.add(new MovieEntry(id, fileLocation, extractedMovieName, movieDefID));
 				}
+				resultSet.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -99,12 +99,15 @@ public class DatabaseConnection {
 				if (rs.next()) {
 					final String id = rs.getString(1);
 					try {
-						MovieEntry newEntry = new MovieEntry(Integer.parseInt(id), fileLocation, fileName, Constants.NO_MOVIE_DEFINITION);
+						MovieEntry newEntry = new MovieEntry(Integer.parseInt(id), fileLocation, fileName,
+								Constants.NO_MOVIE_DEFINITION);
 						MediaRepository.addMovieEntry(newEntry);
 						added++;
 					} catch (Exception e) {
+						rs.close();
 					}
 				}
+				rs.close();
 			} catch (DerbySQLIntegrityConstraintViolationException e) {
 			} catch (Exception e) {
 				logger.println("error: " + query);
