@@ -2,6 +2,7 @@ package com.jakebellotti.model.movie;
 
 /**
  * Defines a movie.
+ * 
  * @author Jake Bellotti
  * @date Dec 13, 2015
  */
@@ -28,9 +29,9 @@ public class MovieDefinition {
 	private final String imdbVotes;
 	private final String imdbID;
 
-	public MovieDefinition(int databaseID, String title, int year, String rated, String released, String runtime, String genre,
-			String director, String writer, String actors, String plot, String language, String country, String awards,
-			String poster, int metascore, double imdbRating, String imdbVotes, String imdbID) {
+	public MovieDefinition(int databaseID, String title, int year, String rated, String released, String runtime,
+			String genre, String director, String writer, String actors, String plot, String language, String country,
+			String awards, String poster, int metascore, double imdbRating, String imdbVotes, String imdbID) {
 		this.databaseID = databaseID;
 		this.title = title;
 		this.year = year;
@@ -50,6 +51,13 @@ public class MovieDefinition {
 		this.imdbRating = imdbRating;
 		this.imdbVotes = imdbVotes;
 		this.imdbID = imdbID;
+	}
+
+	public static final MovieDefinition fromNewDefinition(final int databaseID, final NewMovieDefinition def) {
+		return new MovieDefinition(databaseID, def.getTitle(), def.getYear(), def.getRated(), def.getReleased(),
+				def.getRuntime(), def.getGenre(), def.getDirector(), def.getWriter(), def.getActors(), def.getPlot(),
+				def.getLanguage(), def.getCountry(), def.getAwards(), def.getPoster(), def.getMetascore(),
+				def.getImdbRating(), def.getImdbVotes(), def.getImdbID());
 	}
 
 	public String getTitle() {

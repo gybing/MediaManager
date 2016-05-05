@@ -52,6 +52,7 @@ public class MenuBarStage {
 		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.sizeToScene();
 		stage.show();
+		this.controller.centreOnScreen();
 	}
 
 }

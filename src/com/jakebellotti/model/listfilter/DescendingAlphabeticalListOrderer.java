@@ -19,7 +19,7 @@ public class DescendingAlphabeticalListOrderer extends ListOrderer<MovieEntry> {
 
 	@Override
 	public List<MovieEntry> order(List<MovieEntry> list) {
-		Collections.sort(list, (a, b) -> b.toString().compareTo(a.toString()));
+		Collections.sort(list, (a, b) -> b.toString().toLowerCase().compareTo(a.toString().toLowerCase()));
 		return list;
 	}
 

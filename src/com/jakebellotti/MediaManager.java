@@ -2,11 +2,15 @@ package com.jakebellotti;
 
 import java.util.Optional;
 
-import com.jakebellotti.io.DataScraper;
 import com.jakebellotti.io.DatabaseConnection;
 import com.jakebellotti.io.SettingsIO;
+import com.jakebellotti.io.scraper.DataScraper;
+import com.jakebellotti.io.scraper.impl.OMDBMovieScraper;
 import com.jakebellotti.lang.Language;
 import com.jakebellotti.lang.LanguagePack;
+import com.jakebellotti.model.MediaRepository;
+import com.jakebellotti.model.movie.MovieEntry;
+import com.jakebellotti.model.movie.NewMovieDefinition;
 import com.jakebellotti.scene.launcher.Launcher;
 import com.jakebellotti.scene.main.MainWindowFrameController;
 
@@ -21,10 +25,11 @@ import javafx.stage.Stage;
 
 public class MediaManager {
 
-	private static DataScraper definitionRetriever;
+	private static DataScraper<MovieEntry, NewMovieDefinition> movieDefinitionRetriever = new OMDBMovieScraper();
 	private static final DatabaseConnection database = new DatabaseConnection();
 	private static final MainWindowFrameController mainController = new MainWindowFrameController();
 	private static final LanguagePack language = new LanguagePack(Language.ENGLISH);
+	private static final MediaRepository mediaRepository = new MediaRepository();
 
 	private static Stage mainFrameStage = null;
 
@@ -68,13 +73,13 @@ public class MediaManager {
 		database.connect();
 	}
 
-	public static Optional<DataScraper> getDefinitionRetriever() {
-		return Optional.ofNullable(definitionRetriever);
+	public static Optional<DataScraper<MovieEntry, NewMovieDefinition>> getMovieDefinitionRetriever() {
+		return Optional.ofNullable(movieDefinitionRetriever);
 	}
 
-	public static void setDefinitionRetriever(DataScraper definitionRetriever) {
+	public static void setMovieDefinitionRetriever(DataScraper<MovieEntry, NewMovieDefinition> definitionRetriever) {
 		if (definitionRetriever != null) {
-			MediaManager.definitionRetriever = definitionRetriever;
+			MediaManager.movieDefinitionRetriever = definitionRetriever;
 		}
 	}
 
@@ -103,6 +108,10 @@ public class MediaManager {
 
 	public static LanguagePack getLanguage() {
 		return language;
+	}
+
+	public static MediaRepository getMediaRepository() {
+		return mediaRepository;
 	}
 
 }

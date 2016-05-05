@@ -6,6 +6,7 @@ import com.jakebellotti.scene.launcher.loadingtask.*;
 import com.jakebellotti.scene.loadingscreen.LoadingScreen;
 import com.jakebellotti.scene.main.MainWindowFrame;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -74,7 +75,7 @@ public class LauncherController {
 	}
 
 	private void exitButtonOnMouseClicked(MouseEvent event) {
-		System.exit(0);
+		Platform.exit();
 	}
 
 	private void memorySaverCheckBoxSelectionProperty(boolean newValue) {

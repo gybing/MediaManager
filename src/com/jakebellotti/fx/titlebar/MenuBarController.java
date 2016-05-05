@@ -4,7 +4,6 @@ import java.io.File;
 
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,6 +14,7 @@ import javafx.stage.Stage;
 
 /**
  * TODO minimum sizes in resizing, try using on different screen resolutions
+ * 
  * @author Jake Bellotti
  * @date Apr 25, 2016
  */
@@ -27,12 +27,19 @@ public class MenuBarController {
 	private double lastStageY = 0;
 	private double lastStageWidth = 0;
 	private double lastStageHeight;
+	
+	private final double rootPrefWidth;
+	private final double rootPrefHeight;
+	
+	private double minWidth;
+	private double minHeight;
 
 	private final Stage stage;
 	private final Region root;
 
 	private boolean maximised = false;
-
+	private boolean firstShown = true;
+	
 	private static Image maximiseImage;
 	private static Image maximiseImageHover;
 	private static Image restoreImage;
@@ -65,6 +72,8 @@ public class MenuBarController {
 	public MenuBarController(Stage stage, Region root) {
 		this.stage = stage;
 		this.root = root;
+		this.rootPrefWidth = root.getPrefWidth();
+		this.rootPrefHeight = root.getPrefHeight();
 	}
 
 	@FXML
@@ -104,7 +113,7 @@ public class MenuBarController {
 		if (root != null) {
 			this.contentPane.getChildren().clear();
 			Region r = (Region) root;
-			
+
 			r.prefWidthProperty().bind(contentPane.widthProperty());
 			r.prefHeightProperty().bind(contentPane.heightProperty());
 			this.contentPane.getChildren().add(r);
@@ -130,12 +139,10 @@ public class MenuBarController {
 			this.maximiseImageView.setImage(restoreImage);
 		} else {
 			if (resize) {
-				stage.hide();
 				stage.setX(lastStageX);
 				stage.setY(lastStageY);
 				stage.setWidth(lastStageWidth);
 				stage.setHeight(this.lastStageHeight);
-				stage.show();
 			}
 
 			this.maximiseImageView.setOnMouseEntered(event -> this.maximiseImageView.setImage(maximiseImageHover));
@@ -143,8 +150,27 @@ public class MenuBarController {
 			this.maximiseImageView.setImage(maximiseImage);
 		}
 	}
+	
+	public void centreOnScreen() {
+		//TODO add this to the JBLib library
+		double xLocation = (MenuBarStage.MAX_WIDTH - this.stage.getWidth()) / 2;
+		double yLocation = (MenuBarStage.MAX_HEIGHT - this.stage.getHeight()) / 2;
+		this.stage.setX(xLocation);
+		this.stage.setY(yLocation);
+	}
 
 	private void addEventHandlers() {
+		this.stage.setOnShown(e -> {
+			if (firstShown) {
+				firstShown = false;
+				this.windowPane.setPrefWidth(this.rootPrefWidth);
+				this.windowPane.setPrefHeight(this.rootPrefHeight + (this.titleBarPane.getHeight() + 10));
+				
+				this.minHeight = new Double(this.windowPane.getPrefHeight());
+				this.minWidth = new Double(this.windowPane.getPrefWidth());
+			}
+		});
+
 		this.minimiseImageView.setOnMouseClicked(event -> stage.setIconified(true));
 		this.closeImageView.setOnMouseClicked(event -> stage.close());
 
@@ -158,10 +184,23 @@ public class MenuBarController {
 			yOffset = event.getSceneY();
 			double widthDiff = (xOffset - stage.getWidth());
 			double heightDiff = (yOffset - stage.getHeight());
-
-			stage.setWidth(stage.getWidth() + widthDiff);
-			stage.setHeight(stage.getHeight() + heightDiff);
 			
+			double newWidth = stage.getWidth() + widthDiff;
+			double newHeight = stage.getHeight() + heightDiff;
+			
+			//TODO fix bug
+			//TODO make sure they can't resize past the windows task bar
+			
+			if(newWidth > this.minWidth) {
+				stage.setWidth(newWidth);
+			}
+			if(newHeight > this.minHeight) {
+				stage.setHeight(newHeight);
+			}
+
+//			stage.setWidth(stage.getWidth() + widthDiff);
+//			stage.setHeight(stage.getHeight() + heightDiff);
+
 			this.maximised = false;
 			updateMaximised(false);
 		});

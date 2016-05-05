@@ -3,7 +3,7 @@ package com.jakebellotti.model.movie;
 import java.io.File;
 import java.util.Optional;
 
-import com.jakebellotti.model.MediaRepository;
+import com.jakebellotti.MediaManager;
 
 /**
  * 
@@ -28,7 +28,7 @@ public class MovieEntry {
 	/**
 	 * The definition of the movie.
 	 */
-	private final int movieDefinitionID;
+	private int movieDefinitionID;
 	/**
 	 * Creates a new Movie File.
 	 * @param file
@@ -56,15 +56,25 @@ public class MovieEntry {
 	 * @return The movie definition.
 	 */
 	public Optional<MovieDefinition> getDefinition() {
-		return MediaRepository.getMovieDefinition(movieDefinitionID);
+		return MediaManager.getMediaRepository().getMovieDefinition(movieDefinitionID);
 	}
 	/**
 	 * Returns the name of the file if there is no definition found, else it just returns the movie title.
 	 */
 	@Override
 	public String toString() {
+		//FIXME even though it may be marked as having a movie definition, we can never assume that the definition exists until checking
 		return movieDefinitionID == 0? extractedMovieName : getDefinition().get().getTitle();
 	}
+	
+	public void setMovieDefinitionID(int newID) {
+		this.movieDefinitionID = newID;
+	}
+	
+	public int getMovieDefinitionID() {
+		return this.movieDefinitionID;
+	}
+	
 	/**
 	 * @return the databaseID
 	 */

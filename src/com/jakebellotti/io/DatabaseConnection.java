@@ -12,8 +12,10 @@ import org.apache.derby.jdbc.EmbeddedDriver;
 import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
 
 import com.jakebellotti.Constants;
-import com.jakebellotti.model.MediaRepository;
+import com.jakebellotti.MediaManager;
+import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
+import com.jakebellotti.model.movie.NewMovieDefinition;
 import com.jakebellotti.model.movie.NewMovieEntry;
 
 import javafx.application.Platform;
@@ -21,8 +23,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 /**
- * TODO this could really do with a cleanup
- * TODO change database design to delete all entries associated to a movie entry when deleted
+ * TODO this could really do with a cleanup TODO change database design to
+ * delete all entries associated to a movie entry when deleted XXX Remember to
+ * use ' instead of " for inserting as Derby doesn't accept it
+ * 
  * @author Jake Bellotti
  * @date Mar 21, 2016
  */
@@ -45,6 +49,7 @@ public class DatabaseConnection {
 				errorAlert.setContentText("Another instance of this program is running. Closing program now.");
 				errorAlert.showAndWait();
 				Platform.exit();
+				return;
 			}
 			e.printStackTrace();
 		}
@@ -58,6 +63,67 @@ public class DatabaseConnection {
 	public final void createRequiredTables() {
 		// TODO properly create all tables
 		// logger.println(createTable(DatabaseTableConstants.createMovieListEntryTable()));
+	}
+
+	/**
+	 * 
+	 * @return A list of every movie definition in the database
+	 */
+	public final ArrayList<MovieDefinition> getAllMovieDefinitions() {
+		final ArrayList<MovieDefinition> toReturn = new ArrayList<>();
+		executeQuery("SELECT * FROM tblMovieDefinition").ifPresent(resultSet -> {
+			try {
+				while (resultSet.next()) {
+					final int id = resultSet.getInt("ID");
+					final String imdbID = resultSet.getString("imdbID");
+					final String title = resultSet.getString("title");
+					// TODO check that all of the names when getting from the
+					// result set are correct
+					int year = -1;
+					try {
+						year = Integer.parseInt(resultSet.getString("releaseYear"));
+					} catch (Exception e) {
+					}
+					final String rated = resultSet.getString("rating");
+					final String released = resultSet.getString("released");
+					final String runtime = resultSet.getString("runtime");
+					final String genre = resultSet.getString("genre");
+					final String director = resultSet.getString("director");
+					final String writer = resultSet.getString("writer");
+					final String actors = resultSet.getString("actors");
+					final String plot = resultSet.getString("plot");
+					final String language = resultSet.getString("movieLanguage");
+					final String country = resultSet.getString("country");
+					final String awards = resultSet.getString("awards");
+					final String poster = resultSet.getString("poster");
+					int metascore = -1;
+					try {
+						metascore = Integer.parseInt(resultSet.getString("metascore"));
+					} catch (Exception e) {
+					}
+
+					double imdbRating = -1;
+					try {
+						imdbRating = Double.parseDouble(resultSet.getString("imdbRating"));
+					} catch (Exception e) {
+					}
+					final String imdbVotes = resultSet.getString("imdbVotes");
+					final MovieDefinition movieDef = new MovieDefinition(id, title, year, rated, released, runtime,
+							genre, director, writer, actors, plot, language, country, awards, poster, metascore,
+							imdbRating, imdbVotes, imdbID);
+					toReturn.add(movieDef);
+				}
+				resultSet.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				try {
+					resultSet.close();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		return toReturn;
 	}
 
 	/**
@@ -91,9 +157,11 @@ public class DatabaseConnection {
 			try {
 				final String fileLocation = entry.getFileLocation().getAbsolutePath().replace("'", "''");
 				final String fileName = entry.getMovieName().replace("'", "''");
-				query = "INSERT INTO tblMovieEntry(fileLocation, extractedMovieName) VALUES('" + fileLocation + "', '"
-						+ fileName + "')";
-				conn.createStatement().execute(query);
+				
+				SQLInsertQueryBuilder builder = new SQLInsertQueryBuilder("tblMovieEntry");
+				builder.insertString("fileLocation", entry.getFileLocation());
+				builder.insertString("extractedMovieName", entry.getMovieName());
+				conn.createStatement().execute(builder.generateQuery());
 
 				ResultSet rs = conn.createStatement().executeQuery("VALUES IDENTITY_VAL_LOCAL()");
 				if (rs.next()) {
@@ -101,7 +169,7 @@ public class DatabaseConnection {
 					try {
 						MovieEntry newEntry = new MovieEntry(Integer.parseInt(id), fileLocation, fileName,
 								Constants.NO_MOVIE_DEFINITION);
-						MediaRepository.addMovieEntry(newEntry);
+						MediaManager.getMediaRepository().addMovieEntry(newEntry);
 						added++;
 					} catch (Exception e) {
 						rs.close();
@@ -115,6 +183,56 @@ public class DatabaseConnection {
 			}
 		}
 		return added;
+	}
+
+	public final MovieDefinition addMovieDefinition(NewMovieDefinition definition) {
+		int databaseID = -1;
+		try {
+			// TODO update if exists
+			// TODO complete database so that all of the movie data can be
+			// inserted
+			// TODO make this more secure
+			
+			SQLInsertQueryBuilder queryBuilder = new SQLInsertQueryBuilder("tblMovieDefinition");
+			
+			queryBuilder.insertString("imdbID", definition.getImdbID());
+			queryBuilder.insertString("title", definition.getTitle());
+			queryBuilder.insertString("releaseYear", definition.getYear());
+			queryBuilder.insertString("rating", definition.getRated());
+			queryBuilder.insertString("runtime", definition.getRuntime());
+			queryBuilder.insertString("genre", definition.getGenre());
+			queryBuilder.insertString("director", definition.getDirector());
+			queryBuilder.insertString("writer", definition.getWriter());
+			queryBuilder.insertString("actors", definition.getActors());
+			queryBuilder.insertString("movieLanguage", definition.getLanguage());
+			queryBuilder.insertString("country", definition.getCountry());
+			queryBuilder.insertString("awards", definition.getAwards());
+			queryBuilder.insertString("poster", definition.getPoster());
+			queryBuilder.insert("metascore", definition.getMetascore());
+			queryBuilder.insertString("imdbRating", definition.getImdbRating());
+			queryBuilder.insertString("imdbVotes", definition.getImdbVotes());
+			queryBuilder.insertString("plot", definition.getPlot());
+			conn.createStatement().execute(queryBuilder.generateQuery());
+
+			ResultSet rs = conn.createStatement().executeQuery("VALUES IDENTITY_VAL_LOCAL()");
+			if (rs.next()) {
+				final String id = rs.getString(1);
+				databaseID = Integer.parseInt(id);
+				rs.close();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return MovieDefinition.fromNewDefinition(databaseID, definition);
+	}
+
+	public final void assignMovieDefinitionToEntry(final MovieEntry entry, final int newID) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("UPDATE tblMovieEntry ");
+		builder.append("SET assignedMovieDefinitionID = " + newID + " ");
+		builder.append("WHERE ID = " + entry.getDatabaseID());
+		this.query(builder.toString());
 	}
 
 	/**
@@ -162,17 +280,5 @@ public class DatabaseConnection {
 	public String getShutdownString() {
 		return "jdbc:derby:;shutdown=true";
 	}
-
-	// executeQuery("SELECT * FROM SYS.SYSTABLES").ifPresent(rs->{
-	// System.out.println("Got result set.");
-	// try {
-	// while(rs.next()) {
-	//
-	// System.out.println(rs.getString(2));
-	// }
-	// } catch (Exception e1) {
-	// e1.printStackTrace();
-	// }
-	// });;
 
 }

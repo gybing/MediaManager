@@ -2,7 +2,6 @@ package com.jakebellotti.scene.launcher.loadingtask;
 
 import com.jakebellotti.MediaManager;
 import com.jakebellotti.io.Logger;
-import com.jakebellotti.model.MediaRepository;
 import com.jakebellotti.scene.loadingscreen.LoadingTask;
 
 /**
@@ -15,13 +14,13 @@ public class DeserializeMediaDataLoadingTask implements LoadingTask {
 	
 	@Override
 	public String taskDescription() {
-		return "Loading media data...";
+		return "Loading media definitions...";
 	}
 
 	@Override
 	public String getFinishText() {
 		//loaded x movie entries, tv series entries, music entries
-		return "Loaded media data.";
+		return "Loaded media definitions.";
 	}
 
 	@Override
@@ -36,8 +35,10 @@ public class DeserializeMediaDataLoadingTask implements LoadingTask {
 	@Override
 	public void doTask() {
 		//TODO load from database
-		MediaRepository.addMovieEntries(MediaManager.getDatabase().getAllMovieEntries());
-		logger.println(MediaRepository.getLoadedMovieEntries().size() + " movie entries");
+		//XXX this is where you load media definitions
+		logger.println("Deserializing media definitions");
+		MediaManager.getMediaRepository().addMovieDefinitions(MediaManager.getDatabase().getAllMovieDefinitions());
+		logger.println(MediaManager.getMediaRepository().getLoadedMovieDefinitions().size()+" movie definitions");
 	}
 
 }

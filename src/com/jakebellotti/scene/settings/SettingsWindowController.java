@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
+ * TODO alphabetically sort settings by name
  * @author Jake Bellotti
  * @date Apr 14, 2016
  */

@@ -8,8 +8,8 @@
 
 <AnchorPane fx:id="windowPane" minHeight="75.0" minWidth="175.0" prefHeight="75.0" prefWidth="175.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <StackPane fx:id="contentPane" layoutX="5.0" layoutY="36.0" prefHeight="30.0" prefWidth="167.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="36.0" />
-      <AnchorPane fx:id="titleBarPane" minWidth="175.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="contentPane" layoutY="36.0" prefHeight="30.0" prefWidth="167.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="36.0" />
+      <AnchorPane fx:id="titleBarPane" minWidth="175.0" style="-fx-border-color: transparent transparent black transparent;;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane layoutX="68.0" prefHeight="31.0" prefWidth="102.0" AnchorPane.rightAnchor="1.0">
                <children>

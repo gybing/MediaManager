@@ -4,8 +4,7 @@ import com.jakebellotti.fx.titlebar.MenuBarStage;
 import com.jakebellotti.scene.main.MainWindowFrame;
 
 import javafx.application.Application;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
@@ -21,11 +20,18 @@ public class MenuBarTest extends Application {
 
 	@Override
 	public void start(Stage newStage) throws Exception {
-		//TODO load
+		boolean test = true;
+		
 		Region root = MainWindowFrame.getLoader().load(MainWindowFrame.class.getResource("MainWindowFrame.fxml").openStream());
-		//MenuBarStage stage = new MenuBarStage(newStage, new Button("Click"));
-		MenuBarStage stage = new MenuBarStage(newStage, root);
-		stage.show();
+		if(test) {
+			//MenuBarStage stage = new MenuBarStage(newStage, new Button("Click"));
+			MenuBarStage stage = new MenuBarStage(newStage, root);
+			stage.show();
+		} else {
+			newStage.setScene(new Scene(root));
+			newStage.show();
+		}
+
 	}
 
 }
