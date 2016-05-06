@@ -28,7 +28,7 @@ public class MovieSearchScreen {
 	@FXML
 	private GridView<ImageView> gridView;
 
-	public void load(Stage currentStage) {
+	public void load(String title, Stage currentStage) {
 		try {
 			final Stage stage = new Stage();
 			stage.initOwner(currentStage);

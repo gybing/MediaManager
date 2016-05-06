@@ -6,11 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
- * 
+ * TODO about menu
  * @author Jake Bellotti
  * @date Feb 19, 2016
  */
@@ -18,6 +20,8 @@ import javafx.stage.Stage;
 public class MainWindowFrame {
 	
 	private static final FXMLLoader loader = new FXMLLoader();
+	private static Menu windowMenu;
+	private static Menu helpMenu;
 	
 	public static void load(Stage stage) {
 		try {
@@ -38,6 +42,31 @@ public class MainWindowFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static final Menu getHelpMenu() {
+		if(helpMenu == null) {
+			helpMenu = new Menu("Help");
+			MenuItem about = new MenuItem("About");
+			helpMenu.getItems().addAll(about);
+		}
+		return helpMenu;
+	}
+	
+	/**
+	 * TODO add the functionality to this
+	 * @return
+	 */
+	public static final Menu getWindowMenu() {
+		if(windowMenu == null) {
+			windowMenu = new Menu("Window");
+			MenuItem movieView = new MenuItem("Switch To Movie View");
+			MenuItem tvSeriesView = new MenuItem("Switch To TV Series View");
+			MenuItem musicView = new MenuItem("Switch To Music View");
+			
+			windowMenu.getItems().addAll(movieView, tvSeriesView, musicView);
+		}
+		return windowMenu;
 	}
 	
 	public static FXMLLoader getLoader() {

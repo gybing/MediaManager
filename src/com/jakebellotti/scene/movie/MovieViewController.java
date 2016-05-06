@@ -16,6 +16,7 @@ import java.util.Optional;
 import org.controlsfx.control.textfield.TextFields;
 
 import com.jakebellotti.scene.MediaScene;
+import com.jakebellotti.scene.main.MainWindowFrame;
 import com.jakebellotti.scene.movie.add.AddMovieWindow;
 import com.jakebellotti.scene.movie.search.MovieSearchScreen;
 import com.jakebellotti.scene.settings.SettingsWindow;
@@ -23,13 +24,14 @@ import com.jakebellotti.DataConstants;
 import com.jakebellotti.MediaManager;
 import com.jakebellotti.Settings;
 import com.jakebellotti.fx.ListViewModifier;
-import com.jakebellotti.fx.impl.DetailsListViewModifier;
+import com.jakebellotti.fx.impl.*;
 import com.jakebellotti.model.ListOrderer;
 import com.jakebellotti.model.filenamecleanser.FileNameCleanserRepository;
 import com.jakebellotti.model.listfilter.AscendingAlphabeticalListOrderer;
 import com.jakebellotti.model.listfilter.DescendingAlphabeticalListOrderer;
 import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
+import com.jakebellotti.model.movie.MovieEntryWrapper;
 import com.jakebellotti.model.movie.NewMovieDefinition;
 
 import javafx.application.Platform;
@@ -66,13 +68,13 @@ public class MovieViewController implements MediaScene {
 	private AnchorPane root;
 
 	@FXML
-	private ListView<MovieEntry> movieList;
+	private ListView<MovieEntryWrapper> movieList;
 	/**
 	 * Allows the user to select how they want to view the movie list, for
 	 * example text with a thumbnail or just text.
 	 */
 	@FXML
-	private ComboBox<ListViewModifier<MovieEntry>> viewTypeComboBox;
+	private ComboBox<ListViewModifier<MovieEntryWrapper>> viewTypeComboBox;
 	/**
 	 * Where the user can type in a search query to further filter the movies.
 	 */
@@ -94,7 +96,7 @@ public class MovieViewController implements MediaScene {
 	 * Where the user can select how they want to order their movie list by.
 	 */
 	@FXML
-	private ComboBox<ListOrderer<MovieEntry>> orderByComboBox;
+	private ComboBox<ListOrderer<MovieEntryWrapper>> orderByComboBox;
 	/**
 	 * Moves up one in the movie list.
 	 */
@@ -166,48 +168,34 @@ public class MovieViewController implements MediaScene {
 
 	@FXML
 	public void initialize() {
+		resetMovieInterface();
 		this.viewTypeComboBox.getItems().add(new DetailsListViewModifier());
+		this.viewTypeComboBox.getItems().add(new TilesSmallListViewModifier());
+		this.viewTypeComboBox.getItems().add(new TilesMediumListViewModifier());
+		this.viewTypeComboBox.getItems().add(new TilesLargeListViewModifier());
 
 		this.orderByComboBox.getItems().add(new AscendingAlphabeticalListOrderer());
 		this.orderByComboBox.getItems().add(new DescendingAlphabeticalListOrderer());
-		
-		JavaFXUtils.setListViewCellFactory(this.movieList, (cell, movieEntry, c) -> {
-			HBox box = new HBox();
-			Label text = new Label(movieEntry.toString());
-			if(! movieEntry.getDefinition().isPresent()) {
-				text.setStyle("-fx-text-fill: red");
-			}
-			
-			ContextMenu menu = new ContextMenu();
-			MenuItem delete = new MenuItem();
-			delete.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
-			menu.getItems().add(delete);
-			
-			cell.setContextMenu(menu);
-			
-			box.getChildren().add(text);
-			cell.setGraphic(box);
-		});
-		
+
 		JavaFXUtils.setListViewCellFactory(this.movieActorListView, (cell, actor, c) -> {
 			HBox box = new HBox();
 			Label text = new Label(actor);
-			
+
 			ContextMenu menu = new ContextMenu();
 			MenuItem viewAllMovies = new MenuItem();
 			viewAllMovies.textProperty().bind(Bindings.format("See all movies containing \"%s\"", cell.itemProperty()));
+			// TODO finish feature
 			MenuItem viewActorProfile = new MenuItem();
 			viewActorProfile.textProperty().bind(Bindings.format("See actor profile for \"%s\"", cell.itemProperty()));
-			
+			// TODO finish feature
+
 			menu.getItems().addAll(viewAllMovies, viewActorProfile);
-			
+
 			cell.setContextMenu(menu);
-			
+
 			box.getChildren().add(text);
 			cell.setGraphic(box);
 		});
-		
-		
 
 		setupSearchTextField();
 
@@ -218,8 +206,9 @@ public class MovieViewController implements MediaScene {
 				.addListener((o, oldVal, newVal) -> refreshMovieList(true));
 		this.retrieveDataButton.setOnMouseClicked(this::retrieveDataButtonMouseClicked);
 
-		this.automatedDataButton.setOnMouseClicked(e -> new MovieSearchScreen().load(MediaManager.getMainFrameStage()));
+		this.automatedDataButton.setOnMouseClicked(this::automatedDataButtonMouseClicked);
 		this.openMovieButton.setOnMouseClicked(this::openMovieButtonClicked);
+		this.viewTypeComboBox.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> viewTypeComboBoxSelected(oldVal, newVal));
 
 		// Add data
 		refreshMovieList(false);
@@ -230,11 +219,26 @@ public class MovieViewController implements MediaScene {
 		this.movieList.getSelectionModel().selectFirst();
 	}
 	
-	private final void openMovieButtonClicked(MouseEvent event) {
-		MovieEntry selected = this.movieList.getSelectionModel().getSelectedItem();
+	private final void automatedDataButtonMouseClicked(MouseEvent event) {
+//		e -> new MovieSearchScreen().load(MediaManager.getMainFrameStage()
+		//TODO search for movies
+		final MovieSearchScreen movieSearch = new MovieSearchScreen();
+		
+		MovieEntryWrapper selected = this.movieList.getSelectionModel().getSelectedItem();
 		if(selected != null) {
+			movieSearch.load(selected.getMovieEntry().toString(), MediaManager.getMainFrameStage());
+		}
+	}
+	
+	private final void viewTypeComboBoxSelected(ListViewModifier<MovieEntryWrapper> oldVal, ListViewModifier<MovieEntryWrapper> newVal) {
+		newVal.change(this.movieList);
+	}
+
+	private final void openMovieButtonClicked(MouseEvent event) {
+		MovieEntryWrapper selected = this.movieList.getSelectionModel().getSelectedItem();
+		if (selected != null) {
 			try {
-				Desktop.getDesktop().open(selected.getFile());
+				Desktop.getDesktop().open(selected.getMovieEntry().getFile());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -249,7 +253,7 @@ public class MovieViewController implements MediaScene {
 	private final void refreshMovieList(boolean reorder) {
 		this.movieList.getItems().addAll(MediaManager.getMediaRepository().getDisplayedMovieEntries());
 		if (reorder) {
-			ListOrderer<MovieEntry> currentOrderer = this.orderByComboBox.getSelectionModel().getSelectedItem();
+			ListOrderer<MovieEntryWrapper> currentOrderer = this.orderByComboBox.getSelectionModel().getSelectedItem();
 			if (currentOrderer != null) {
 				this.movieList.getItems().clear();
 				this.movieList.getItems()
@@ -258,61 +262,52 @@ public class MovieViewController implements MediaScene {
 		}
 	}
 
-	private void movieListOnChangeItem(MovieEntry newEntry) {
+	private void movieListOnChangeItem(MovieEntryWrapper newEntry) {
 		updateMovieInterface(newEntry);
 	}
-	
+
 	private void resetMovieInterface() {
-		//TODO finish this
+		// TODO finish this
+		this.movieNameLabel.setText("");
 		this.movieActorListView.getItems().clear();
-		this.movieInfoLabel.setText("Rating  |  Runtime  |  Genre  |  Release Date");
-		this.movieAuthorLabel.setText("Director: | Writer:");
+		this.movieInfoLabel.setText("");
+		this.movieAuthorLabel.setText("");
 		this.moviePoster.setImage(null);
 		this.automatedDataLabel.setText("No data has been selected yet");
 		this.moviePlotTextArea.clear();
+		this.fileInfoLabel.setText("");
+	}
+	
+	private final void setFileInfo(MovieEntryWrapper newEntry) {
+		StringBuilder fileInfo = new StringBuilder();
+		fileInfo.append(newEntry.getMovieEntry().getFile().getName() + " | ");
+
+		final String fileName = newEntry.getMovieEntry().getFile().getName();
+		int extensionStart = fileName.lastIndexOf(".");
+
+		String extension = (extensionStart > 0) ? fileName.substring(extensionStart) : "movie";
+		fileInfo.append(extension.replace(".", "").toUpperCase() + " file | ");
+		fileInfo.append(newEntry.getMovieEntry().getFile().length() / (1024 * 1024) + "mb");
+		this.fileInfoLabel.setText(fileInfo.toString());
 	}
 
-	private void updateMovieInterface(MovieEntry newEntry) {
+	private void updateMovieInterface(MovieEntryWrapper newEntry) {
 		// TODO do similar error checking code on others
 		// TODO finish updating
 		if (newEntry == null) {
 			resetMovieInterface();
 			return;
 		}
+		this.moviePoster.setImage(this.getPosterImage(newEntry.getMovieEntry()));
 
 		// Update regardless of there being a definition
 		this.moviePlotTextArea.clear();
 		this.movieActorListView.getItems().clear();
 		this.movieNameLabel.setText(newEntry.toString());
-		StringBuilder fileInfo = new StringBuilder();
-		fileInfo.append(newEntry.getFile().getName() + " | ");
-
-		final String fileName = newEntry.getFile().getName();
-		int extensionStart = fileName.lastIndexOf(".");
-
-		String extension = (extensionStart > 0) ? fileName.substring(extensionStart) : "movie";
-		fileInfo.append(extension.replace(".", "").toUpperCase() + " file | ");
-		fileInfo.append(newEntry.getFile().length() / (1024 * 1024) + "mb");
-		this.fileInfoLabel.setText(fileInfo.toString());
+		setFileInfo(newEntry);
 
 		// Update if there is a definition
-		newEntry.getDefinition().ifPresent(def -> {
-			try {
-				String[] posterLocation = def.getPoster().split("/");
-				String poster = posterLocation[(posterLocation.length - 1)];
-				final File posterFile = new File(DataConstants.MOVIE_IMAGE_FOLDER + "/" + poster);
-				if (!posterFile.exists()) {
-					// TODO set movie as a constant, load when needed
-					Image image = new Image(
-							new File(DataConstants.IMAGE_ROOT_FOLDER + "/movienotfound.gif").toURI().toString());
-					this.moviePoster.setImage(image);
-				} else {
-					Image image = new Image(posterFile.toURI().toString());
-					this.moviePoster.setImage(image);
-				}
-			} catch (Exception e) {
-			}
-
+		newEntry.getMovieEntry().getDefinition().ifPresent(def -> {
 			this.moviePlotTextArea.setText(def.getPlot());
 			this.movieInfoLabel.setText(def.getRated() + "  |  " + def.getRuntime() + "  |  " + def.getGenre() + "  |  "
 					+ def.getReleased());
@@ -325,8 +320,28 @@ public class MovieViewController implements MediaScene {
 		});
 
 		// Update if there is not a definition
-		if (!newEntry.getDefinition().isPresent()) {
+		if (!newEntry.getMovieEntry().getDefinition().isPresent()) {
 			resetMovieInterface();
+			setFileInfo(newEntry);
+		}
+	}
+
+	private final Image getPosterImage(MovieEntry entry) {
+		if (entry == null) {
+			return null;
+		}
+		if (!entry.getDefinition().isPresent()) {
+			File movieNotFound = new File(DataConstants.IMAGE_ROOT_FOLDER + "/movienotfound.gif");
+			return new Image(movieNotFound.toURI().toString());
+		} else {
+			String[] posterLocation = entry.getDefinition().get().getPoster().split("/");
+			String poster = posterLocation[(posterLocation.length - 1)];
+			final File posterFile = new File(DataConstants.MOVIE_IMAGE_FOLDER + "/" + poster);
+			if (!posterFile.exists()) {
+				File movieNotFound = new File(DataConstants.IMAGE_ROOT_FOLDER + "/movienotfound.gif");
+				return new Image(movieNotFound.toURI().toString());
+			}
+			return new Image(posterFile.toURI().toString());
 		}
 	}
 
@@ -336,9 +351,9 @@ public class MovieViewController implements MediaScene {
 		// TODO do this on a separate thread to JavaFX
 		// TODO update the status indicator bar because this is a low latency
 		// operation
-		MovieEntry selected = this.movieList.getSelectionModel().getSelectedItem();
+		MovieEntryWrapper selected = this.movieList.getSelectionModel().getSelectedItem();
 		if (selected != null) {
-			selected.getDefinition().ifPresent(def -> {
+			selected.getMovieEntry().getDefinition().ifPresent(def -> {
 				// TODO notify the user, that the definition exists, get
 				// confirmation before retrieving again
 				return;
@@ -349,27 +364,38 @@ public class MovieViewController implements MediaScene {
 				return;
 			}
 			MediaManager.getMovieDefinitionRetriever().ifPresent(scraper -> {
-				Optional<NewMovieDefinition> definition = scraper.scrapeData(selected);
+				Platform.runLater(() -> {
+					//TODO clean up this code...
+					//FIXME threading issues that make the image not spin because the download is on the javafx thread
+					final int selectedIndex = new Integer(this.movieList.getSelectionModel().getSelectedIndex());
+					selected.setShowLoadingImage(true);
+					this.movieList.getItems().set(selectedIndex, null);
+					this.movieList.getItems().set(selectedIndex, selected);
+					Platform.runLater(() -> {
+						Optional<NewMovieDefinition> definition = scraper.scrapeData(selected.getMovieEntry());
 
-				if (!definition.isPresent()) {
-					// TODO return an error message
-				}
+						if (!definition.isPresent()) {
+							// TODO return an error message
+						}
 
-				definition.ifPresent(def -> {
-					// TODO reuse this code
-					MovieDefinition storedDefinition = MediaManager.getDatabase().addMovieDefinition(def);
-					selected.setMovieDefinitionID(storedDefinition.getDatabaseID());
-					MediaManager.getMediaRepository().assignMovieDefinition(storedDefinition.getDatabaseID(),
-							storedDefinition);
-					MediaManager.getDatabase().assignMovieDefinitionToEntry(selected, storedDefinition.getDatabaseID());
-					downloadImage(storedDefinition);
+						definition.ifPresent(def -> {
+							// TODO reuse this code
+							MovieDefinition storedDefinition = MediaManager.getDatabase().addMovieDefinition(def);
+							selected.getMovieEntry().setMovieDefinitionID(storedDefinition.getDatabaseID());
+							MediaManager.getMediaRepository().assignMovieDefinition(storedDefinition.getDatabaseID(),
+									storedDefinition);
+							MediaManager.getDatabase().assignMovieDefinitionToEntry(selected.getMovieEntry(),
+									storedDefinition.getDatabaseID());
+							downloadImage(storedDefinition);
 
-					// TODO find a more efficient way to do this that does not
-					// involve updating the whole list
-					int selectedIndex = new Integer(this.movieList.getSelectionModel().getSelectedIndex());
-					this.refreshMovieList(true);
-					this.movieList.getSelectionModel().select(selectedIndex);
-					this.updateMovieInterface(this.movieList.getSelectionModel().getSelectedItem());
+							selected.setShowLoadingImage(false);
+							Platform.runLater(() -> {
+								this.movieList.getItems().set(selectedIndex, null);
+								this.movieList.getItems().set(selectedIndex, selected);
+								this.updateMovieInterface(this.movieList.getSelectionModel().getSelectedItem());
+							});
+						});
+					});
 				});
 			});
 		}
@@ -419,7 +445,7 @@ public class MovieViewController implements MediaScene {
 				fileChooser.getExtensionFilters()
 						.add(new FileChooser.ExtensionFilter(ext.toUpperCase() + " files (*" + ext + ")", "*" + ext));
 			}
-			
+
 			final List<File> selectedFiles = fileChooser.showOpenMultipleDialog(MediaManager.getMainFrameStage());
 			if (selectedFiles != null) {
 				AddMovieWindow addMovie = new AddMovieWindow(selectedFiles, FileNameCleanserRepository.getCleansers());
@@ -436,7 +462,7 @@ public class MovieViewController implements MediaScene {
 		closeItem.setOnAction(event -> Platform.exit());
 		fileMenu.getItems().addAll(indexFile, indexFolder, settings, closeItem);
 
-		menuBar.getMenus().add(fileMenu);
+		menuBar.getMenus().addAll(fileMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
 	}
 
 	private void setupSearchTextField() {

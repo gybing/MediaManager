@@ -4,13 +4,13 @@ import java.util.Collections;
 import java.util.List;
 
 import com.jakebellotti.model.ListOrderer;
-import com.jakebellotti.model.movie.MovieEntry;
+import com.jakebellotti.model.movie.MovieEntryWrapper;
 
 /**
  * @author Jake Bellotti
  * @date Apr 19, 2016
  */
-public class AscendingAlphabeticalListOrderer extends ListOrderer<MovieEntry> {
+public class AscendingAlphabeticalListOrderer extends ListOrderer<MovieEntryWrapper> {
 
 	@Override
 	public String getName() {
@@ -18,7 +18,7 @@ public class AscendingAlphabeticalListOrderer extends ListOrderer<MovieEntry> {
 	}
 
 	@Override
-	public List<MovieEntry> order(List<MovieEntry> list) {
+	public List<MovieEntryWrapper> order(List<MovieEntryWrapper> list) {
 		Collections.sort(list, (a, b) -> a.toString().toLowerCase().compareTo(b.toString().toLowerCase()));
 		return list;
 	}

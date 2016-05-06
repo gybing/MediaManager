@@ -199,6 +199,7 @@ public class DatabaseConnection {
 			queryBuilder.insertString("title", definition.getTitle());
 			queryBuilder.insertString("releaseYear", definition.getYear());
 			queryBuilder.insertString("rating", definition.getRated());
+			queryBuilder.insertString("released", definition.getReleased());
 			queryBuilder.insertString("runtime", definition.getRuntime());
 			queryBuilder.insertString("genre", definition.getGenre());
 			queryBuilder.insertString("director", definition.getDirector());

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
+import com.jakebellotti.model.movie.MovieEntryWrapper;
 
 /**
  * Holds all the media data for this program.
@@ -63,11 +64,11 @@ public class MediaRepository {
 	 * @return An ArrayList of MovieEntry objects, that have passed the filter
 	 *         testing.
 	 */
-	public final ArrayList<MovieEntry> getDisplayedMovieEntries() {
-		final ArrayList<MovieEntry> toReturn = new ArrayList<>();
+	public final ArrayList<MovieEntryWrapper> getDisplayedMovieEntries() {
+		final ArrayList<MovieEntryWrapper> toReturn = new ArrayList<>();
 		for (MovieEntry currentMovieEntry : loadedMovieEntries) {
 			if (shouldAddMovieEntry(currentMovieEntry))
-				toReturn.add(currentMovieEntry);
+				toReturn.add(new MovieEntryWrapper(currentMovieEntry));
 		}
 		return toReturn;
 	}
