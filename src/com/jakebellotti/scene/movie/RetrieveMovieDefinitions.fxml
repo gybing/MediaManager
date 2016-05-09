@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="185.0" minWidth="400.0" prefHeight="185.0" prefWidth="229.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ProgressBar fx:id="progressbar" layoutX="14.0" layoutY="116.0" prefHeight="23.0" prefWidth="372.0" progress="0.0" />
+      <Button fx:id="requestCancelButton" layoutX="100.0" layoutY="146.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Request Cancel" />
+      <ListView fx:id="listView" layoutX="14.0" layoutY="14.0" prefHeight="102.0" prefWidth="372.0" />
+   </children>
+</AnchorPane>

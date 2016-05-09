@@ -60,12 +60,20 @@
       </StackPane>
       <StackPane layoutX="308.0" layoutY="506.0" AnchorPane.bottomAnchor="86.0">
          <children>
-            <ProgressBar prefHeight="23.0" prefWidth="299.0" progress="0.0" style="-fx-accent: yellow;" />
+            <ProgressBar fx:id="imdbscoreProgressBar" prefHeight="23.0" prefWidth="299.0" progress="0.0" style="-fx-accent: yellow;" />
+            <Label fx:id="imdbScoreLabel" alignment="CENTER" prefHeight="23.0" prefWidth="299.0">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
          </children>
       </StackPane>
       <StackPane layoutX="308.0" layoutY="527.0" prefHeight="23.0" prefWidth="299.0" AnchorPane.bottomAnchor="65.0">
          <children>
-            <ProgressBar prefHeight="23.0" prefWidth="299.0" progress="0.0" style="-fx-accent: green;" />
+            <ProgressBar fx:id="metascoreProgressbar" prefHeight="23.0" prefWidth="299.0" progress="0.0" style="-fx-accent: green;" />
+            <Label fx:id="metascoreLabel" alignment="CENTER" prefHeight="23.0" prefWidth="299.0">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
          </children>
       </StackPane>
       <StackPane layoutX="620.0" layoutY="85.0" AnchorPane.leftAnchor="620.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="85.0">

@@ -1,4 +1,4 @@
-package com.jakebellotti.model.listfilter;
+package com.jakebellotti.model.listorderer;
 
 import java.util.Collections;
 import java.util.List;

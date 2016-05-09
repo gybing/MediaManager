@@ -6,7 +6,6 @@ package com.jakebellotti.model.movie;
  * @author Jake Bellotti
  * @date Dec 13, 2015
  */
-
 public class MovieDefinition {
 
 	private final int databaseID;

@@ -28,7 +28,7 @@ public class MovieView {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return scene;
 	}
 	
 	public static MovieViewController getController() {

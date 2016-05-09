@@ -37,3 +37,11 @@ CREATE TABLE tblMovieEntrySearch(
 	tblMovieEntryID		INTEGER NOT NULL,
 	FOREIGN KEY(tblMovieEntryID) REFERENCES tblMovieEntry(ID)
 );
+
+/* A directory that contains media */
+CREATE TABLE tblMediaDirectory(
+	ID 					INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	fileLocation		VARCHAR(255) NOT NULL,
+	mediaType			VARCHAR(255) NOT NULL,
+	removableDirectory	BOOLEAN NOT NULL DEFAULT FALSE
+);

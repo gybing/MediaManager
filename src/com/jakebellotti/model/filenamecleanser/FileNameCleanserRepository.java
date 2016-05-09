@@ -15,8 +15,8 @@ public class FileNameCleanserRepository {
 	private static final ArrayList<FileNameCleanser> cleansers = new ArrayList<>();
 
 	static {
-//		cleansers.add(new DefaultFileNameCleanser());
 		//TODO add more cleansers
+		cleansers.add(new CapitalizationFileNameCleanser());
 	}
 	
 	public static ArrayList<FileNameCleanser> getCleansers() {
