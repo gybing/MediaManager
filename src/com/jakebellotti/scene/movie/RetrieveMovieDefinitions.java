@@ -25,7 +25,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * TODO this code is horrible, make it better TODO title bar
+ * TODO this code is horrible, make it better
  * 
  * @author Jake Bellotti Date 8-May-2016
  *

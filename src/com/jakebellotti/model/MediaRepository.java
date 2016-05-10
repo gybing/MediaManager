@@ -30,15 +30,19 @@ public class MediaRepository {
 	 * A HashMap to hold all of the MovieDefinition objects.
 	 */
 	private final HashMap<Integer, MovieDefinition> movieDefinitions = new HashMap<>();
-	
+	/**
+	 * 
+	 */
+	private String movieSearchText;
+
 	public final void addMovieDefinitions(final ArrayList<MovieDefinition> definitionList) {
 		definitionList.forEach(def -> assignMovieDefinition(def.getDatabaseID(), def));
 	}
-	
+
 	public final void assignMovieDefinition(int id, MovieDefinition definition) {
 		movieDefinitions.put(id, definition);
 	}
-	
+
 	public final Optional<MovieDefinition> getMovieDefinition(int id) {
 		return Optional.ofNullable(movieDefinitions.get(id));
 	}
@@ -46,19 +50,11 @@ public class MediaRepository {
 	public final void addMovieEntries(ArrayList<MovieEntry> movieEntries) {
 		movieEntries.forEach((e) -> addMovieEntry(e));
 	}
-	
+
 	public final void addMovieEntry(MovieEntry movieEntry) {
 		loadedMovieEntries.add(movieEntry);
 	}
-	
-	public final ArrayList<MovieEntry> getLoadedMovieEntries() {
-		return loadedMovieEntries;
-	}
-	
-	public final HashMap<Integer, MovieDefinition> getLoadedMovieDefinitions() {
-		return this.movieDefinitions;
-	}
-	
+
 	/**
 	 * 
 	 * @return An ArrayList of MovieEntry objects, that have passed the filter
@@ -67,8 +63,15 @@ public class MediaRepository {
 	public final ArrayList<MovieEntryWrapper> getDisplayedMovieEntries() {
 		final ArrayList<MovieEntryWrapper> toReturn = new ArrayList<>();
 		for (MovieEntry currentMovieEntry : loadedMovieEntries) {
-			if (shouldAddMovieEntry(currentMovieEntry))
-				toReturn.add(new MovieEntryWrapper(currentMovieEntry));
+			if (shouldAddMovieEntry(currentMovieEntry)) {
+				if(this.movieSearchText == null || this.movieSearchText.length() < 0) {
+					toReturn.add(new MovieEntryWrapper(currentMovieEntry));
+				} else {
+					if(currentMovieEntry.toString().toLowerCase().contains(this.movieSearchText.toLowerCase())) {
+						toReturn.add(new MovieEntryWrapper(currentMovieEntry));
+					}
+				}
+			}
 		}
 		return toReturn;
 	}
@@ -86,5 +89,21 @@ public class MediaRepository {
 				return false;
 		}
 		return true;
+	}
+
+	public final ArrayList<MovieEntry> getLoadedMovieEntries() {
+		return loadedMovieEntries;
+	}
+
+	public final HashMap<Integer, MovieDefinition> getLoadedMovieDefinitions() {
+		return this.movieDefinitions;
+	}
+
+	public String getMovieSearchText() {
+		return movieSearchText;
+	}
+
+	public void setMovieSearchText(String movieSearchText) {
+		this.movieSearchText = movieSearchText;
 	}
 }

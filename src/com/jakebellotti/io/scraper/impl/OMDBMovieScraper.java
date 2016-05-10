@@ -50,7 +50,6 @@ public class OMDBMovieScraper implements DataScraper<MovieEntry, NewMovieDefinit
 	}
 
 	public Optional<NewMovieDefinition> parseMovieDefinitionFromJSON(String json) {
-		// TODO start parsing here
 		try {
 			JSONParser parser = new JSONParser();
 			JSONObject object = (JSONObject) parser.parse(json);

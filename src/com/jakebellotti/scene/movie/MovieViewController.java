@@ -34,6 +34,7 @@ import com.jakebellotti.model.movie.NewMovieDefinition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -54,7 +55,7 @@ import javafx.stage.FileChooser;
 import jblib.javafx.JavaFXUtils;
 
 /**
- * 
+ * TODO image should be saved as <movieDefinitionID>_low.jpg and <movieDefinitionID>_high.jpg
  * @author Jake Bellotti
  * @date Mar 20, 2016
  */
@@ -215,6 +216,10 @@ public class MovieViewController implements MediaScene {
 		setupSearchTextField();
 
 		// add event handlers
+		//TODO add event handler to either open up the hd poster or download it if it doesn't exist, or just open up the regular size
+		this.moviePoster.setCursor(Cursor.HAND);
+		
+		
 		this.movieList.getSelectionModel().selectedItemProperty()
 				.addListener((o, oldVal, newVal) -> movieListOnChangeItem(newVal));
 		this.orderByComboBox.getSelectionModel().selectedItemProperty()
@@ -419,8 +424,6 @@ public class MovieViewController implements MediaScene {
 	}
 
 	public void retrieveDataButtonMouseClicked(MouseEvent event) {
-		// TODO represent this in a loading bar of some kind so the user doesn't
-		// experience freezing and is unaware of what is happening
 		// TODO do this on a separate thread to JavaFX
 		// TODO update the status indicator bar because this is a low latency
 		// operation
@@ -543,6 +546,10 @@ public class MovieViewController implements MediaScene {
 
 		this.searchTextField = newSearchTextField;
 		this.root.getChildren().add(this.searchTextField);
+		this.searchTextField.textProperty().addListener(e -> {
+			MediaManager.getMediaRepository().setMovieSearchText(this.searchTextField.getText().trim());
+			this.refreshMovieList(true);
+		});
 	}
 
 	@Override

@@ -74,6 +74,7 @@ public class DataSettingsScreen extends SettingsScreen {
 		// TODO make sure to reset the scene if the current selected valus is
 		// null
 		MainWindowFrame.getController().getCurrentSceneController().refresh();
+		resetInfoLabels();
 	}
 
 	@Override

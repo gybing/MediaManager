@@ -109,7 +109,6 @@ public class MovieSearchScreen {
 		});
 
 		
-		//TODO add an overlaying pane that will display 'performing search' until the search results have been returned.
 		AnchorPane overLay = new AnchorPane();
 		
 		overLay.setMinWidth(this.rootPane.getMinWidth());
