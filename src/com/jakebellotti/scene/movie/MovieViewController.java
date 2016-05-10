@@ -36,6 +36,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -52,10 +53,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import jblib.javafx.Alerts;
 import jblib.javafx.JavaFXUtils;
 
 /**
- * TODO image should be saved as <movieDefinitionID>_low.jpg and <movieDefinitionID>_high.jpg
+ * TODO image should be saved as <movieDefinitionID>_low.jpg and
+ * <movieDefinitionID>_high.jpg
+ * 
  * @author Jake Bellotti
  * @date Mar 20, 2016
  */
@@ -216,10 +220,10 @@ public class MovieViewController implements MediaScene {
 		setupSearchTextField();
 
 		// add event handlers
-		//TODO add event handler to either open up the hd poster or download it if it doesn't exist, or just open up the regular size
+		// TODO add event handler to either open up the hd poster or download it
+		// if it doesn't exist, or just open up the regular size
 		this.moviePoster.setCursor(Cursor.HAND);
-		
-		
+
 		this.movieList.getSelectionModel().selectedItemProperty()
 				.addListener((o, oldVal, newVal) -> movieListOnChangeItem(newVal));
 		this.orderByComboBox.getSelectionModel().selectedItemProperty()
@@ -424,54 +428,61 @@ public class MovieViewController implements MediaScene {
 	}
 
 	public void retrieveDataButtonMouseClicked(MouseEvent event) {
-		// TODO do this on a separate thread to JavaFX
-		// TODO update the status indicator bar because this is a low latency
-		// operation
 		MovieEntryWrapper selected = this.movieList.getSelectionModel().getSelectedItem();
 		if (selected != null) {
-			selected.getMovieEntry().getDefinition().ifPresent(def -> {
-				// TODO notify the user, that the definition exists, get
-				// confirmation before retrieving again
-				return;
-			});
+			if (selected.getMovieEntry().getDefinition().isPresent()) {
+				Optional<ButtonType> alert = Alerts.showConfirmationAlert("Definition exists",
+						"Do you want to override the existing definition?",
+						"Data for the selected movie already exists, and you have chosen to scrape the data for this movie. Do you want to override the existing data?");
+				if (alert.isPresent()) {
+					ButtonType type = alert.get();
+					if (type == ButtonType.CANCEL || type == ButtonType.CLOSE) {
+						return;
+					}
+				}
+			}
+
 			if (!MediaManager.getMovieDefinitionRetriever().isPresent()) {
-				// TODO notify the user that there was an error, use reflection
-				// to find all of the movie retrievers and let them set it
+				Alerts.showInformationAlert("No movie scraper set", "No movie scraper set",
+						"No movie scraper is set. This means there is no way of retrieving the data. Go to settings and set a movie scraper.");
 				return;
 			}
 			MediaManager.getMovieDefinitionRetriever().ifPresent(scraper -> {
 				Platform.runLater(() -> {
 					// TODO clean up this code...
-					// FIXME threading issues that make the image not spin
-					// because the download is on the javafx thread
 					final int selectedIndex = new Integer(this.movieList.getSelectionModel().getSelectedIndex());
 					selected.setShowLoadingImage(true);
 					this.movieList.getItems().set(selectedIndex, null);
 					this.movieList.getItems().set(selectedIndex, selected);
+
 					Platform.runLater(() -> {
-						Optional<NewMovieDefinition> definition = scraper.scrapeData(selected.getMovieEntry());
+						Thread thread = new Thread(() -> {
+							Optional<NewMovieDefinition> definition = scraper.scrapeData(selected.getMovieEntry());
 
-						if (!definition.isPresent()) {
-							// TODO return an error message
-						}
+							if (!definition.isPresent()) {
+								Alerts.showErrorAlert("Error", "Definition not found",
+										"The definition for the selected movie was not found. Check that the name is correct, or manually enter the data.");
+								return;
+							}
 
-						definition.ifPresent(def -> {
-							// TODO reuse this code
-							MovieDefinition storedDefinition = MediaManager.getDatabase().addMovieDefinition(def);
-							selected.getMovieEntry().setMovieDefinitionID(storedDefinition.getDatabaseID());
-							MediaManager.getMediaRepository().assignMovieDefinition(storedDefinition.getDatabaseID(),
-									storedDefinition);
-							MediaManager.getDatabase().assignMovieDefinitionToEntry(selected.getMovieEntry(),
-									storedDefinition.getDatabaseID());
-							Images.downloadImage(storedDefinition);
+							definition.ifPresent(def -> {
+								MovieDefinition storedDefinition = MediaManager.getDatabase().addMovieDefinition(def);
+								selected.getMovieEntry().setMovieDefinitionID(storedDefinition.getDatabaseID());
+								MediaManager.getMediaRepository()
+										.assignMovieDefinition(storedDefinition.getDatabaseID(), storedDefinition);
+								MediaManager.getDatabase().assignMovieDefinitionToEntry(selected.getMovieEntry(),
+										storedDefinition.getDatabaseID());
+								Images.downloadImage(storedDefinition);
 
-							selected.setShowLoadingImage(false);
-							Platform.runLater(() -> {
-								this.movieList.getItems().set(selectedIndex, null);
-								this.movieList.getItems().set(selectedIndex, selected);
-								this.updateMovieInterface(this.movieList.getSelectionModel().getSelectedItem());
+								selected.setShowLoadingImage(false);
+								Platform.runLater(() -> {
+									this.movieList.getItems().set(selectedIndex, null);
+									this.movieList.getItems().set(selectedIndex, selected);
+									this.updateMovieInterface(this.movieList.getSelectionModel().getSelectedItem());
+								});
 							});
 						});
+						thread.start();
 					});
 				});
 			});
@@ -531,10 +542,6 @@ public class MovieViewController implements MediaScene {
 	}
 
 	private void setupSearchTextField() {
-		// TODO add event handler to this, in media
-		// repository->getDisplayedMovieDefinitions update a search variable
-		// when anything is added to the search bar, make that affect the
-		// results
 		this.root.getChildren().remove(this.searchTextField);
 
 		final TextField newSearchTextField = TextFields.createClearableTextField();
