@@ -541,6 +541,10 @@ public class MovieViewController implements MediaScene {
 		menuBar.getMenus().addAll(fileMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
 	}
 
+	/**
+	 * Changes the native JavaFX text field to the special one in the ControlsFX
+	 * library.
+	 */
 	private void setupSearchTextField() {
 		this.root.getChildren().remove(this.searchTextField);
 

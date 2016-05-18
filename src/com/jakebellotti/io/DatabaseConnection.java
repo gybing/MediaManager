@@ -151,14 +151,13 @@ public class DatabaseConnection {
 	}
 
 	public final int addMovieEntries(List<NewMovieEntry> newEntries) {
+		SQLInsertQueryBuilder builder = new SQLInsertQueryBuilder("tblMovieEntry");
 		int added = 0;
 		for (NewMovieEntry entry : newEntries) {
-			String query = "";
 			try {
 				final String fileLocation = entry.getFileLocation().getAbsolutePath().replace("'", "''");
 				final String fileName = entry.getMovieName().replace("'", "''");
 				
-				SQLInsertQueryBuilder builder = new SQLInsertQueryBuilder("tblMovieEntry");
 				builder.insertString("fileLocation", entry.getFileLocation());
 				builder.insertString("extractedMovieName", entry.getMovieName());
 				conn.createStatement().execute(builder.generateQuery());
@@ -178,7 +177,7 @@ public class DatabaseConnection {
 				rs.close();
 			} catch (DerbySQLIntegrityConstraintViolationException e) {
 			} catch (Exception e) {
-				logger.println("error: " + query);
+				logger.println("error: " + builder.generateQuery());
 				e.printStackTrace();
 			}
 		}

@@ -2,6 +2,7 @@ package com.jakebellotti.scene.main;
 
 import com.jakebellotti.scene.MediaScene;
 import com.jakebellotti.scene.movie.MovieView;
+import com.jakebellotti.scene.tvseries.TVSeriesView;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
@@ -32,12 +33,22 @@ public class MainWindowFrameController {
 	@FXML
 	public void initialize() {
 		// TODO determine the screen to show
-		if (true) {
+		//XXX testing tv series view
+		boolean movieView= false;
+		if (movieView) {
 			contentWindow.getChildren().clear();
 			contentWindow.getChildren().add(MovieView.getAnchorPane());
 			this.menuBar.getMenus().clear();
 			MovieView.getController().addMenuBarItems(menuBar);
 			this.setCurrentSceneController(MovieView.getController());
+		}
+		
+		if(!movieView) {
+			contentWindow.getChildren().clear();
+			contentWindow.getChildren().add(TVSeriesView.getAnchorPane());
+			this.menuBar.getMenus().clear();
+//			MovieView.getController().addMenuBarItems(menuBar);
+			this.setCurrentSceneController(TVSeriesView.getController());
 		}
 
 	}
