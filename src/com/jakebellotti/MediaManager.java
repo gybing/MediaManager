@@ -1,6 +1,5 @@
 package com.jakebellotti;
 
-import java.io.File;
 import java.util.Optional;
 
 import com.jakebellotti.io.DatabaseConnection;
@@ -35,8 +34,6 @@ public class MediaManager {
 	private static Stage mainFrameStage = null;
 
 	public static void main(String[] arguments) {
-		File file = new File("./data/test/series/arrow_backdrop.jpg");
-		System.out.println(file.toURI().toString());
 		checkProgramFiles();
 		loadProgramFiles();
 		Launcher.main(arguments);

@@ -1,6 +1,5 @@
 package com.jakebellotti.scene.tvseries;
 
-import java.io.File;
 import java.io.IOException;
 
 
@@ -18,7 +17,6 @@ public class TVSeriesView {
 			try {
 				controller = new TVSeriesViewController();
 				loader.setController(controller);
-				System.out.println(new File(TVSeriesViewController.class.getResource("TvSeriesView.fxml").getFile()).exists());
 				
 				scene = loader.load(TVSeriesViewController.class.getResource("TvSeriesView.fxml").openStream());
 				return scene;
