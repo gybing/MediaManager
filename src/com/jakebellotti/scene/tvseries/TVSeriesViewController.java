@@ -7,7 +7,6 @@ import com.jakebellotti.model.tvseries.TVSeriesNode;
 import com.jakebellotti.model.tvseries.TVSeriesSeason;
 import com.jakebellotti.scene.MediaScene;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;

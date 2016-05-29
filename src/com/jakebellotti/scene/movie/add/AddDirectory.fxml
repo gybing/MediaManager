@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane minHeight="144.0" minWidth="357.0" prefHeight="144.0" prefWidth="357.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65">
+<AnchorPane minHeight="144.0" minWidth="357.0" prefHeight="186.0" prefWidth="357.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TextField fx:id="searchTextField" layoutX="14.0" layoutY="15.0" prefHeight="31.0" prefWidth="263.0">
          <font>
@@ -20,13 +19,18 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="indexDirectoryButton" layoutX="14.0" layoutY="102.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="329.0" text="Index Directory">
+      <Button fx:id="indexDirectoryButton" layoutX="14.0" layoutY="142.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="329.0" text="Index Directory">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Label fx:id="validationLabel" alignment="CENTER" layoutX="14.0" layoutY="53.0" prefHeight="17.0" prefWidth="329.0" text="Entered value is not a valid directory!" />
-      <CheckBox fx:id="scanDirectoryCheckBox" layoutX="14.0" layoutY="70.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="329.0" text="Scan this directory for new entries on startup">
+      <Label fx:id="validationLabel" alignment="CENTER" layoutX="14.0" layoutY="53.0" prefHeight="17.0" prefWidth="329.0" text="Entered value is not a valid directory!" textFill="#f80000" />
+      <CheckBox fx:id="scanDirectoryCheckBox" layoutX="14.0" layoutY="75.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="329.0" text="Scan this directory for new entries on startup">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </CheckBox>
+      <CheckBox fx:id="removableMediaCheckBox" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="329.0" text="This is directory is on removable storage" textOverrun="CLIP" wrapText="true">
          <font>
             <Font size="14.0" />
          </font>

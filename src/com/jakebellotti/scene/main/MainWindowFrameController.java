@@ -34,7 +34,7 @@ public class MainWindowFrameController {
 	public void initialize() {
 		// TODO determine the screen to show
 		//XXX testing tv series view
-		boolean movieView= false;
+		boolean movieView= true;
 		if (movieView) {
 			contentWindow.getChildren().clear();
 			contentWindow.getChildren().add(MovieView.getAnchorPane());

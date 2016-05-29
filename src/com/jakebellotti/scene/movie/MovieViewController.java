@@ -10,6 +10,7 @@ import org.controlsfx.control.textfield.TextFields;
 
 import com.jakebellotti.scene.MediaScene;
 import com.jakebellotti.scene.main.MainWindowFrame;
+import com.jakebellotti.scene.movie.add.AddDirectoryController;
 import com.jakebellotti.scene.movie.add.AddMovieWindow;
 import com.jakebellotti.scene.movie.search.MovieSearchScreen;
 import com.jakebellotti.scene.settings.SettingsWindow;
@@ -33,6 +34,7 @@ import com.jakebellotti.model.movie.NewMovieDefinition;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -281,10 +283,16 @@ public class MovieViewController implements MediaScene {
 
 	private final void openMovieButtonClicked(MouseEvent event) {
 		// TODO be able to manage applications
+		//TODO be able to relocate the movie
 		MovieEntryWrapper selected = this.movieList.getSelectionModel().getSelectedItem();
 		if (selected != null) {
 			try {
-				Desktop.getDesktop().open(selected.getMovieEntry().getFile());
+				final File movieFile = selected.getMovieEntry().getFile();
+				if (!movieFile.exists()) {
+					Alerts.showErrorAlert("Could not open movie", "File not found",
+							"Could not open the movie because the file could not be found. Would you like to relocate the movie?");
+				} else
+					Desktop.getDesktop().open(movieFile);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -527,7 +535,7 @@ public class MovieViewController implements MediaScene {
 
 		// 'Index a Folder' clicked
 		indexFolder.setOnAction(event -> {
-			// TODO folder indexing
+			indexAFolderEvent(event);
 		});
 
 		retrieveDefinitions.setOnAction(e -> {
@@ -541,6 +549,13 @@ public class MovieViewController implements MediaScene {
 		menuBar.getMenus().addAll(fileMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
 	}
 
+	private final void indexAFolderEvent(ActionEvent e) {
+		// TODO folder indexing
+		AddDirectoryController.getDirectory().ifPresent(directory -> {
+			//TODO check if the folder already exists
+		});
+	}
+	
 	/**
 	 * Changes the native JavaFX text field to the special one in the ControlsFX
 	 * library.
