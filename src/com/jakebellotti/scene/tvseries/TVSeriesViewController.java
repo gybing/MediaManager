@@ -6,11 +6,16 @@ import com.jakebellotti.model.tvseries.TVSeries;
 import com.jakebellotti.model.tvseries.TVSeriesNode;
 import com.jakebellotti.model.tvseries.TVSeriesSeason;
 import com.jakebellotti.scene.MediaScene;
+import com.jakebellotti.scene.main.MainWindowFrame;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -130,8 +135,18 @@ public class TVSeriesViewController implements MediaScene {
 
 	@Override
 	public void refresh() {
-		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void addMenuBarItems(MenuBar menuBar) {
+		Menu fileMenu = new Menu("File");
+		MenuItem close = new MenuItem("Close");
+		
+		close.setOnAction(e -> Platform.exit());
+		fileMenu.getItems().add(close);
+		
+		menuBar.getMenus().addAll(fileMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
 	}
 
 }

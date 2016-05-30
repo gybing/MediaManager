@@ -3,6 +3,7 @@ package com.jakebellotti.scene.movie;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -283,7 +284,7 @@ public class MovieViewController implements MediaScene {
 
 	private final void openMovieButtonClicked(MouseEvent event) {
 		// TODO be able to manage applications
-		//TODO be able to relocate the movie
+		// TODO be able to relocate the movie
 		MovieEntryWrapper selected = this.movieList.getSelectionModel().getSelectedItem();
 		if (selected != null) {
 			try {
@@ -506,56 +507,89 @@ public class MovieViewController implements MediaScene {
 		MenuItem settings = new MenuItem("Settings");
 		MenuItem closeItem = new MenuItem("Close");
 
-		// Add event listeners
-
-		// 'Index Files' clicked
-		indexFile.setOnAction(event -> {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Choose movie file");
-
-			String[] fileExtensionOptions = new String[Settings.getVideoFileAssociations().length];
-			for (int index = 0; index < Settings.getVideoFileAssociations().length; index++) {
-				fileExtensionOptions[index] = "*" + Settings.getVideoFileAssociations()[index];
-			}
-			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Video", fileExtensionOptions));
-			for (String ext : Settings.getVideoFileAssociations()) {
-				fileChooser.getExtensionFilters()
-						.add(new FileChooser.ExtensionFilter(ext.toUpperCase() + " files (*" + ext + ")", "*" + ext));
-			}
-
-			final List<File> selectedFiles = fileChooser.showOpenMultipleDialog(MediaManager.getMainFrameStage());
-			if (selectedFiles != null) {
-				AddMovieWindow addMovie = new AddMovieWindow(selectedFiles, FileNameCleanserRepository.getCleansers());
-				int added = addMovie.showAndReturnValues(MediaManager.getMainFrameStage());
-				if (added > 0) {
-					this.refreshMovieList(true);
-				}
-			}
-		});
-
-		// 'Index a Folder' clicked
-		indexFolder.setOnAction(event -> {
-			indexAFolderEvent(event);
-		});
-
-		retrieveDefinitions.setOnAction(e -> {
-			RetrieveMovieDefinitionsOptions.open(MediaManager.getMainFrameStage());
-		});
-
+		indexFile.setOnAction(this::indexFileEvent);
+		indexFolder.setOnAction(this::indexAFolderEvent);
+		retrieveDefinitions.setOnAction(this::retrieveDefinitionsEvent);
 		settings.setOnAction(event -> SettingsWindow.open(MediaManager.getMainFrameStage()));
 		closeItem.setOnAction(event -> Platform.exit());
 		fileMenu.getItems().addAll(indexFile, indexFolder, retrieveDefinitions, settings, closeItem);
-
 		menuBar.getMenus().addAll(fileMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
 	}
 
+	private final void indexFileEvent(ActionEvent e) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Choose movie file");
+
+		String[] fileExtensionOptions = new String[Settings.getVideoFileAssociations().length];
+		for (int index = 0; index < Settings.getVideoFileAssociations().length; index++) {
+			fileExtensionOptions[index] = "*" + Settings.getVideoFileAssociations()[index];
+		}
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Video", fileExtensionOptions));
+		for (String ext : Settings.getVideoFileAssociations()) {
+			fileChooser.getExtensionFilters()
+					.add(new FileChooser.ExtensionFilter(ext.toUpperCase() + " files (*" + ext + ")", "*" + ext));
+		}
+
+		final List<File> selectedFiles = fileChooser.showOpenMultipleDialog(MediaManager.getMainFrameStage());
+		if (selectedFiles != null) {
+			AddMovieWindow addMovie = new AddMovieWindow(selectedFiles, FileNameCleanserRepository.getCleansers());
+			int added = addMovie.showAndReturnValues(MediaManager.getMainFrameStage());
+			if (added > 0) {
+				this.refreshMovieList(true);
+			}
+		}
+	}
+
+	private final void retrieveDefinitionsEvent(ActionEvent e) {
+		RetrieveMovieDefinitionsOptions.open(MediaManager.getMainFrameStage());
+	}
+
 	private final void indexAFolderEvent(ActionEvent e) {
-		// TODO folder indexing
 		AddDirectoryController.getDirectory().ifPresent(directory -> {
-			//TODO check if the direcory already exists
+			final boolean added = MediaManager.getDatabase().addMovieDirectoryEntry(directory);
+			if (!added) {
+				Alerts.showInformationAlert("Directory already indexed", "Directory was not added",
+						"The selected directory was not added because it already exists. If you wish to edit this directory, you must do so via the settings.");
+				return;
+			}
+			ArrayList<File> gatheredFiles = new ArrayList<>();
+			gatheredFiles = scanDirectory(gatheredFiles, directory.getDirectory(), directory.isScanSubdirectories());
+			ArrayList<String> toRemoveFileNames = MediaManager.getDatabase().getAddedFileNames(gatheredFiles);
+			
+			// SELECT * FROM tblMovieEntry WHERE fileLocation NOT IN('');
+
+			// if (selectedFiles != null) {
+			// AddMovieWindow addMovie = new AddMovieWindow(selectedFiles,
+			// FileNameCleanserRepository.getCleansers());
+			// int added =
+			// addMovie.showAndReturnValues(MediaManager.getMainFrameStage());
+			// if (added > 0) {
+			// this.refreshMovieList(true);
+			// }
+			// }
+			// TODO start adding new movies
 		});
 	}
-	
+
+	private final ArrayList<File> scanDirectory(final ArrayList<File> toReturn, final File start, final boolean recursive) {
+			for(final File f: start.listFiles()) {
+				final int periodIndex = f.getName().lastIndexOf(".");
+				if(periodIndex != -1) {
+					final String extension = f.getName().substring(periodIndex).trim();
+					for(String ext: Settings.getVideoFileAssociations()) {
+						if(extension.equalsIgnoreCase(ext)) {
+							toReturn.add(f);
+							continue;
+						}
+					}
+				}
+			}
+		if(recursive) {
+			//TODO add recursive additions
+		}
+		return toReturn;
+	}
+
 	/**
 	 * Changes the native JavaFX text field to the special one in the ControlsFX
 	 * library.

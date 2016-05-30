@@ -19,7 +19,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="indexDirectoryButton" layoutX="14.0" layoutY="142.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="329.0" text="Index Directory">
+      <Button fx:id="indexDirectoryButton" layoutX="14.0" layoutY="149.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="329.0" text="Index Directory">
          <font>
             <Font size="14.0" />
          </font>
@@ -31,6 +31,11 @@
          </font>
       </CheckBox>
       <CheckBox fx:id="removableMediaCheckBox" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="329.0" text="This is directory is on removable storage" textOverrun="CLIP" wrapText="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </CheckBox>
+      <CheckBox fx:id="scanSubdirectoriesCheckBox" layoutX="14.0" layoutY="123.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="329.0" text="Scan subdirectories for media" textOverrun="CLIP" wrapText="true">
          <font>
             <Font size="14.0" />
          </font>

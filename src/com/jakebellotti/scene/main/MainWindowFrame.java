@@ -2,6 +2,8 @@ package com.jakebellotti.scene.main;
 
 import java.io.IOException;
 
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -20,12 +22,14 @@ import javafx.stage.Stage;
 public class MainWindowFrame {
 	
 	private static final FXMLLoader loader = new FXMLLoader();
+	private static MainWindowFrameController controller = new MainWindowFrameController();
 	private static Menu windowMenu;
 	private static Menu helpMenu;
 	
 	public static void load(Stage stage) {
 		try {
 			stage.hide();
+			loader.setController(controller);
 			final Parent root = loader.load(MainWindowFrame.class.getResource("MainWindowFrame.fxml").openStream());
 			stage.setScene(new Scene(root));
 			stage.setResizable(true);
@@ -55,6 +59,7 @@ public class MainWindowFrame {
 	
 	/**
 	 * TODO add the functionality to this
+	 * TODO if we ever have anything going in the background, add error checking code to prevent errors when switching
 	 * @return
 	 */
 	public static final Menu getWindowMenu() {
@@ -64,9 +69,25 @@ public class MainWindowFrame {
 			MenuItem tvSeriesView = new MenuItem("Switch To TV Series View");
 			MenuItem musicView = new MenuItem("Switch To Music View");
 			
+			movieView.setOnAction(MainWindowFrame::movieViewMenuItemAction);
+			tvSeriesView.setOnAction(MainWindowFrame::tvSeriesViewMenuItemAction);
+			musicView.setOnAction(MainWindowFrame::musicViewMenuItemAction);
+			
 			windowMenu.getItems().addAll(movieView, tvSeriesView, musicView);
 		}
 		return windowMenu;
+	}
+	
+	private static final void movieViewMenuItemAction(ActionEvent e) {
+		controller.setAsMovieView();
+	}
+	
+	private static final void tvSeriesViewMenuItemAction(ActionEvent e) {
+		controller.setAsTVSeriesView();
+	}
+	
+	private static final void musicViewMenuItemAction(ActionEvent e) {
+		
 	}
 	
 	public static FXMLLoader getLoader() {

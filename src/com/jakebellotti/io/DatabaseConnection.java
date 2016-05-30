@@ -1,9 +1,12 @@
 package com.jakebellotti.io;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +20,7 @@ import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.NewMovieDefinition;
 import com.jakebellotti.model.movie.NewMovieEntry;
+import com.jakebellotti.scene.movie.add.MovieDirectoryEntry;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -179,6 +183,8 @@ public class DatabaseConnection {
 			} catch (Exception e) {
 				logger.println("error: " + builder.generateQuery());
 				e.printStackTrace();
+			} finally {
+				builder = new SQLInsertQueryBuilder("tblMovieEntry");
 			}
 		}
 		return added;
@@ -225,6 +231,52 @@ public class DatabaseConnection {
 			e.printStackTrace();
 		}
 		return MovieDefinition.fromNewDefinition(databaseID, definition);
+	}
+	
+	public boolean addMovieDirectoryEntry(final MovieDirectoryEntry entry) {
+		final String query = "INSERT INTO tblMovieDirectoryEntry(directoryLocation, removableDirectory, scanOnStartup, scanSubdirectories) VALUES(?, ?, ?, ?)";
+		try(PreparedStatement s = conn.prepareStatement(query)) {
+			s.setString(1, entry.getDirectory().toString());
+			s.setBoolean(2, entry.isRemovableMedia());
+			s.setBoolean(3, entry.isScanOnStartup());
+			s.setBoolean(4, entry.isScanSubdirectories());
+			return s.executeUpdate() > 0;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	/**
+	 * Given a list of files, returns a list of movie entries that match the file names of the given files.
+	 * @param files
+	 * @return
+	 */
+	public ArrayList<String> getAddedFileNames(final ArrayList<File> files) {
+		final ArrayList<String> toReturn = new ArrayList<>();
+		try (Statement s = conn.createStatement()) {
+			String query = "SELECT fileLocation FROM tblMovieEntry WHERE fileLocation IN (";
+			
+			String adding = "";
+			for(int i = 0; i < files.size(); i++) {
+				adding += "'" + files.get(i).getPath() + "'";
+				if(i != files.size() - 1) {
+					adding += ",";
+				}
+			}
+			
+			query = query + adding + ");";
+			
+			final ResultSet set = s.executeQuery(query);
+			while (set.next()) {
+				toReturn.add(set.getString("fileLocation"));
+			}
+			
+			set.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		//TODO finish
+		return toReturn;
 	}
 
 	public final void assignMovieDefinitionToEntry(final MovieEntry entry, final int newID) {

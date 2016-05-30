@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.Optional;
 
 import com.jakebellotti.Constants;
-import com.jakebellotti.io.Logger;
+//import com.jakebellotti.io.Logger;
 import com.jakebellotti.model.movie.MovieEntry;
 
 /**
@@ -20,7 +20,7 @@ public class OMDBAPIMovieParams {
 	private final ScraperFileReturnType returnType = ScraperFileReturnType.JSON;
 	private final PlotLength plotLength = PlotLength.FULL;
 	
-	private static final Logger logger = new Logger(OMDBAPIMovieParams.class);
+//	private static final Logger logger = new Logger(OMDBAPIMovieParams.class);
 	
 	private OMDBAPIMovieParams(String title) {
 		this.title = title;

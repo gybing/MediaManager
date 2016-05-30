@@ -1,15 +1,7 @@
 package com.jakebellotti.scene.movie;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
-import com.jakebellotti.Images;
 import com.jakebellotti.MediaManager;
-import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
-import com.jakebellotti.model.movie.NewMovieDefinition;
-import com.jakebellotti.scene.loadingscreen.LoadingScreen;
-import com.jakebellotti.scene.loadingscreen.LoadingTask;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

@@ -32,6 +32,7 @@ public class MovieView {
 	}
 	
 	public static MovieViewController getController() {
+		getAnchorPane();
 		return controller;
 	}
 

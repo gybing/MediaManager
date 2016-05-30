@@ -47,6 +47,9 @@ public class AddDirectoryController {
 
 	@FXML
 	private CheckBox removableMediaCheckBox;
+	
+    @FXML
+    private CheckBox scanSubdirectoriesCheckBox;
 
 	public AddDirectoryController(final Stage stage) {
 		this.stage = stage;
@@ -94,7 +97,7 @@ public class AddDirectoryController {
 			return;
 		}
 		this.toReturn = new MovieDirectoryEntry(new File(searchTextField.getText().trim()),
-				scanDirectoryCheckBox.isSelected(), removableMediaCheckBox.isSelected());
+				scanDirectoryCheckBox.isSelected(), removableMediaCheckBox.isSelected(), scanSubdirectoriesCheckBox.isSelected());
 		stage.close();
 	}
 

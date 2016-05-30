@@ -6,6 +6,7 @@ import com.jakebellotti.scene.tvseries.TVSeriesView;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -27,30 +28,29 @@ public class MainWindowFrameController {
 
 	@FXML
 	private MenuBar menuBar;
-	
+
 	private MediaScene currentSceneController = null;
 
 	@FXML
 	public void initialize() {
 		// TODO determine the screen to show
-		//XXX testing tv series view
-		boolean movieView= true;
-		if (movieView) {
-			contentWindow.getChildren().clear();
-			contentWindow.getChildren().add(MovieView.getAnchorPane());
-			this.menuBar.getMenus().clear();
-			MovieView.getController().addMenuBarItems(menuBar);
-			this.setCurrentSceneController(MovieView.getController());
-		}
-		
-		if(!movieView) {
-			contentWindow.getChildren().clear();
-			contentWindow.getChildren().add(TVSeriesView.getAnchorPane());
-			this.menuBar.getMenus().clear();
-//			MovieView.getController().addMenuBarItems(menuBar);
-			this.setCurrentSceneController(TVSeriesView.getController());
-		}
+		setAsMovieView();
+	}
 
+	public void setAsMovieView() {
+		setAs(MovieView.getAnchorPane(), MovieView.getController());
+	}
+
+	public void setAsTVSeriesView() {
+		setAs(TVSeriesView.getAnchorPane(), TVSeriesView.getController());
+	}
+	
+	private final void setAs(final AnchorPane pane, final MediaScene scene) {
+		contentWindow.getChildren().clear();
+		contentWindow.getChildren().add(pane);
+		this.menuBar.getMenus().clear();
+		scene.addMenuBarItems(menuBar);
+		this.setCurrentSceneController(scene);
 	}
 
 	public MediaScene getCurrentSceneController() {

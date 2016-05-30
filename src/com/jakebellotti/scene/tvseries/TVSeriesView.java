@@ -28,6 +28,7 @@ public class TVSeriesView {
 	}
 	
 	public static TVSeriesViewController getController() {
+		getAnchorPane();
 		return controller;
 	}
 
