@@ -3,7 +3,7 @@ package com.jakebellotti;
 /**
  * 
  * @author Jake Bellotti
- * @date Apr 19, 2016
+ * @since Apr 19, 2016
  *
  */
 public class Constants {

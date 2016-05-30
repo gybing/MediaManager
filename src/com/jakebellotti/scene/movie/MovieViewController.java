@@ -552,7 +552,7 @@ public class MovieViewController implements MediaScene {
 	private final void indexAFolderEvent(ActionEvent e) {
 		// TODO folder indexing
 		AddDirectoryController.getDirectory().ifPresent(directory -> {
-			//TODO check if the folder already exists
+			//TODO check if the direcory already exists
 		});
 	}
 	
