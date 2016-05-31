@@ -7,14 +7,52 @@ package com.jakebellotti.model.tvseries;
  *
  */
 public class TheMovieDBSeriesSearchEntry {
-	
-//	
-//	final String title = titleResult.attributes().get("title").trim();
-//	final String releaseDate = info.select("span.release_date").get(0).text().trim();
-//	final String genres = info.select("span.genres").get(0).text().trim();
-//	final String rating = info.select("span.vote_average").get(0).text().trim();
-//	final String href = titleResult.attributes().get("href").trim();
-//	final String images = imageContent.select("img").get(0).attributes().get("data-srcset").split("1x,")[0].replace("1x,", "").trim();
-//	final String overview = info.select("p.overview").get(0).text().trim();
+
+	private final String title;
+	private final String releaseDate;
+	private final String genres;
+	private final String rating;
+	private final String href;
+	private final String image;
+	private final String overview;
+
+	public TheMovieDBSeriesSearchEntry(String title, String releaseDate, String genres, String rating, String href,
+			String image, String overview) {
+		this.title = title;
+		this.releaseDate = releaseDate;
+		this.genres = genres;
+		this.rating = rating;
+		this.image = image;
+		this.overview = overview;
+		this.href = href;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getReleaseDate() {
+		return releaseDate;
+	}
+
+	public String getGenres() {
+		return genres;
+	}
+
+	public String getRating() {
+		return rating;
+	}
+
+	public String getHref() {
+		return href;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public String getOverview() {
+		return overview;
+	}
 
 }
