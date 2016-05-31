@@ -11,6 +11,7 @@ import java.util.Optional;
  * @param <R> The return type
  */
 public interface DataScraper<P, R> {
+	//TODO make this return a result wrapper class so we can know why it didn't return a result if it didn't
 	
 	/**
 	 * 

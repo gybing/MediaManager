@@ -70,6 +70,7 @@ public class LauncherController {
 		loadingScreen.addTask(new DeserializeIndexedMediaLoadingTask());
 		loadingScreen.addTask(new DeserializeMediaDataLoadingTask());
 		loadingScreen.addTask(new FinishingDelayLoadingTask());
+		//TODO scan indexed directories if needed here for new media
 		
 		loadingScreen.open(MediaManager.getMainFrameStage());
 	}

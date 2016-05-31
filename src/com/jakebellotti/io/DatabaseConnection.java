@@ -264,7 +264,7 @@ public class DatabaseConnection {
 				}
 			}
 			
-			query = query + adding + ");";
+			query = query + adding + ")";
 			
 			final ResultSet set = s.executeQuery(query);
 			while (set.next()) {

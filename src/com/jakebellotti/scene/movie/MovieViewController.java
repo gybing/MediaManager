@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -469,8 +470,13 @@ public class MovieViewController implements MediaScene {
 							Optional<NewMovieDefinition> definition = scraper.scrapeData(selected.getMovieEntry());
 
 							if (!definition.isPresent()) {
-								Alerts.showErrorAlert("Error", "Definition not found",
-										"The definition for the selected movie was not found. Check that the name is correct, or manually enter the data.");
+								Platform.runLater(() -> {
+									selected.setShowLoadingImage(false);
+									this.movieList.getItems().set(selectedIndex, null);
+									this.movieList.getItems().set(selectedIndex, selected);
+									Alerts.showErrorAlert("Error", "Definition could not be retrieved",
+											"The definition for the selected movie was not found. Check that the name is correct and you have an active internet connection, or manually enter the data.");
+								});
 								return;
 							}
 
@@ -552,40 +558,47 @@ public class MovieViewController implements MediaScene {
 						"The selected directory was not added because it already exists. If you wish to edit this directory, you must do so via the settings.");
 				return;
 			}
+			//TODO check if database constraints handle this anyway
+			//TODO we could reuse this code in some instances, make that possible
 			ArrayList<File> gatheredFiles = new ArrayList<>();
 			gatheredFiles = scanDirectory(gatheredFiles, directory.getDirectory(), directory.isScanSubdirectories());
-			ArrayList<String> toRemoveFileNames = MediaManager.getDatabase().getAddedFileNames(gatheredFiles);
-			
-			// SELECT * FROM tblMovieEntry WHERE fileLocation NOT IN('');
+			final ArrayList<String> toRemoveFileNames = MediaManager.getDatabase().getAddedFileNames(gatheredFiles);
 
-			// if (selectedFiles != null) {
-			// AddMovieWindow addMovie = new AddMovieWindow(selectedFiles,
-			// FileNameCleanserRepository.getCleansers());
-			// int added =
-			// addMovie.showAndReturnValues(MediaManager.getMainFrameStage());
-			// if (added > 0) {
-			// this.refreshMovieList(true);
-			// }
-			// }
-			// TODO start adding new movies
-		});
-	}
-
-	private final ArrayList<File> scanDirectory(final ArrayList<File> toReturn, final File start, final boolean recursive) {
-			for(final File f: start.listFiles()) {
-				final int periodIndex = f.getName().lastIndexOf(".");
-				if(periodIndex != -1) {
-					final String extension = f.getName().substring(periodIndex).trim();
-					for(String ext: Settings.getVideoFileAssociations()) {
-						if(extension.equalsIgnoreCase(ext)) {
-							toReturn.add(f);
-							continue;
-						}
+			final Iterator<File> iter = gatheredFiles.iterator();
+			while (iter.hasNext()) {
+				final File currentFile = iter.next();
+				for (String s : toRemoveFileNames) {
+					if (currentFile.getPath().toLowerCase().equalsIgnoreCase(s.toLowerCase())) {
+						iter.remove();
+						break;
 					}
 				}
 			}
-		if(recursive) {
-			//TODO add recursive additions
+
+			AddMovieWindow addMovie = new AddMovieWindow(gatheredFiles, FileNameCleanserRepository.getCleansers());
+			int amountAdded = addMovie.showAndReturnValues(MediaManager.getMainFrameStage());
+			if (amountAdded > 0) {
+				this.refreshMovieList(true);
+			}
+		});
+	}
+
+	private final ArrayList<File> scanDirectory(final ArrayList<File> toReturn, final File start,
+			final boolean recursive) {
+		for (final File f : start.listFiles()) {
+			final int periodIndex = f.getName().lastIndexOf(".");
+			if (periodIndex != -1) {
+				final String extension = f.getName().substring(periodIndex).trim();
+				for (String ext : Settings.getVideoFileAssociations()) {
+					if (extension.equalsIgnoreCase(ext)) {
+						toReturn.add(f);
+						continue;
+					}
+				}
+			}
+		}
+		if (recursive) {
+			// TODO add recursive additions
 		}
 		return toReturn;
 	}
