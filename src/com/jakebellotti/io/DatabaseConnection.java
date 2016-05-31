@@ -20,6 +20,7 @@ import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.NewMovieDefinition;
 import com.jakebellotti.model.movie.NewMovieEntry;
+import com.jakebellotti.model.tvseries.TVSeriesEntry;
 import com.jakebellotti.scene.movie.add.MovieDirectoryEntry;
 
 import javafx.application.Platform;
@@ -67,6 +68,25 @@ public class DatabaseConnection {
 	public final void createRequiredTables() {
 		// TODO properly create all tables
 		// logger.println(createTable(DatabaseTableConstants.createMovieListEntryTable()));
+	}
+
+	public final ArrayList<TVSeriesEntry> getAllTVSeriesEntries() {
+		final ArrayList<TVSeriesEntry> toReturn = new ArrayList<>();
+		try (Statement s = conn.createStatement()) {
+			final ResultSet set = s.executeQuery("SELECT * FROM tblTVSeriesEntry");
+
+			while (set.next()) {
+				final int id = set.getInt("ID");
+				final String seriesName = set.getString("seriesName");
+				final int assignedTVSeriesDefinitionID = set.getInt("assignedTVSeriesDefinitionID");
+				toReturn.add(new TVSeriesEntry(id, seriesName, assignedTVSeriesDefinitionID));
+			}
+
+			set.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toReturn;
 	}
 
 	/**
@@ -161,7 +181,7 @@ public class DatabaseConnection {
 			try {
 				final String fileLocation = entry.getFileLocation().getAbsolutePath().replace("'", "''");
 				final String fileName = entry.getMovieName().replace("'", "''");
-				
+
 				builder.insertString("fileLocation", entry.getFileLocation());
 				builder.insertString("extractedMovieName", entry.getMovieName());
 				conn.createStatement().execute(builder.generateQuery());
@@ -197,9 +217,9 @@ public class DatabaseConnection {
 			// TODO complete database so that all of the movie data can be
 			// inserted
 			// TODO make this more secure
-			
+
 			SQLInsertQueryBuilder queryBuilder = new SQLInsertQueryBuilder("tblMovieDefinition");
-			
+
 			queryBuilder.insertString("imdbID", definition.getImdbID());
 			queryBuilder.insertString("title", definition.getTitle());
 			queryBuilder.insertString("releaseYear", definition.getYear());
@@ -232,10 +252,10 @@ public class DatabaseConnection {
 		}
 		return MovieDefinition.fromNewDefinition(databaseID, definition);
 	}
-	
+
 	public boolean addMovieDirectoryEntry(final MovieDirectoryEntry entry) {
 		final String query = "INSERT INTO tblMovieDirectoryEntry(directoryLocation, removableDirectory, scanOnStartup, scanSubdirectories) VALUES(?, ?, ?, ?)";
-		try(PreparedStatement s = conn.prepareStatement(query)) {
+		try (PreparedStatement s = conn.prepareStatement(query)) {
 			s.setString(1, entry.getDirectory().toString());
 			s.setBoolean(2, entry.isRemovableMedia());
 			s.setBoolean(3, entry.isScanOnStartup());
@@ -245,9 +265,11 @@ public class DatabaseConnection {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Given a list of files, returns a list of movie entries that match the file names of the given files.
+	 * Given a list of files, returns a list of movie entries that match the
+	 * file names of the given files.
+	 * 
 	 * @param files
 	 * @return
 	 */
@@ -255,27 +277,27 @@ public class DatabaseConnection {
 		final ArrayList<String> toReturn = new ArrayList<>();
 		try (Statement s = conn.createStatement()) {
 			String query = "SELECT fileLocation FROM tblMovieEntry WHERE fileLocation IN (";
-			
+
 			String adding = "";
-			for(int i = 0; i < files.size(); i++) {
+			for (int i = 0; i < files.size(); i++) {
 				adding += "'" + files.get(i).getPath() + "'";
-				if(i != files.size() - 1) {
+				if (i != files.size() - 1) {
 					adding += ",";
 				}
 			}
-			
+
 			query = query + adding + ")";
-			
+
 			final ResultSet set = s.executeQuery(query);
 			while (set.next()) {
 				toReturn.add(set.getString("fileLocation"));
 			}
-			
+
 			set.close();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//TODO finish
+		// TODO finish
 		return toReturn;
 	}
 

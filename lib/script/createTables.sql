@@ -46,3 +46,15 @@ CREATE TABLE tblMovieDirectoryEntry (
 	scanOnStartup		BOOLEAN NOT NULL DEFAULT FALSE,
 	scanSubdirectories	BOOLEAN NOT NULL DEFAULT FALSE
 );
+
+CREATE TABLE tblTVSeriesEntry (
+	ID								INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	seriesName						VARCHAR(255) NOT NULL,
+	assignedTVSeriesDefinitionID	INTEGER DEFAULT NULL
+);
+
+/* 
+INSERT DATA
+*/
+INSERT INTO tblTVSeriesEntry(seriesName) VALUES ('My Name IS Earl');
+INSERT INTO tblTVSeriesEntry(seriesName) VALUES ('Arrow');

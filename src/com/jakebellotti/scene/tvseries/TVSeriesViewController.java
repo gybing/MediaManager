@@ -2,7 +2,7 @@ package com.jakebellotti.scene.tvseries;
 
 import java.io.File;
 
-import com.jakebellotti.model.tvseries.TVSeries;
+import com.jakebellotti.model.tvseries.TVSeriesEntry;
 import com.jakebellotti.model.tvseries.TVSeriesNode;
 import com.jakebellotti.model.tvseries.TVSeriesSeason;
 import com.jakebellotti.scene.MediaScene;
@@ -93,12 +93,14 @@ public class TVSeriesViewController implements MediaScene {
 
 		final TreeItem<TVSeriesNode> root = new TreeItem<TVSeriesNode>(new TVSeriesNode("TV Series"));
 
-		final TreeItem<TVSeriesNode> arrow = new TreeItem<>(new TVSeries("Arrow"));
+		//TODO load the actual tv series in the load indexed data launcher task
+		
+		final TreeItem<TVSeriesNode> arrow = new TreeItem<>(new TVSeriesEntry(-1, "Arrow", -1));
 		arrow.getChildren().add(new TreeItem<>(new TVSeriesSeason("Season 1")));
 		arrow.getChildren().add(new TreeItem<>(new TVSeriesSeason("Season 2")));
 		root.getChildren().add(arrow);
 
-		final TreeItem<TVSeriesNode> myNameIsEarl = new TreeItem<>(new TVSeries("My Name Is Earl"));
+		final TreeItem<TVSeriesNode> myNameIsEarl = new TreeItem<>(new TVSeriesEntry(-1, "My Name Is Earl", -1));
 		myNameIsEarl.getChildren().add(new TreeItem<>(new TVSeriesSeason("Season 1")));
 		myNameIsEarl.getChildren().add(new TreeItem<>(new TVSeriesSeason("Season 2")));
 		root.getChildren().add(myNameIsEarl);

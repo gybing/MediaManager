@@ -71,7 +71,7 @@ public class TheMovieDBSeriesSearchScraper
 	}
 
 	private static final String generateURL(final TVSeriesEntry series) {
-		return TV_SERIES_SEARCH_URL + series.getName();
+		return TV_SERIES_SEARCH_URL + series.toString();
 	}
 
 }
