@@ -21,6 +21,8 @@ import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.NewMovieDefinition;
 import com.jakebellotti.model.movie.NewMovieEntry;
 import com.jakebellotti.model.tvseries.TVSeriesEntry;
+import com.jakebellotti.model.tvseries.TVSeriesEpisode;
+import com.jakebellotti.model.tvseries.TVSeriesSeason;
 import com.jakebellotti.scene.movie.add.MovieDirectoryEntry;
 
 import javafx.application.Platform;
@@ -79,9 +81,65 @@ public class DatabaseConnection {
 				final int id = set.getInt("ID");
 				final String seriesName = set.getString("seriesName");
 				final int assignedTVSeriesDefinitionID = set.getInt("assignedTVSeriesDefinitionID");
-				toReturn.add(new TVSeriesEntry(id, seriesName, assignedTVSeriesDefinitionID));
+				final TVSeriesEntry entry = new TVSeriesEntry(id, seriesName, assignedTVSeriesDefinitionID);
+				entry.getSeasons().addAll(getTvSeriesSeasons(entry));
+				toReturn.add(entry);
 			}
 
+			set.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toReturn;
+	}
+
+	public final ArrayList<TVSeriesSeason> getTvSeriesSeasons(final TVSeriesEntry entry) {
+		final ArrayList<TVSeriesSeason> toReturn = new ArrayList<>();
+		final String query = "SELECT * FROM tblTVSeriesSeason WHERE tvSeriesEntryID = " + entry.getDatabaseID();
+		try (Statement s = conn.createStatement()) {
+
+			final ResultSet set = s.executeQuery(query);
+
+			while (set.next()) {
+				final int id = set.getInt("ID");
+				final int seasonNumber = set.getInt("seasonNumber");
+				final int episodeCount = set.getInt("episodeCount");
+				final int theMovieDBID = set.getInt("themoviedbID");
+				final String posterURL = set.getString("posterURL");
+				final int tvSeriesEntryID = set.getInt("tvSeriesEntryID");
+				final TVSeriesSeason season = new TVSeriesSeason(id, seasonNumber, episodeCount, theMovieDBID,
+						posterURL, tvSeriesEntryID);
+				season.getEpisodes().addAll(getTvSeriesSeasonEpisodes(season));
+				toReturn.add(season);
+			}
+
+			set.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toReturn;
+	}
+
+	/**
+	 * Retrieves an ArrayList of TVSeriesEpisodes for the given TVSeriesSeason.
+	 * 
+	 * @param entry
+	 * @return
+	 */
+	public final ArrayList<TVSeriesEpisode> getTvSeriesSeasonEpisodes(final TVSeriesSeason entry) {
+		final ArrayList<TVSeriesEpisode> toReturn = new ArrayList<>();
+		final String query = "SELECT * FROM tblTVSeriesEpisode WHERE tvSeriesSeasonID = " + entry.getDatabaseID();
+		try (Statement s = conn.createStatement()) {
+			final ResultSet set = s.executeQuery(query);
+			
+			while (set.next()) {
+				final int id = set.getInt("ID");
+				final String fileLocation = set.getString("fileLocation");
+				final int episodeNumber = set.getInt("episodeNumber");
+				final int tvSeriesSeasonID = set.getInt("tvSeriesSeasonID");
+				final int tvSeriesEpisodeDefinitionID = set.getInt("tvSeriesEpisodeDefinitionID");
+				toReturn.add(new TVSeriesEpisode(id, fileLocation, episodeNumber, tvSeriesSeasonID, tvSeriesEpisodeDefinitionID));
+			}
 			set.close();
 		} catch (Exception e) {
 			e.printStackTrace();

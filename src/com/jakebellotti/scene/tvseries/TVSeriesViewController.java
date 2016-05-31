@@ -2,7 +2,10 @@ package com.jakebellotti.scene.tvseries;
 
 import java.io.File;
 
+import com.jakebellotti.MediaManager;
+import com.jakebellotti.model.ListOrderer;
 import com.jakebellotti.model.tvseries.TVSeriesEntry;
+import com.jakebellotti.model.tvseries.TVSeriesEpisode;
 import com.jakebellotti.model.tvseries.TVSeriesNode;
 import com.jakebellotti.model.tvseries.TVSeriesSeason;
 import com.jakebellotti.scene.MediaScene;
@@ -47,7 +50,7 @@ public class TVSeriesViewController implements MediaScene {
 	private Button manageFiltersButton;
 
 	@FXML
-	private ComboBox<?> orderByComboBox;
+	private ComboBox<ListOrderer<TVSeriesNode>> orderByComboBox;
 
 	@FXML
 	private Button upMoviesButton;
@@ -81,6 +84,46 @@ public class TVSeriesViewController implements MediaScene {
 
 	@FXML
 	public void initialize() {
+		addTestData();
+		refreshTVSeriesList();
+		addEventHandlers();
+	}
+
+	/**
+	 * Adds the appropriate event handlers to this Scene's controls.
+	 */
+	private final void addEventHandlers() {
+		this.informationButton.setOnMouseClicked(this::informationButtonClicked);
+	}
+
+	/**
+	 * Refreshes the TV Series list
+	 */
+	private final void refreshTVSeriesList() {
+		final TreeItem<TVSeriesNode> root = new TreeItem<TVSeriesNode>(new TVSeriesNode("TV Series"));
+
+		for (TVSeriesEntry entry : MediaManager.getMediaRepository().getDisplayedTVSeriesEntries()) {
+			final TreeItem<TVSeriesNode> node = new TreeItem<>(entry);
+			for (TVSeriesSeason season : entry.getSeasons()) {
+				final TreeItem<TVSeriesNode> seriesNode = new TreeItem<>(season);
+				for (TVSeriesEpisode episode : season.getEpisodes()) {
+					final TreeItem<TVSeriesNode> episodeNode = new TreeItem<>(episode);
+					seriesNode.getChildren().add(episodeNode);
+				}
+				node.getChildren().add(seriesNode);
+			}
+
+			root.getChildren().add(node);
+		}
+
+		this.seriesTreeView.setRoot(root);
+		this.seriesTreeView.getRoot().setExpanded(true);
+	}
+
+	/**
+	 * Adds test data to the scene which is, obviously, for testing.
+	 */
+	private final void addTestData() {
 		File file = new File("./data/test/series/arrow_backdrop.jpg");
 		Image img = new Image(file.toURI().toString());
 		this.backdropImageView.setImage(img);
@@ -90,33 +133,12 @@ public class TVSeriesViewController implements MediaScene {
 		File poster = new File("./data/test/series/arrow_poster.jpg");
 		Image posterImage = new Image(poster.toURI().toString());
 		this.posterImage.setImage(posterImage);
-
-		final TreeItem<TVSeriesNode> root = new TreeItem<TVSeriesNode>(new TVSeriesNode("TV Series"));
-
-		//TODO load the actual tv series in the load indexed data launcher task
-		
-		final TreeItem<TVSeriesNode> arrow = new TreeItem<>(new TVSeriesEntry(-1, "Arrow", -1));
-		arrow.getChildren().add(new TreeItem<>(new TVSeriesSeason("Season 1")));
-		arrow.getChildren().add(new TreeItem<>(new TVSeriesSeason("Season 2")));
-		root.getChildren().add(arrow);
-
-		final TreeItem<TVSeriesNode> myNameIsEarl = new TreeItem<>(new TVSeriesEntry(-1, "My Name Is Earl", -1));
-		myNameIsEarl.getChildren().add(new TreeItem<>(new TVSeriesSeason("Season 1")));
-		myNameIsEarl.getChildren().add(new TreeItem<>(new TVSeriesSeason("Season 2")));
-		root.getChildren().add(myNameIsEarl);
-
-		this.seriesTreeView.setRoot(root);
-
-		this.seriesTreeView.getRoot().setExpanded(true);
-
-		this.informationButton.setOnMouseClicked(this::informationButtonClicked);
-		
 	}
 
 	private final void informationButtonClicked(MouseEvent e) {
 		updateInformation();
 	}
-	
+
 	private final void updateInformation() {
 		if (this.informationExpanded) {
 			this.originalInformationHeight = new Double(this.informationAnchorPane.getHeight());
@@ -129,7 +151,7 @@ public class TVSeriesViewController implements MediaScene {
 			this.informationAnchorPane.setMinHeight(this.originalInformationHeight);
 			this.informationAnchorPane.setPrefHeight(this.originalInformationHeight);
 			this.informationAnchorPane.setMaxHeight(this.originalInformationHeight);
-			
+
 			this.informationButton.setText("Hide Information ▼");
 			this.informationExpanded = true;
 		}
@@ -144,10 +166,10 @@ public class TVSeriesViewController implements MediaScene {
 	public void addMenuBarItems(MenuBar menuBar) {
 		Menu fileMenu = new Menu("File");
 		MenuItem close = new MenuItem("Close");
-		
+
 		close.setOnAction(e -> Platform.exit());
 		fileMenu.getItems().add(close);
-		
+
 		menuBar.getMenus().addAll(fileMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
 	}
 

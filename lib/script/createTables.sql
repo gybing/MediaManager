@@ -53,8 +53,56 @@ CREATE TABLE tblTVSeriesEntry (
 	assignedTVSeriesDefinitionID	INTEGER DEFAULT NULL
 );
 
+CREATE TABLE tblTVSeriesSeason(
+	ID								INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	seasonNumber					INTEGER NOT NULL,
+	episodeCount					INTEGER DEFAULT NULL,
+	themoviedbID					INTEGER DEFAULT NULL,
+	posterURL						VARCHAR(255) DEFAULT NULL,
+	tvSeriesEntryID					INTEGER NOT NULL,
+	FOREIGN KEY(tvSeriesEntryID) REFERENCES tblTVSeriesEntry(ID)
+);
+
+CREATE TABLE tblTVSeriesEpisodeDefinition(
+	ID								INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)
+);
+
+CREATE TABLE tblTVSeriesEpisode(
+	ID								INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	fileLocation					VARCHAR(255) NOT NULL,
+	episodeNumber					INTEGER NOT NULL,
+	tvSeriesSeasonID				INTEGER NOT NULL,
+	tvSeriesEpisodeDefinitionID		INTEGER DEFAULT NULL,
+	FOREIGN KEY(tvSeriesSeasonID) REFERENCES tblTVSeriesSeason(ID),
+	FOREIGN KEY(tvSeriesEpisodeDefinitionID) REFERENCES tblTVSeriesEpisodeDefinition(ID)
+);
+
+
 /* 
 INSERT DATA
 */
-INSERT INTO tblTVSeriesEntry(seriesName) VALUES ('My Name IS Earl');
+/* TV Series entry*/
+INSERT INTO tblTVSeriesEntry(seriesName) VALUES ('My Name Is Earl');
 INSERT INTO tblTVSeriesEntry(seriesName) VALUES ('Arrow');
+
+
+/* TV Series seasons*/
+
+INSERT INTO tblTVSeriesEntry(seriesName) 
+VALUES ('Skins');
+
+INSERT INTO tblTVSeriesSeason(seasonNumber, episodeCount, themoviedbID, posterURL, tvSeriesEntryID) 
+VALUES(1, 9, 2596, 'https://image.tmdb.org/t/p/w185/uVvxlICxd0AFtgLgTqdtIA5SatG.jpg', 1);
+
+INSERT INTO tblTVSeriesSeason(seasonNumber, episodeCount, themoviedbID, posterURL, tvSeriesEntryID) 
+VALUES(2, 10, 2597, 'https://image.tmdb.org/t/p/w185/z3hWluGuywvvSckgyPPpRQJcXcs.jpg', 1);
+
+INSERT INTO tblTVSeriesEpisode(fileLocation, episodeNumber, tvSeriesSeasonID) 
+VALUES('Skins - S01-E01', 1, 1);
+INSERT INTO tblTVSeriesEpisode(fileLocation, episodeNumber, tvSeriesSeasonID) 
+VALUES('Skins - S01-E02', 2, 1);
+
+INSERT INTO tblTVSeriesEpisode(fileLocation, episodeNumber, tvSeriesSeasonID) 
+VALUES('Skins - S02-E01', 1, 2);
+INSERT INTO tblTVSeriesEpisode(fileLocation, episodeNumber, tvSeriesSeasonID) 
+VALUES('Skins - S02-E02', 2, 2);

@@ -24,11 +24,11 @@ import com.jakebellotti.fx.ListViewModifier;
 import com.jakebellotti.fx.impl.*;
 import com.jakebellotti.model.ListOrderer;
 import com.jakebellotti.model.filenamecleanser.FileNameCleanserRepository;
-import com.jakebellotti.model.listorderer.AscendingAlphabeticalListOrderer;
-import com.jakebellotti.model.listorderer.AverageScoreListOrderer;
-import com.jakebellotti.model.listorderer.DescendingAlphabeticalListOrderer;
-import com.jakebellotti.model.listorderer.IMDBScoreListOrderer;
-import com.jakebellotti.model.listorderer.MetascoreListOrderer;
+import com.jakebellotti.model.listorderer.movie.MovieAscendingAlphabeticalListOrderer;
+import com.jakebellotti.model.listorderer.movie.MovieAverageScoreListOrderer;
+import com.jakebellotti.model.listorderer.movie.MovieDescendingAlphabeticalListOrderer;
+import com.jakebellotti.model.listorderer.movie.MovieIMDBScoreListOrderer;
+import com.jakebellotti.model.listorderer.movie.MovieMetascoreListOrderer;
 import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.MovieEntryWrapper;
@@ -192,11 +192,11 @@ public class MovieViewController implements MediaScene {
 		this.viewTypeComboBox.getItems().add(new TilesMediumListViewModifier());
 		this.viewTypeComboBox.getItems().add(new TilesLargeListViewModifier());
 
-		this.orderByComboBox.getItems().add(new AscendingAlphabeticalListOrderer());
-		this.orderByComboBox.getItems().add(new DescendingAlphabeticalListOrderer());
-		this.orderByComboBox.getItems().add(new IMDBScoreListOrderer());
-		this.orderByComboBox.getItems().add(new MetascoreListOrderer());
-		this.orderByComboBox.getItems().add(new AverageScoreListOrderer());
+		this.orderByComboBox.getItems().add(new MovieAscendingAlphabeticalListOrderer());
+		this.orderByComboBox.getItems().add(new MovieDescendingAlphabeticalListOrderer());
+		this.orderByComboBox.getItems().add(new MovieIMDBScoreListOrderer());
+		this.orderByComboBox.getItems().add(new MovieMetascoreListOrderer());
+		this.orderByComboBox.getItems().add(new MovieAverageScoreListOrderer());
 
 		this.imdbScoreLabel.setStyle("-fx-text-fill: black;");
 		this.metascoreLabel.setStyle("-fx-text-fill: black;");

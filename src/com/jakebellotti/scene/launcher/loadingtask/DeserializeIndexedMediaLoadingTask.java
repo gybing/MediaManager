@@ -38,6 +38,8 @@ public class DeserializeIndexedMediaLoadingTask implements LoadingTask {
 		logger.println("Deserializing indexed media");
 		MediaManager.getMediaRepository().addMovieEntries(MediaManager.getDatabase().getAllMovieEntries());
 		logger.println(MediaManager.getMediaRepository().getLoadedMovieEntries().size() + " movie entries");
+		MediaManager.getMediaRepository().addTVSeriesEntries(MediaManager.getDatabase().getAllTVSeriesEntries());
+		logger.println(MediaManager.getMediaRepository().getLoadedTVSeries().size() + " tv series entries");
 	}
 
 }
