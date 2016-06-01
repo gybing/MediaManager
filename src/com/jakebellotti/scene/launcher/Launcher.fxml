@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="500.0" maxWidth="500.0" minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jakebellotti.scene.launcher.LauncherController">
+<AnchorPane maxHeight="500.0" maxWidth="500.0" minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jakebellotti.scene.launcher.LauncherController">
    <children>
       <Separator layoutX="3.0" layoutY="37.0" prefHeight="14.0" prefWidth="501.0" />
       <Separator layoutY="74.0" prefHeight="14.0" prefWidth="501.0" />
@@ -16,7 +17,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <Separator layoutY="109.0" prefHeight="14.0" prefWidth="501.0" />
+      <Separator layoutY="130.0" prefHeight="14.0" prefWidth="501.0" />
       <CheckBox fx:id="memorySaverModeCheckBox" layoutX="14.0" layoutY="88.0" mnemonicParsing="false" text="Memory Saver Mode">
          <tooltip>
             <Tooltip text="Skip loading" />
@@ -32,6 +33,11 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Label alignment="CENTER" prefHeight="43.0" prefWidth="500.0" text="Tip: Hover over any option to see it'd description in the tooltip" />
+      <Label alignment="CENTER" prefHeight="43.0" prefWidth="500.0" text="Tip: Hover over any option to see it's description in the tooltip" />
+      <CheckBox fx:id="preloadImagesCheckBox" layoutX="14.0" layoutY="110.0" mnemonicParsing="false" text="Preload Images">
+         <tooltip>
+            <Tooltip text="Skip loading" />
+         </tooltip>
+      </CheckBox>
    </children>
 </AnchorPane>

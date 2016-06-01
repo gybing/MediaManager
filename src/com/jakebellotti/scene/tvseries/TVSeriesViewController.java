@@ -29,10 +29,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
+/**
+ * 
+ * @author Jake Bellotti
+ *
+ */
 public class TVSeriesViewController implements MediaScene {
 
+	private static Image catOnTacoFlyingThroughSpaceGif = null;
+
 	private boolean informationExpanded = true;
-	private double originalInformationHeight;
+	private static final double originalInformationHeight = 212.0;
 
 	@FXML
 	private AnchorPane root;
@@ -59,7 +66,7 @@ public class TVSeriesViewController implements MediaScene {
 	private Button downMoviesButton;
 
 	@FXML
-	private Label movieNameLabel;
+	private Label seriesNameLabel;
 
 	@FXML
 	private StackPane backdropImageStackPane;
@@ -69,6 +76,9 @@ public class TVSeriesViewController implements MediaScene {
 
 	@FXML
 	private ImageView posterImage;
+
+	@FXML
+	private AnchorPane posterImageAnchorPane;
 
 	@FXML
 	private Slider posterOpacitySlider;
@@ -84,9 +94,11 @@ public class TVSeriesViewController implements MediaScene {
 
 	@FXML
 	public void initialize() {
-		addTestData();
+		resetData();
+		// addTestData();
 		refreshTVSeriesList();
 		addEventHandlers();
+		this.seriesTreeView.getSelectionModel().selectFirst();
 	}
 
 	/**
@@ -94,6 +106,57 @@ public class TVSeriesViewController implements MediaScene {
 	 */
 	private final void addEventHandlers() {
 		this.informationButton.setOnMouseClicked(this::informationButtonClicked);
+		this.seriesTreeView.getSelectionModel().selectedItemProperty().addListener(l -> seriesTreeViewItemSelected());
+		this.backdropImageView.fitWidthProperty().bind(this.backdropImageStackPane.widthProperty());
+		this.backdropImageView.fitHeightProperty().bind(this.backdropImageStackPane.heightProperty());
+
+		this.posterImage.opacityProperty().bind(this.posterOpacitySlider.valueProperty());
+		this.posterImageAnchorPane.opacityProperty().bind(this.posterOpacitySlider.valueProperty());
+	}
+
+	private final void seriesTreeViewItemSelected() {
+		final TreeItem<TVSeriesNode> selectedNode = this.seriesTreeView.getSelectionModel().getSelectedItem();
+		if (selectedNode == null) {
+			resetData();
+			return;
+		}
+		this.contentAnchorPane.getChildren().clear();
+		this.posterImage.setVisible(true);
+		this.posterImageAnchorPane.setVisible(true);
+
+		if (selectedNode.getValue() instanceof TVSeriesEntry) {
+			final TVSeriesEntry tvSeriesEntry = (TVSeriesEntry) selectedNode.getValue();
+			AnchorPane seriesDataPane = SeriesDataPane.getPane();
+			this.contentAnchorPane.getChildren().add(seriesDataPane);
+			seriesDataPane.prefWidthProperty().bind(contentAnchorPane.widthProperty());
+
+			this.seriesNameLabel.setText(tvSeriesEntry.toString());
+
+			posterImage.setImage(tvSeriesEntry.getPoster());
+			backdropImageView.setImage(tvSeriesEntry.getBackDrop());
+			return;
+		}
+
+		if (selectedNode.getValue() instanceof TVSeriesSeason) {
+			final TVSeriesSeason selectedSeason = (TVSeriesSeason) selectedNode.getValue();
+
+			return;
+		}
+
+		if (selectedNode.getValue() instanceof TVSeriesEpisode) {
+			final TVSeriesEpisode selectedEpisode = (TVSeriesEpisode) selectedNode.getValue();
+			return;
+		}
+		this.posterImage.setVisible(false);
+		this.posterImageAnchorPane.setVisible(false);
+		resetData();
+	}
+
+	private final void resetData() {
+		this.seriesNameLabel.setText("");
+		this.posterImage.setImage(null);
+		this.backdropImageView.setImage(getCatOnTacoFlyingThroughSpaceGif());
+		this.contentAnchorPane.getChildren().clear();
 	}
 
 	/**
@@ -141,16 +204,15 @@ public class TVSeriesViewController implements MediaScene {
 
 	private final void updateInformation() {
 		if (this.informationExpanded) {
-			this.originalInformationHeight = new Double(this.informationAnchorPane.getHeight());
 			this.informationAnchorPane.setMinHeight(this.informationButton.getHeight());
 			this.informationAnchorPane.setPrefHeight(this.informationButton.getHeight());
 			this.informationAnchorPane.setMaxHeight(this.informationButton.getHeight());
 			this.informationExpanded = false;
 			this.informationButton.setText("Show Information ▲");
 		} else {
-			this.informationAnchorPane.setMinHeight(this.originalInformationHeight);
-			this.informationAnchorPane.setPrefHeight(this.originalInformationHeight);
-			this.informationAnchorPane.setMaxHeight(this.originalInformationHeight);
+			this.informationAnchorPane.setMinHeight(originalInformationHeight);
+			this.informationAnchorPane.setPrefHeight(originalInformationHeight);
+			this.informationAnchorPane.setMaxHeight(originalInformationHeight);
 
 			this.informationButton.setText("Hide Information ▼");
 			this.informationExpanded = true;
@@ -165,12 +227,37 @@ public class TVSeriesViewController implements MediaScene {
 	@Override
 	public void addMenuBarItems(MenuBar menuBar) {
 		Menu fileMenu = new Menu("File");
+		MenuItem addASeries = new MenuItem("Add A Series");
+		MenuItem addSeriesFromFolder = new MenuItem("Add Several Series From Root Folder");
+		MenuItem preloadImages = new MenuItem("Preload Images");
 		MenuItem close = new MenuItem("Close");
 
+		preloadImages.setOnAction(e -> preloadImages());
 		close.setOnAction(e -> Platform.exit());
-		fileMenu.getItems().add(close);
+		fileMenu.getItems().addAll(addASeries, addSeriesFromFolder, preloadImages, close);
 
 		menuBar.getMenus().addAll(fileMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
+	}
+
+	private final void preloadImages() {
+		for (TreeItem<TVSeriesNode> item : this.seriesTreeView.getRoot().getChildren()) {
+			if(item.getValue() instanceof TVSeriesEntry) {
+				final TVSeriesEntry entry = (TVSeriesEntry) item.getValue();
+				entry.getBackDrop();
+				entry.getPoster();
+			}
+		}
+	}
+
+	public static Image getCatOnTacoFlyingThroughSpaceGif() {
+		if (catOnTacoFlyingThroughSpaceGif == null) {
+			catOnTacoFlyingThroughSpaceGif = new Image(new File("./data/spacegif.gif").toURI().toString());
+		}
+		return catOnTacoFlyingThroughSpaceGif;
+	}
+
+	public static void setCatOnTacoFlyingThroughSpaceGif(Image catOnTacoFlyingThroughSpaceGif) {
+		TVSeriesViewController.catOnTacoFlyingThroughSpaceGif = catOnTacoFlyingThroughSpaceGif;
 	}
 
 }

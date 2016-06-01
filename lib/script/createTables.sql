@@ -106,3 +106,24 @@ INSERT INTO tblTVSeriesEpisode(fileLocation, episodeNumber, tvSeriesSeasonID)
 VALUES('Skins - S02-E01', 1, 2);
 INSERT INTO tblTVSeriesEpisode(fileLocation, episodeNumber, tvSeriesSeasonID) 
 VALUES('Skins - S02-E02', 2, 2);
+
+
+/*Inserting Arrow */
+INSERT INTO tblTVSeriesEntry(seriesName) 
+VALUES ('Arrow');
+
+INSERT INTO tblTVSeriesSeason(seasonNumber, episodeCount, themoviedbID, posterURL, tvSeriesEntryID) 
+VALUES(1, 23, 3967, 'https://image.tmdb.org/t/p/w185/pFF8cA0M0iE61DYbNr3ntG8SmyI.jpg', 2);
+
+INSERT INTO tblTVSeriesSeason(seasonNumber, episodeCount, themoviedbID, posterURL, tvSeriesEntryID) 
+VALUES(2, 23, 3699, 'https://image.tmdb.org/t/p/w185/1ncUnJzrhgl7I1Fc80jGly1zaiC.jpg', 2);
+
+INSERT INTO tblTVSeriesEpisode(fileLocation, episodeNumber, tvSeriesSeasonID) 
+VALUES('Arrow - S01-E01', 1, 3);
+INSERT INTO tblTVSeriesEpisode(fileLocation, episodeNumber, tvSeriesSeasonID) 
+VALUES('Arrow - S01-E02', 2, 3);
+
+INSERT INTO tblTVSeriesEpisode(fileLocation, episodeNumber, tvSeriesSeasonID) 
+VALUES('Arrow - S02-E01', 1, 4);
+INSERT INTO tblTVSeriesEpisode(fileLocation, episodeNumber, tvSeriesSeasonID) 
+VALUES('Arrow - S02-E02', 2, 4);

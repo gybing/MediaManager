@@ -1,9 +1,13 @@
 package com.jakebellotti.model.tvseries;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 
 import com.jakebellotti.MediaManager;
+import com.jakebellotti.Settings;
+
+import javafx.scene.image.Image;
 
 /**
  * 
@@ -19,6 +23,9 @@ public class TVSeriesEntry extends TVSeriesNode {
 
 	private final ArrayList<TVSeriesSeason> seasons = new ArrayList<>();
 
+	private Image backdropImage = null;
+	private Image posterImage = null;
+
 	public TVSeriesEntry(final int databaseID, final String name, final int seriesDefinitionID) {
 		super(name);
 		this.databaseID = databaseID;
@@ -32,6 +39,28 @@ public class TVSeriesEntry extends TVSeriesNode {
 	 */
 	public Optional<TVSeriesDefinition> getDefinition() {
 		return MediaManager.getMediaRepository().getTVSeriesDefinition(seriesDefinitionID);
+	}
+
+	public Image getBackDrop() {
+		if (backdropImage == null) {
+			final File backdropFile = new File("./data/img/tvseries/backdrop/" + getDatabaseID() + "_backdrop.jpg");
+			final Image newImage = new Image(backdropFile.toURI().toString());
+			if (Settings.isMemorySaverMode())
+				return newImage;
+			backdropImage = newImage;
+		}
+		return backdropImage;
+	}
+
+	public Image getPoster() {
+		if (posterImage == null) {
+			final File posterFile = new File("./data/img/tvseries/poster/" + getDatabaseID() + "_tvseries_poster.jpg");
+			final Image newImage = new Image(posterFile.toURI().toString());
+			if (Settings.isMemorySaverMode())
+				return newImage;
+			posterImage = newImage;
+		}
+		return posterImage;
 	}
 
 	public int getDatabaseID() {

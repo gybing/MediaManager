@@ -23,6 +23,9 @@ public class LauncherController {
 
 	@FXML
 	private CheckBox memorySaverModeCheckBox;
+	
+    @FXML
+    private CheckBox preloadImagesCheckBox;
 
 	@FXML
 	private Button launchButton;
