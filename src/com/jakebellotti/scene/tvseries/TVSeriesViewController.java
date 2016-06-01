@@ -11,6 +11,7 @@ import com.jakebellotti.model.tvseries.TVSeriesNode;
 import com.jakebellotti.model.tvseries.TVSeriesSeason;
 import com.jakebellotti.scene.MediaScene;
 import com.jakebellotti.scene.main.MainWindowFrame;
+import com.jakebellotti.scene.tvseries.datapane.TVSeriesDataPanes;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -127,9 +128,11 @@ public class TVSeriesViewController implements MediaScene {
 
 		if (selectedNode.getValue() instanceof TVSeriesEntry) {
 			final TVSeriesEntry tvSeriesEntry = (TVSeriesEntry) selectedNode.getValue();
-			AnchorPane seriesDataPane = SeriesDataPane.getPane();
+			AnchorPane seriesDataPane = TVSeriesDataPanes.getSeriesDataPane();
+			TVSeriesDataPanes.getSeriesController().updateSeries(tvSeriesEntry);
 			this.contentAnchorPane.getChildren().add(seriesDataPane);
 			seriesDataPane.prefWidthProperty().bind(contentAnchorPane.widthProperty());
+			
 
 			this.seriesNameLabel.setText(tvSeriesEntry.toString());
 
@@ -141,6 +144,12 @@ public class TVSeriesViewController implements MediaScene {
 		if (selectedNode.getValue() instanceof TVSeriesSeason) {
 			final TVSeriesEntry parent = (TVSeriesEntry) selectedNode.getParent().getValue();
 			final TVSeriesSeason selectedSeason = (TVSeriesSeason) selectedNode.getValue();
+			
+			AnchorPane seasonDataPane = TVSeriesDataPanes.getSeasonDataPane();
+			TVSeriesDataPanes.getSeasonController().updateSeason(selectedSeason);
+			this.contentAnchorPane.getChildren().add(seasonDataPane);
+			seasonDataPane.prefWidthProperty().bind(contentAnchorPane.widthProperty());
+			
 			this.seriesNameLabel.setText(parent.toString() + " - " + selectedSeason.toString());
 			this.posterImage.setImage(selectedSeason.getPoster());
 			this.backdropImageView.setImage(parent.getBackDrop());
@@ -151,6 +160,11 @@ public class TVSeriesViewController implements MediaScene {
 			final TVSeriesEpisode selectedEpisode = (TVSeriesEpisode) selectedNode.getValue();
 			final TVSeriesSeason season = (TVSeriesSeason) selectedNode.getParent().getValue();
 			final TVSeriesEntry tvSeriesEntry = (TVSeriesEntry) selectedNode.getParent().getParent().getValue();
+			
+			AnchorPane episodeDataPane = TVSeriesDataPanes.getEpisodeDataPane();
+			TVSeriesDataPanes.getEpisodeController().updateEpisode(selectedEpisode);
+			this.contentAnchorPane.getChildren().add(episodeDataPane);
+			episodeDataPane.prefWidthProperty().bind(contentAnchorPane.widthProperty());
 
 			this.seriesNameLabel
 					.setText(tvSeriesEntry.toString() + " - " + season.toString() + " - " + selectedEpisode.toString());

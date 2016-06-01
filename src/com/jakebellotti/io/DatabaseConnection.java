@@ -92,6 +92,18 @@ public class DatabaseConnection {
 		}
 		return toReturn;
 	}
+	
+	public final ArrayList<Object> getAllTVSeriesDefinitions() {
+		final ArrayList<Object> toReturn = new ArrayList<>();
+//		ID								INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+//		firstAirDate					VARCHAR(255) DEFAULT NULL,
+//	homePageURL						VARCHAR(255) DEFAULT NULL,
+//	name							VARCHAR(255) DEFAULT NULL,
+//	numberOfEpisodes				INTEGER DEFAULT NULL,
+//	overview						VARCHAR(255) DEFAULT NULL,
+//	posterURL						VARCHAR(255) DEFAULT NULL
+		return toReturn;
+	}
 
 	public final ArrayList<TVSeriesSeason> getTvSeriesSeasons(final TVSeriesEntry entry) {
 		final ArrayList<TVSeriesSeason> toReturn = new ArrayList<>();

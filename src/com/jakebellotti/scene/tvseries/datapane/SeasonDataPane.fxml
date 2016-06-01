@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="181.0" minWidth="1006.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TabPane prefHeight="200.0" prefWidth="1006.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <tabs>
+          <Tab text="Info">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="5.0" layoutY="5.0" prefHeight="20.0" prefWidth="125.0" text="Season Number:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="5.0" layoutY="25.0" prefHeight="20.0" prefWidth="125.0" text="Episode Count:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="5.0" layoutY="45.0" prefHeight="20.0" prefWidth="125.0" text="TheMovieDB URL:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="seasonNumberLabel" layoutX="130.0" layoutY="7.0" prefHeight="17.0" prefWidth="270.0" text="2" />
+                        <Label fx:id="episodeCountLabel" layoutX="130.0" layoutY="27.0" prefHeight="17.0" prefWidth="270.0" text="10" />
+                        <Hyperlink fx:id="urlHyperlink" layoutX="130.0" layoutY="44.0" prefHeight="17.0" prefWidth="270.0" text="Hyperlink" />
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
