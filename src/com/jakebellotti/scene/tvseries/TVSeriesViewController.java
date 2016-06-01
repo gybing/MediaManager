@@ -3,6 +3,7 @@ package com.jakebellotti.scene.tvseries;
 import java.io.File;
 
 import com.jakebellotti.MediaManager;
+import com.jakebellotti.Settings;
 import com.jakebellotti.model.ListOrderer;
 import com.jakebellotti.model.tvseries.TVSeriesEntry;
 import com.jakebellotti.model.tvseries.TVSeriesEpisode;
@@ -12,6 +13,7 @@ import com.jakebellotti.scene.MediaScene;
 import com.jakebellotti.scene.main.MainWindowFrame;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -95,7 +97,6 @@ public class TVSeriesViewController implements MediaScene {
 	@FXML
 	public void initialize() {
 		resetData();
-		// addTestData();
 		refreshTVSeriesList();
 		addEventHandlers();
 		this.seriesTreeView.getSelectionModel().selectFirst();
@@ -138,13 +139,23 @@ public class TVSeriesViewController implements MediaScene {
 		}
 
 		if (selectedNode.getValue() instanceof TVSeriesSeason) {
+			final TVSeriesEntry parent = (TVSeriesEntry) selectedNode.getParent().getValue();
 			final TVSeriesSeason selectedSeason = (TVSeriesSeason) selectedNode.getValue();
-
+			this.seriesNameLabel.setText(parent.toString() + " - " + selectedSeason.toString());
+			this.posterImage.setImage(selectedSeason.getPoster());
+			this.backdropImageView.setImage(parent.getBackDrop());
 			return;
 		}
 
 		if (selectedNode.getValue() instanceof TVSeriesEpisode) {
 			final TVSeriesEpisode selectedEpisode = (TVSeriesEpisode) selectedNode.getValue();
+			final TVSeriesSeason season = (TVSeriesSeason) selectedNode.getParent().getValue();
+			final TVSeriesEntry tvSeriesEntry = (TVSeriesEntry) selectedNode.getParent().getParent().getValue();
+
+			this.seriesNameLabel
+					.setText(tvSeriesEntry.toString() + " - " + season.toString() + " - " + selectedEpisode.toString());
+			this.posterImage.setImage(season.getPoster());
+			this.backdropImageView.setImage(tvSeriesEntry.getBackDrop());
 			return;
 		}
 		this.posterImage.setVisible(false);
@@ -183,21 +194,6 @@ public class TVSeriesViewController implements MediaScene {
 		this.seriesTreeView.getRoot().setExpanded(true);
 	}
 
-	/**
-	 * Adds test data to the scene which is, obviously, for testing.
-	 */
-	private final void addTestData() {
-		File file = new File("./data/test/series/arrow_backdrop.jpg");
-		Image img = new Image(file.toURI().toString());
-		this.backdropImageView.setImage(img);
-		this.backdropImageView.fitWidthProperty().bind(this.backdropImageStackPane.widthProperty());
-		this.backdropImageView.fitHeightProperty().bind(this.backdropImageStackPane.heightProperty());
-
-		File poster = new File("./data/test/series/arrow_poster.jpg");
-		Image posterImage = new Image(poster.toURI().toString());
-		this.posterImage.setImage(posterImage);
-	}
-
 	private final void informationButtonClicked(MouseEvent e) {
 		updateInformation();
 	}
@@ -232,16 +228,33 @@ public class TVSeriesViewController implements MediaScene {
 		MenuItem preloadImages = new MenuItem("Preload Images");
 		MenuItem close = new MenuItem("Close");
 
-		preloadImages.setOnAction(e -> preloadImages());
+		//Assign event handlers
+		addASeries.setOnAction(this::AddASeriesAction);
+		addSeriesFromFolder.setOnAction(this::AddSeriesFromAFolderAction);
+		preloadImages.setOnAction(this::preloadImagesAction);
 		close.setOnAction(e -> Platform.exit());
-		fileMenu.getItems().addAll(addASeries, addSeriesFromFolder, preloadImages, close);
 
+		//Add to the file menu
+		fileMenu.getItems().add(addASeries);
+		fileMenu.getItems().add(addSeriesFromFolder);
+		if (!Settings.isMemorySaverMode())
+			fileMenu.getItems().add(preloadImages);
+		fileMenu.getItems().add(close);
+
+		//Add to the menubar
 		menuBar.getMenus().addAll(fileMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
 	}
 
-	private final void preloadImages() {
+	private final void AddASeriesAction(final ActionEvent e) {
+	}
+	
+	private final void AddSeriesFromAFolderAction(final ActionEvent e) {
+
+	}
+
+	private final void preloadImagesAction(ActionEvent e) {
 		for (TreeItem<TVSeriesNode> item : this.seriesTreeView.getRoot().getChildren()) {
-			if(item.getValue() instanceof TVSeriesEntry) {
+			if (item.getValue() instanceof TVSeriesEntry) {
 				final TVSeriesEntry entry = (TVSeriesEntry) item.getValue();
 				entry.getBackDrop();
 				entry.getPoster();

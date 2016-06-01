@@ -69,6 +69,7 @@ public class LauncherController {
 				MainWindowFrame.load(MediaManager.getMainFrameStage());
 			}
 		};
+		//TODO set settings
 		loadingScreen.addTask(new SettingsIOSaveLoadingTask());
 		loadingScreen.addTask(new DeserializeIndexedMediaLoadingTask());
 		loadingScreen.addTask(new DeserializeMediaDataLoadingTask());
@@ -83,7 +84,7 @@ public class LauncherController {
 	}
 
 	private void memorySaverCheckBoxSelectionProperty(boolean newValue) {
-
+		Settings.setMemorySaverMode(newValue);
 	}
 
 }

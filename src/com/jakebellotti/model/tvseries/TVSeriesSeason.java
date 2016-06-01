@@ -1,6 +1,11 @@
 package com.jakebellotti.model.tvseries;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import com.jakebellotti.Settings;
+
+import javafx.scene.image.Image;
 
 /**
  * 
@@ -11,6 +16,7 @@ import java.util.ArrayList;
 public class TVSeriesSeason extends TVSeriesNode {
 
 	private final ArrayList<TVSeriesEpisode> episodes = new ArrayList<>();
+	private Image poster = null;
 
 	private final int databaseID;
 	private final int seasonNumber;
@@ -57,6 +63,16 @@ public class TVSeriesSeason extends TVSeriesNode {
 
 	public ArrayList<TVSeriesEpisode> getEpisodes() {
 		return episodes;
+	}
+
+	public Image getPoster() {
+		if(poster == null) {
+			final File posterFile = new File("./data/img/tvseries/poster/" + databaseID + "_season_poster.jpg");
+			if(Settings.isMemorySaverMode())
+				return new Image(posterFile.toURI().toString());
+			poster = new Image(posterFile.toURI().toString());
+		}
+		return poster;
 	}
 
 }
