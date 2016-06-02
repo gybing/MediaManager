@@ -20,8 +20,10 @@ import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.NewMovieDefinition;
 import com.jakebellotti.model.movie.NewMovieEntry;
+import com.jakebellotti.model.tvseries.TVSeriesDefinition;
 import com.jakebellotti.model.tvseries.TVSeriesEntry;
 import com.jakebellotti.model.tvseries.TVSeriesEpisode;
+import com.jakebellotti.model.tvseries.TVSeriesEpisodeDefinition;
 import com.jakebellotti.model.tvseries.TVSeriesSeason;
 import com.jakebellotti.scene.movie.add.MovieDirectoryEntry;
 
@@ -71,6 +73,22 @@ public class DatabaseConnection {
 		// TODO properly create all tables
 		// logger.println(createTable(DatabaseTableConstants.createMovieListEntryTable()));
 	}
+	
+	public boolean insertTVSeries(final String name) {
+		final String query = "INSERT INTO tblTVSeriesEntry(seriesName) VALUES(?)";
+		try(PreparedStatement s = conn.prepareStatement(query)) {
+			s.setString(1, name);
+			
+			final boolean result = (s.executeUpdate() > 0);
+			
+			final int lastInsertID = this.getLastInsertID();
+			MediaManager.getMediaRepository().addTVSeriesEntry(new TVSeriesEntry(lastInsertID, name, 0));
+			return result;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	public final ArrayList<TVSeriesEntry> getAllTVSeriesEntries() {
 		final ArrayList<TVSeriesEntry> toReturn = new ArrayList<>();
@@ -92,16 +110,32 @@ public class DatabaseConnection {
 		}
 		return toReturn;
 	}
-	
-	public final ArrayList<Object> getAllTVSeriesDefinitions() {
-		final ArrayList<Object> toReturn = new ArrayList<>();
-//		ID								INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-//		firstAirDate					VARCHAR(255) DEFAULT NULL,
-//	homePageURL						VARCHAR(255) DEFAULT NULL,
-//	name							VARCHAR(255) DEFAULT NULL,
-//	numberOfEpisodes				INTEGER DEFAULT NULL,
-//	overview						VARCHAR(255) DEFAULT NULL,
-//	posterURL						VARCHAR(255) DEFAULT NULL
+
+	public final ArrayList<TVSeriesDefinition> getAllTVSeriesDefinitions() {
+		final ArrayList<TVSeriesDefinition> toReturn = new ArrayList<>();
+		try (Statement s = conn.createStatement()) {
+			final String query = "SELECT * FROM tblTVSeriesDefinition";
+			final ResultSet set = s.executeQuery(query);
+
+			while (set.next()) {
+				final int databaseID = set.getInt("ID");
+				final String name = set.getString("name");
+				final String firstAirDate = set.getString("firstAirDate");
+				final String lastAirDate = set.getString("lastAirDate");
+				final String homePageURL = set.getString("homePageURL");
+				final String posterURL = set.getString("posterURL");
+				final String backdropURL = set.getString("backdropURL");
+				final int episodeCount = set.getInt("episodeCount");
+				final int seasonCount = set.getInt("seasonCount");
+				final String overview = set.getString("overview");
+
+				toReturn.add(new TVSeriesDefinition(databaseID, name, firstAirDate, lastAirDate, homePageURL, posterURL,
+						backdropURL, episodeCount, seasonCount, overview));
+			}
+			set.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return toReturn;
 	}
 
@@ -119,8 +153,9 @@ public class DatabaseConnection {
 				final int theMovieDBID = set.getInt("themoviedbID");
 				final String posterURL = set.getString("posterURL");
 				final int tvSeriesEntryID = set.getInt("tvSeriesEntryID");
+				final String overview = set.getString("overview");
 				final TVSeriesSeason season = new TVSeriesSeason(id, seasonNumber, episodeCount, theMovieDBID,
-						posterURL, tvSeriesEntryID);
+						posterURL, tvSeriesEntryID, overview);
 				season.getEpisodes().addAll(getTvSeriesSeasonEpisodes(season));
 				toReturn.add(season);
 			}
@@ -143,15 +178,38 @@ public class DatabaseConnection {
 		final String query = "SELECT * FROM tblTVSeriesEpisode WHERE tvSeriesSeasonID = " + entry.getDatabaseID();
 		try (Statement s = conn.createStatement()) {
 			final ResultSet set = s.executeQuery(query);
-			
+
 			while (set.next()) {
 				final int id = set.getInt("ID");
 				final String fileLocation = set.getString("fileLocation");
 				final int episodeNumber = set.getInt("episodeNumber");
 				final int tvSeriesSeasonID = set.getInt("tvSeriesSeasonID");
 				final int tvSeriesEpisodeDefinitionID = set.getInt("tvSeriesEpisodeDefinitionID");
-				toReturn.add(new TVSeriesEpisode(id, fileLocation, episodeNumber, tvSeriesSeasonID, tvSeriesEpisodeDefinitionID));
+				toReturn.add(new TVSeriesEpisode(id, fileLocation, episodeNumber, tvSeriesSeasonID,
+						tvSeriesEpisodeDefinitionID));
 			}
+			set.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toReturn;
+	}
+
+	public final ArrayList<TVSeriesEpisodeDefinition> getAllTVSeriesEpisodeDefinitions() {
+		final ArrayList<TVSeriesEpisodeDefinition> toReturn = new ArrayList<>();
+		try (Statement s = conn.createStatement()) {
+			final String query = "SELECT * FROM tblTVSeriesEpisodeDefinition";
+			final ResultSet set = s.executeQuery(query);
+
+			while (set.next()) {
+				final int databaseID = set.getInt("ID");
+				final String name = set.getString("name");
+				final String overview = set.getString("overview");
+				final int themoviedbID = set.getInt("themoviedbID");
+				final String stillImageURL = set.getString("stillImageURL");
+				toReturn.add(new TVSeriesEpisodeDefinition(databaseID, name, overview, themoviedbID, stillImageURL));
+			}
+
 			set.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -321,6 +379,21 @@ public class DatabaseConnection {
 			e.printStackTrace();
 		}
 		return MovieDefinition.fromNewDefinition(databaseID, definition);
+	}
+
+	public int getLastInsertID() {
+		int returnID = -1;
+		try (ResultSet rs = conn.createStatement().executeQuery("VALUES IDENTITY_VAL_LOCAL()")) {
+			if (rs.next()) {
+				final String id = rs.getString(1);
+				returnID = Integer.parseInt(id);
+				rs.close();
+				return returnID;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return returnID;
 	}
 
 	public boolean addMovieDirectoryEntry(final MovieDirectoryEntry entry) {

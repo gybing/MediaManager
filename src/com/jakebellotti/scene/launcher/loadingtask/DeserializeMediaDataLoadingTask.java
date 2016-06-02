@@ -39,6 +39,11 @@ public class DeserializeMediaDataLoadingTask implements LoadingTask {
 		logger.println("Deserializing media definitions");
 		MediaManager.getMediaRepository().addMovieDefinitions(MediaManager.getDatabase().getAllMovieDefinitions());
 		logger.println(MediaManager.getMediaRepository().getLoadedMovieDefinitions().size()+" movie definitions");
+		MediaManager.getMediaRepository().addTVSeriesDefinitions(MediaManager.getDatabase().getAllTVSeriesDefinitions());
+		logger.println(MediaManager.getMediaRepository().getTvSeriesDefinitions().size()+" tv series definitions");
+		MediaManager.getMediaRepository().addTVSeriesEpisodeDefinitions(MediaManager.getDatabase().getAllTVSeriesEpisodeDefinitions());
+		logger.println(MediaManager.getMediaRepository().getTvSeriesEpisodeDefinitions().size()+" tv series episode definitions");
+		
 	}
 
 }

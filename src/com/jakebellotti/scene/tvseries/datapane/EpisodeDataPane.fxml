@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane minHeight="181.0" minWidth="1006.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -10,9 +13,32 @@
         <tabs>
           <Tab text="Info">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="5.0" layoutY="5.0" prefHeight="20.0" prefWidth="140.0" text="Name:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="5.0" layoutY="25.0" prefHeight="20.0" prefWidth="140.0" text="TheMovieDB URL:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="themoviedbURLLabel" layoutX="128.0" layoutY="25.0" prefHeight="21.0" prefWidth="270.0" text="https://movie/900/s/2" />
+                        <Label fx:id="nameLabel" layoutX="128.0" layoutY="5.0" prefHeight="21.0" prefWidth="270.0" text="&quot;Tony&quot;" />
+                     </children></AnchorPane>
             </content>
           </Tab>
+            <Tab text="Plot">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea fx:id="plotTextArea" editable="false" layoutX="5.0" layoutY="5.0" prefHeight="130.0" prefWidth="996.0" wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </children>

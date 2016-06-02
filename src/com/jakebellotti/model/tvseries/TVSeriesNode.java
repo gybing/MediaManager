@@ -1,16 +1,18 @@
 package com.jakebellotti.model.tvseries;
 
-public class TVSeriesNode {
+/**
+ * 
+ * @author Jake Bellotti
+ * @since 30 May, 2016
+ *
+ */
+public abstract class TVSeriesNode {
 	
-	private String name;
-	
-	public TVSeriesNode(final String name) {
-		this.name = name;
-	}
-	
+	public abstract String getDisplayName();
+
 	@Override
 	public String toString() {
-		return name;
+		return getDisplayName();
 	}
 
 }

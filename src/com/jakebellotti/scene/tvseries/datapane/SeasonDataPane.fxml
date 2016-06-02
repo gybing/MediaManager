@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -33,6 +34,14 @@
                         <Label fx:id="seasonNumberLabel" layoutX="130.0" layoutY="7.0" prefHeight="17.0" prefWidth="270.0" text="2" />
                         <Label fx:id="episodeCountLabel" layoutX="130.0" layoutY="27.0" prefHeight="17.0" prefWidth="270.0" text="10" />
                         <Hyperlink fx:id="urlHyperlink" layoutX="130.0" layoutY="44.0" prefHeight="17.0" prefWidth="270.0" text="Hyperlink" />
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Plot">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea fx:id="plotTextArea" editable="false" layoutX="5.0" layoutY="5.0" prefHeight="130.0" prefWidth="996.0" wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
                      </children></AnchorPane>
             </content>
           </Tab>

@@ -9,6 +9,7 @@ import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.MovieEntryWrapper;
 import com.jakebellotti.model.tvseries.TVSeriesDefinition;
 import com.jakebellotti.model.tvseries.TVSeriesEntry;
+import com.jakebellotti.model.tvseries.TVSeriesEpisodeDefinition;
 
 /**
  * Holds all the media data for this program.
@@ -18,7 +19,9 @@ import com.jakebellotti.model.tvseries.TVSeriesEntry;
  */
 public class MediaRepository {
 
+	private final HashMap<Integer, TVSeriesEpisodeDefinition> tvSeriesEpisodeDefinitions = new HashMap<>();
 	private final HashMap<Integer, TVSeriesDefinition> tvSeriesDefinitions = new HashMap<>();
+
 	private final ArrayList<TVSeriesEntry> loadedTVSeries = new ArrayList<>();
 	/**
 	 * An ArrayList to hold all of the MovieEntry objects. This should never
@@ -35,11 +38,12 @@ public class MediaRepository {
 	 */
 	private final HashMap<Integer, MovieDefinition> movieDefinitions = new HashMap<>();
 	/**
-	 * The search text on the movie view that is factored in when retrieving the displayed movies.
+	 * The search text on the movie view that is factored in when retrieving the
+	 * displayed movies.
 	 */
 	private String movieSearchText;
-	
-	//MOVIES
+
+	// MOVIES
 
 	public final void addMovieDefinitions(final ArrayList<MovieDefinition> definitionList) {
 		definitionList.forEach(def -> assignMovieDefinition(def.getDatabaseID(), def));
@@ -60,26 +64,39 @@ public class MediaRepository {
 	public final void addMovieEntry(MovieEntry movieEntry) {
 		loadedMovieEntries.add(movieEntry);
 	}
+
+	// TV SERIES
 	
-	//TV SERIES
-	
-	public final void addTVSeriesDefinition(final int key, final TVSeriesDefinition definition) {
+
+	public final void assignTVSeriesDefinition(final int key, final TVSeriesDefinition definition) {
 		this.tvSeriesDefinitions.put(key, definition);
 	}
-	
+
+	public final void addTVSeriesDefinitions(final ArrayList<TVSeriesDefinition> definitionList) {
+		definitionList.forEach(def -> assignTVSeriesDefinition(def.getDatabaseID(), def));
+	}
+
 	public final Optional<TVSeriesDefinition> getTVSeriesDefinition(int id) {
 		return Optional.ofNullable(tvSeriesDefinitions.get(id));
 	}
-	
+
 	public final void addTVSeriesEntries(ArrayList<TVSeriesEntry> tvSeriesEntries) {
 		tvSeriesEntries.forEach(this::addTVSeriesEntry);
 	}
-	
+
 	public final void addTVSeriesEntry(TVSeriesEntry entry) {
 		this.loadedTVSeries.add(entry);
 	}
 	
-	//MUSIC
+	public final void addTVSeriesEpisodeDefinitions(final ArrayList<TVSeriesEpisodeDefinition> definitions) {
+		definitions.forEach(def -> assignTVSeriesEpisodeDefinition(def.getDatabaseID(), def));
+	}
+	
+	public final void assignTVSeriesEpisodeDefinition(final int key, final TVSeriesEpisodeDefinition definition) {
+		this.tvSeriesEpisodeDefinitions.put(key, definition);
+	}
+
+	// MUSIC
 
 	/**
 	 * 
@@ -90,10 +107,10 @@ public class MediaRepository {
 		final ArrayList<MovieEntryWrapper> toReturn = new ArrayList<>();
 		for (MovieEntry currentMovieEntry : loadedMovieEntries) {
 			if (shouldAddMovieEntry(currentMovieEntry)) {
-				if(this.movieSearchText == null || this.movieSearchText.length() < 0) {
+				if (this.movieSearchText == null || this.movieSearchText.length() < 0) {
 					toReturn.add(new MovieEntryWrapper(currentMovieEntry));
 				} else {
-					if(currentMovieEntry.toString().toLowerCase().contains(this.movieSearchText.toLowerCase())) {
+					if (currentMovieEntry.toString().toLowerCase().contains(this.movieSearchText.toLowerCase())) {
 						toReturn.add(new MovieEntryWrapper(currentMovieEntry));
 					}
 				}
@@ -101,9 +118,13 @@ public class MediaRepository {
 		}
 		return toReturn;
 	}
-	
+
+	public HashMap<Integer, TVSeriesDefinition> getTvSeriesDefinitions() {
+		return tvSeriesDefinitions;
+	}
+
 	public final ArrayList<TVSeriesEntry> getDisplayedTVSeriesEntries() {
-		//TODO eventually implement filtering logic to TV series
+		// TODO eventually implement filtering logic to TV series
 		return loadedTVSeries;
 	}
 
@@ -125,7 +146,7 @@ public class MediaRepository {
 	public final ArrayList<MovieEntry> getLoadedMovieEntries() {
 		return loadedMovieEntries;
 	}
-	
+
 	public ArrayList<TVSeriesEntry> getLoadedTVSeries() {
 		return loadedTVSeries;
 	}
@@ -140,5 +161,9 @@ public class MediaRepository {
 
 	public void setMovieSearchText(String movieSearchText) {
 		this.movieSearchText = movieSearchText;
+	}
+
+	public HashMap<Integer, TVSeriesEpisodeDefinition> getTvSeriesEpisodeDefinitions() {
+		return tvSeriesEpisodeDefinitions;
 	}
 }

@@ -25,16 +25,17 @@ public class TVSeriesSeason extends TVSeriesNode {
 	// TODO use TheMovieDBImageString instead of a regular String.
 	private final String posterURL;
 	private final int tvSeriesEntryID;
+	private final String overview;
 
 	public TVSeriesSeason(final int databaseID, final int seasonNumber, final int episodeCount, final int theMovieDBID,
-			final String posterURL, final int tvSeriesEntryID) {
-		super("Season " + seasonNumber);
+			final String posterURL, final int tvSeriesEntryID, final String overview) {
 		this.databaseID = databaseID;
 		this.seasonNumber = seasonNumber;
 		this.episodeCount = episodeCount;
 		this.theMovieDBID = theMovieDBID;
 		this.posterURL = posterURL;
 		this.tvSeriesEntryID = tvSeriesEntryID;
+		this.overview = overview;
 	}
 
 	public int getDatabaseID() {
@@ -73,6 +74,15 @@ public class TVSeriesSeason extends TVSeriesNode {
 			poster = new Image(posterFile.toURI().toString());
 		}
 		return poster;
+	}
+
+	public String getOverview() {
+		return overview;
+	}
+
+	@Override
+	public String getDisplayName() {
+		return "Season " + seasonNumber;
 	}
 
 }

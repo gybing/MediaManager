@@ -14,5 +14,6 @@ public class Constants {
 	
 	public static final String OMDBAPI_WEBSITE = "www.omdbapi.com";
 	
+	public static final String THE_MOVIE_DB_TV_LINK = "https://www.themoviedb.org/tv/";
 
 }

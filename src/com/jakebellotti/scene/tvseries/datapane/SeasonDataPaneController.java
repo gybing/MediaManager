@@ -1,10 +1,12 @@
 package com.jakebellotti.scene.tvseries.datapane;
 
+import com.jakebellotti.Constants;
 import com.jakebellotti.model.tvseries.TVSeriesSeason;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 
 /**
  *
@@ -12,8 +14,6 @@ import javafx.scene.control.Label;
  * @since 1 Jun 2016
  */
 public class SeasonDataPaneController {
-
-	private static final String THE_MOVIE_DB_LINK = "https://www.themoviedb.org/tv/";
 
 	@FXML
 	private Label seasonNumberLabel;
@@ -23,6 +23,9 @@ public class SeasonDataPaneController {
 
 	@FXML
 	private Hyperlink urlHyperlink;
+	
+    @FXML
+    private TextArea plotTextArea;
 
 	@FXML
 	public void initialize() {
@@ -34,11 +37,13 @@ public class SeasonDataPaneController {
 			seasonNumberLabel.setText("");
 			episodeCountLabel.setText("");
 			urlHyperlink.setText("");
+			plotTextArea.setText("");
 			return;
 		}
 		seasonNumberLabel.setText("" + season.getSeasonNumber());
 		episodeCountLabel.setText("" + season.getEpisodeCount());
-		urlHyperlink.setText(THE_MOVIE_DB_LINK + season.getTheMovieDBID());
+		urlHyperlink.setText(Constants.THE_MOVIE_DB_TV_LINK + season.getTheMovieDBID());
+		plotTextArea.setText(season.getOverview());
 	}
 
 }

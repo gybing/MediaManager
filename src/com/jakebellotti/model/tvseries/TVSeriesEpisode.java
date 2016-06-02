@@ -1,5 +1,9 @@
 package com.jakebellotti.model.tvseries;
 
+import java.util.Optional;
+
+import com.jakebellotti.MediaManager;
+
 public class TVSeriesEpisode extends TVSeriesNode {
 
 	private final int databaseID;
@@ -10,12 +14,15 @@ public class TVSeriesEpisode extends TVSeriesNode {
 
 	public TVSeriesEpisode(final int databaseID, final String fileLocation, final int episodeNumber,
 			final int tvSeriesSeasonID, final int tvSeriesEpisodeDefinitionID) {
-		super("Episode " + episodeNumber);
 		this.databaseID = databaseID;
 		this.fileLocation = fileLocation;
 		this.episodeNumber = episodeNumber;
 		this.tvSeriesSeasonID = tvSeriesSeasonID;
 		this.tvSeriesEpisodeDefinitionID = tvSeriesEpisodeDefinitionID;
+	}
+
+	public final Optional<TVSeriesEpisodeDefinition> getDefinition() {
+		return Optional.ofNullable(MediaManager.getMediaRepository().getTvSeriesEpisodeDefinitions().get(databaseID));
 	}
 
 	public int getDatabaseID() {
@@ -36,6 +43,15 @@ public class TVSeriesEpisode extends TVSeriesNode {
 
 	public int getTvSeriesEpisodeDefinitionID() {
 		return tvSeriesEpisodeDefinitionID;
+	}
+
+	@Override
+	public String getDisplayName() {
+		Optional<TVSeriesEpisodeDefinition> def = getDefinition();
+		if(def.isPresent()) {
+			return "Episode " + episodeNumber + " - \"" + def.get().getName() + "\"";
+		}
+		return "Episode " + episodeNumber;
 	}
 
 }

@@ -18,7 +18,7 @@ import javafx.scene.image.Image;
 public class TVSeriesEntry extends TVSeriesNode {
 
 	private final int databaseID;
-
+	private final String name;
 	private final int seriesDefinitionID;
 
 	private final ArrayList<TVSeriesSeason> seasons = new ArrayList<>();
@@ -27,8 +27,8 @@ public class TVSeriesEntry extends TVSeriesNode {
 	private Image posterImage = null;
 
 	public TVSeriesEntry(final int databaseID, final String name, final int seriesDefinitionID) {
-		super(name);
 		this.databaseID = databaseID;
+		this.name = name;
 		this.seriesDefinitionID = seriesDefinitionID;
 	}
 
@@ -86,6 +86,11 @@ public class TVSeriesEntry extends TVSeriesNode {
 			}
 		}
 		return builder.toString();
+	}
+
+	@Override
+	public String getDisplayName() {
+		return name;
 	}
 
 }
