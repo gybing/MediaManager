@@ -6,11 +6,14 @@ import com.jakebellotti.io.DatabaseConnection;
 import com.jakebellotti.io.SettingsIO;
 import com.jakebellotti.io.scraper.DataScraper;
 import com.jakebellotti.io.scraper.impl.OMDBMovieScraper;
+import com.jakebellotti.io.scraper.impl.TheMovieDBTVSeriesDefinitionScraper;
 import com.jakebellotti.lang.Language;
 import com.jakebellotti.lang.LanguagePack;
 import com.jakebellotti.model.MediaRepository;
 import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.NewMovieDefinition;
+import com.jakebellotti.model.tvseries.TVSeriesDefinition;
+import com.jakebellotti.model.tvseries.TVSeriesEntry;
 import com.jakebellotti.scene.launcher.Launcher;
 import com.jakebellotti.scene.main.MainWindowFrameController;
 
@@ -26,6 +29,8 @@ import javafx.stage.Stage;
 public class MediaManager {
 
 	private static DataScraper<MovieEntry, NewMovieDefinition> movieDefinitionRetriever = new OMDBMovieScraper();
+	private static DataScraper<TVSeriesEntry, TVSeriesDefinition> tvSeriesDefinitionRetriever = new TheMovieDBTVSeriesDefinitionScraper();
+	
 	private static final DatabaseConnection database = new DatabaseConnection();
 	private static final MainWindowFrameController mainController = new MainWindowFrameController();
 	private static final LanguagePack language = new LanguagePack(Language.ENGLISH);
@@ -112,6 +117,14 @@ public class MediaManager {
 
 	public static MediaRepository getMediaRepository() {
 		return mediaRepository;
+	}
+
+	public static DataScraper<TVSeriesEntry, TVSeriesDefinition> getTvSeriesDefinitionRetriever() {
+		return tvSeriesDefinitionRetriever;
+	}
+
+	public static void setTvSeriesDefinitionRetriever(DataScraper<TVSeriesEntry, TVSeriesDefinition> tvSeriesDefinitionRetriever) {
+		MediaManager.tvSeriesDefinitionRetriever = tvSeriesDefinitionRetriever;
 	}
 
 }

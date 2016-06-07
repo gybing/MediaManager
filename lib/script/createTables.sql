@@ -21,7 +21,7 @@ CREATE TABLE tblMovieDefinition(
 	metascore			INTEGER,
 	imdbRating			VARCHAR(1000),
 	imdbVotes			VARCHAR(1000),
-	plot				VARCHAR(1000)
+	plot				VARCHAR(10000)
 );
 
 CREATE TABLE tblMovieEntry(

@@ -69,6 +69,8 @@ public class TVSeriesSeason extends TVSeriesNode {
 	public Image getPoster() {
 		if(poster == null) {
 			final File posterFile = new File("./data/img/tvseries/poster/" + databaseID + "_season_poster.jpg");
+			if(! posterFile.exists())
+				return null;
 			if(Settings.isMemorySaverMode())
 				return new Image(posterFile.toURI().toString());
 			poster = new Image(posterFile.toURI().toString());

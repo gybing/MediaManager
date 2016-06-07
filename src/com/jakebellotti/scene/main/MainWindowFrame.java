@@ -2,6 +2,7 @@ package com.jakebellotti.scene.main;
 
 import java.io.IOException;
 
+import com.jakebellotti.MediaManager;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;

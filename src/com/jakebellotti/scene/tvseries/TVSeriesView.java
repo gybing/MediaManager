@@ -17,7 +17,6 @@ public class TVSeriesView {
 			try {
 				controller = new TVSeriesViewController();
 				loader.setController(controller);
-				
 				scene = loader.load(TVSeriesViewController.class.getResource("TvSeriesView.fxml").openStream());
 				return scene;
 			} catch (IOException e) {

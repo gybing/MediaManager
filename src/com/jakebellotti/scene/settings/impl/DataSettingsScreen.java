@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import jblib.javafx.Alerts;
 
 /**
  *
@@ -61,6 +62,24 @@ public class DataSettingsScreen extends SettingsScreen {
 	 */
 	private final void addEventHandlers() {
 		this.resetAllMovieDataButton.setOnMouseClicked(this::resetAllMovieDataButtonClick);
+		this.resetAllMovieDefinitionButton.setOnMouseClicked(this::resetAllMovieDefinitionButtonClicked);
+		this.resetAllTVSeriesButton.setOnMouseClicked(this::resetAllTVSeriesButtonClicked);
+	}
+	
+	private final void resetAllTVSeriesButtonClicked(MouseEvent e) {
+		
+	}
+	
+	private final void resetAllMovieDefinitionButtonClicked(MouseEvent e) {
+		if(MediaManager.getMediaRepository().getLoadedMovieEntries().size() > 0) {
+			Alerts.showInformationAlert("Can not reset movie definitions", "Movie entries are linked with definitions", "Please reset all movie entries first.");
+			return;
+		}
+		this.setSettingsModified(true);
+		MediaManager.getMediaRepository().getLoadedMovieDefinitions().clear();
+		MediaManager.getDatabase().query("DELETE FROM tblMovieDefinition WHERE 1=1");
+		MainWindowFrame.getController().getCurrentSceneController().refresh();
+		resetInfoLabels();
 	}
 
 	private void resetAllMovieDataButtonClick(MouseEvent event) {

@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.jakebellotti.Constants;
+import com.jakebellotti.Images;
 import com.jakebellotti.MediaManager;
 import com.jakebellotti.Settings;
 
@@ -19,7 +21,11 @@ public class TVSeriesEntry extends TVSeriesNode {
 
 	private final int databaseID;
 	private final String name;
-	private final int seriesDefinitionID;
+	private int seriesDefinitionID;
+
+	public void setSeriesDefinitionID(int seriesDefinitionID) {
+		this.seriesDefinitionID = seriesDefinitionID;
+	}
 
 	private final ArrayList<TVSeriesSeason> seasons = new ArrayList<>();
 
@@ -30,6 +36,13 @@ public class TVSeriesEntry extends TVSeriesNode {
 		this.databaseID = databaseID;
 		this.name = name;
 		this.seriesDefinitionID = seriesDefinitionID;
+	}
+	
+	public void downloadImages() {
+		getDefinition().ifPresent(def -> {
+			Images.downloadImage(Constants.THE_MOVIE_DB_ORIGINAL_IMAGE + def.getBackdropURL(), "./data/img/tvseries/backdrop/" + databaseID + "_backdrop.jpg");
+			Images.downloadImage(Constants.THE_MOVIE_DB_IMAGE_URL + "w500" + def.getPosterURL(), "./data/img/tvseries/poster/" + databaseID + "_tvseries_poster.jpg");
+		});
 	}
 
 	/**
@@ -44,6 +57,8 @@ public class TVSeriesEntry extends TVSeriesNode {
 	public Image getBackDrop() {
 		if (backdropImage == null) {
 			final File backdropFile = new File("./data/img/tvseries/backdrop/" + getDatabaseID() + "_backdrop.jpg");
+			if(!backdropFile.exists())
+				return null;
 			final Image newImage = new Image(backdropFile.toURI().toString());
 			if (Settings.isMemorySaverMode())
 				return newImage;
@@ -55,6 +70,8 @@ public class TVSeriesEntry extends TVSeriesNode {
 	public Image getPoster() {
 		if (posterImage == null) {
 			final File posterFile = new File("./data/img/tvseries/poster/" + getDatabaseID() + "_tvseries_poster.jpg");
+			if(!posterFile.exists())
+				return null;
 			final Image newImage = new Image(posterFile.toURI().toString());
 			if (Settings.isMemorySaverMode())
 				return newImage;

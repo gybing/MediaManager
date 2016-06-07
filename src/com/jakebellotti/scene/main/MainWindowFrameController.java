@@ -1,5 +1,6 @@
 package com.jakebellotti.scene.main;
 
+import com.jakebellotti.MediaManager;
 import com.jakebellotti.scene.MediaScene;
 import com.jakebellotti.scene.movie.MovieView;
 import com.jakebellotti.scene.tvseries.TVSeriesView;
@@ -48,9 +49,9 @@ public class MainWindowFrameController {
 	private final void setAs(final AnchorPane pane, final MediaScene scene) {
 		contentWindow.getChildren().clear();
 		contentWindow.getChildren().add(pane);
-		this.menuBar.getMenus().clear();
+		menuBar.getMenus().clear();
 		scene.addMenuBarItems(menuBar);
-		this.setCurrentSceneController(scene);
+		setCurrentSceneController(scene);
 	}
 
 	public MediaScene getCurrentSceneController() {

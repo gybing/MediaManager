@@ -259,7 +259,7 @@ public class TVSeriesViewController implements MediaScene {
 
 	@Override
 	public void refresh() {
-
+		this.refreshTVSeriesList(MediaManager.getMediaRepository().getDisplayedTVSeriesEntries(), showUnindexedEntries.isSelected());
 	}
 
 	@Override

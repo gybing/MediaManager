@@ -73,18 +73,60 @@ public class DatabaseConnection {
 		// TODO properly create all tables
 		// logger.println(createTable(DatabaseTableConstants.createMovieListEntryTable()));
 	}
-	
+
+	public boolean insertTVSeriesDefinition(final TVSeriesEntry entry, final TVSeriesDefinition def) {
+		final String query = "INSERT INTO tblTVSeriesDefinition(name, firstAirDate, lastAirDate, homePageURL, posterURL, backdropURL, episodeCount, seasonCount, overview) VALUES(?,?,?,?,?,?,?,?,?)";
+		try (PreparedStatement s = conn.prepareStatement(query)) {
+			s.setString(1, def.getName());
+			s.setString(2, def.getFirstAirDate());
+			s.setString(3, def.getLastAirDate());
+			s.setString(4, def.getHomePageURL());
+			s.setString(5, def.getPosterURL());
+			s.setString(6, def.getBackdropURL());
+			s.setInt(7, def.getEpisodeCount());
+			s.setInt(8, def.getSeasonCount());
+			s.setString(9, def.getOverview());
+
+			final boolean result = s.executeUpdate() > 0;
+
+			final int lastInsertID = this.getLastInsertID();
+			MediaManager.getMediaRepository().assignTVSeriesDefinition(lastInsertID,
+					new TVSeriesDefinition(lastInsertID, def.getName(), def.getFirstAirDate(), def.getLastAirDate(),
+							def.getHomePageURL(), def.getPosterURL(), def.getBackdropURL(), def.getEpisodeCount(),
+							def.getSeasonCount(), def.getOverview()));
+			updateTVSeriesEntryDefinitionID(entry, lastInsertID);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private void updateTVSeriesEntryDefinitionID(final TVSeriesEntry entry, final int newID) {
+		if (newID > 0) {
+			final String query = "UPDATE tblTVSeriesEntry SET assignedTVSeriesDefinitionID = ? WHERE ID = ?";
+			try(PreparedStatement s = conn.prepareStatement(query)) {
+				s.setInt(1, newID);
+				s.setInt(2, entry.getDatabaseID());
+				if(s.executeUpdate() > 0)
+					entry.setSeriesDefinitionID(newID);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public boolean insertTVSeries(final String name) {
 		final String query = "INSERT INTO tblTVSeriesEntry(seriesName) VALUES(?)";
-		try(PreparedStatement s = conn.prepareStatement(query)) {
+		try (PreparedStatement s = conn.prepareStatement(query)) {
 			s.setString(1, name);
-			
+
 			final boolean result = (s.executeUpdate() > 0);
-			
+
 			final int lastInsertID = this.getLastInsertID();
 			MediaManager.getMediaRepository().addTVSeriesEntry(new TVSeriesEntry(lastInsertID, name, 0));
 			return result;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}

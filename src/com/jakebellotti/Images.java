@@ -34,6 +34,26 @@ public class Images {
 		return loadingImage;
 	}
 	
+	public static final void downloadImage(final String urlLocation, final String output) {
+		final File outputFile = new File(output);
+		if (outputFile.exists())
+			return;
+		try {
+			URL url = new URL(urlLocation);
+			InputStream in = new BufferedInputStream(url.openStream());
+			OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile));
+
+			for (int i; (i = in.read()) != -1;) {
+				out.write(i);
+			}
+			in.close();
+			out.close();
+		} catch (MalformedURLException e) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static final void downloadImage(MovieDefinition def) {
 		final String[] split = def.getPoster().split("/");
 

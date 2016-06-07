@@ -1,6 +1,6 @@
 package com.jakebellotti.io.scraper.impl;
 
-import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
@@ -10,6 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.jakebellotti.io.Logger;
 import com.jakebellotti.io.scraper.DataScraper;
 import com.jakebellotti.model.tvseries.TVSeriesEntry;
 import com.jakebellotti.model.tvseries.TheMovieDBSeriesSearchEntry;
@@ -24,20 +25,22 @@ import com.jakebellotti.model.tvseries.TheMovieDBSeriesSearchEntry;
 public class TheMovieDBSeriesSearchScraper
 		implements DataScraper<TVSeriesEntry, ArrayList<TheMovieDBSeriesSearchEntry>> {
 
-	public static final String WEBSITE_URL = "http://www.themoviedb.org";
+	private static final Logger logger = new Logger(TheMovieDBSeriesSearchScraper.class);
+	public static final String WEBSITE_URL = "https://www.themoviedb.org";
 	public static final String TV_SERIES_SEARCH_URL = WEBSITE_URL + "/search/tv?query=";
 
-	// TODO rig it up to work from a url
 	@Override
 	public Optional<ArrayList<TheMovieDBSeriesSearchEntry>> scrapeData(TVSeriesEntry parameter) {
 		final ArrayList<TheMovieDBSeriesSearchEntry> toReturn = new ArrayList<>();
-		try {
-			final StringBuilder builder = new StringBuilder();
-			Scanner scanner = new Scanner(new File("./data/test/themoviedbtest/tvseries/search result page.html"));
-			while (scanner.hasNext()) {
+		final StringBuilder builder = new StringBuilder();
+		logger.println("Attemping to parse: " + parameter);
+
+		try (Scanner scanner = new Scanner(new URL(generateURL(parameter)).openStream())){
+			
+			while(scanner.hasNext()) 
 				builder.append(scanner.nextLine());
-			}
-			scanner.close();
+			
+			logger.println("Successfully parsed the page.");
 
 			final String parsing = builder.toString().replace("item poster card", "item-poster-card")
 					.replace("title result", "title-result");
@@ -61,9 +64,9 @@ public class TheMovieDBSeriesSearchScraper
 				toReturn.add(
 						new TheMovieDBSeriesSearchEntry(title, releaseDate, genres, rating, href, image, overview));
 			}
+			logger.println("Successfully retrieved " + toReturn.size() + " search results.");
 
 		} catch (Exception e) {
-
 			e.printStackTrace();
 		}
 
@@ -71,7 +74,7 @@ public class TheMovieDBSeriesSearchScraper
 	}
 
 	private static final String generateURL(final TVSeriesEntry series) {
-		return TV_SERIES_SEARCH_URL + series.toString();
+		return TV_SERIES_SEARCH_URL + series.toString().replace(" ", "%20");
 	}
 
 }

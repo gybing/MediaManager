@@ -3,6 +3,7 @@ package com.jakebellotti.scene.movie;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -36,7 +37,7 @@ public class RetrieveMovieDefinitions {
 	private final Stage stage;
 	private final Stage thisStage = new Stage();
 	private boolean requestCancel = false;
-	private int current = 0;
+	private int current = 1;
 
 	private ExecutorService executor = Executors.newFixedThreadPool(1);
 
@@ -58,15 +59,29 @@ public class RetrieveMovieDefinitions {
 	public void initialize() {
 		this.thisStage.setTitle("Downloading movie definitions");
 		stage.close();
-
+		
+		
+		this.requestCancelButton.setText("Begin downloading");
 		this.requestCancelButton.setOnMouseClicked(e -> {
-			Platform.runLater(() -> {
-				this.requestCancel = true;
-				listView.getItems().add("Cancel requested...");
-				this.listView.scrollTo((this.listView.getItems().size() - 1));
+			Thread thread = new Thread(() -> {
+				beginRetrieving();
 			});
+			thread.start();
 		});
+	}
 
+	private void beginRetrieving() {
+		Platform.runLater(() -> {
+			this.requestCancelButton.setText("Request Cancel");
+			this.requestCancelButton.setOnMouseClicked(e -> {
+				Platform.runLater(() -> {
+					this.requestCancel = true;
+					listView.getItems().add("Cancel requested...");
+					this.listView.scrollTo((this.listView.getItems().size() - 1));
+				});
+			});
+		}); 
+		
 		ArrayList<MovieEntry> entriesToScrape = new ArrayList<>();
 
 		MediaManager.getMediaRepository().getLoadedMovieEntries().forEach(entry -> {
@@ -83,12 +98,9 @@ public class RetrieveMovieDefinitions {
 			if (requestCancel) {
 				return;
 			}
+			final CountDownLatch latch = new CountDownLatch(1);
 			executor.execute(() -> {
 				Platform.runLater(() -> {
-					double a = (100 / entriesToScrape.size());
-					double b = (current * a);
-					double progress = b / 100;
-					this.progressbar.setProgress(progress);
 					this.listView.getItems().add("Downloading definition for '" + entry.toString() + "'");
 					this.listView.scrollTo((this.listView.getItems().size() - 1));
 				});
@@ -111,9 +123,15 @@ public class RetrieveMovieDefinitions {
 							thisStage.close();
 						});
 					}
-					current++;
 				}
-
+				Platform.runLater(() -> {
+					double a = (100 / new Double(entriesToScrape.size()));
+					double b = (current * a);
+					double progress = b / 100;					
+					this.progressbar.setProgress(progress);
+				});
+				current++;
+				latch.countDown();
 				// TODO if def is not found, update
 
 				// TODO notify the user if the photo exists, or if it couldn't
@@ -122,6 +140,11 @@ public class RetrieveMovieDefinitions {
 				// specify if they want all images redownloaded
 
 			});
+			try {
+				latch.await();
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 		executor.execute(() -> {
@@ -129,7 +152,6 @@ public class RetrieveMovieDefinitions {
 				this.listView.getItems().add("Finished downloading data.");
 				// TODO progress, how many entries were retrieved etc
 				this.progressbar.setProgress(1);
-
 				this.requestCancelButton.setText("Close");
 				this.requestCancelButton.setOnMouseClicked(e -> {
 					thisStage.close();
