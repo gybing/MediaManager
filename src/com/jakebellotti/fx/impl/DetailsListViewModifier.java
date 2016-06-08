@@ -6,6 +6,7 @@ import com.jakebellotti.DataConstants;
 import com.jakebellotti.Images;
 import com.jakebellotti.fx.ListViewModifier;
 import com.jakebellotti.model.movie.MovieEntryWrapper;
+import com.jakebellotti.scene.movie.MovieViewController;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.ContextMenu;
@@ -24,6 +25,12 @@ import jblib.javafx.JavaFXUtils;
  *
  */
 public class DetailsListViewModifier extends ListViewModifier<MovieEntryWrapper> {
+	
+	private final MovieViewController controller;
+	
+	public DetailsListViewModifier(MovieViewController controller) {
+		this.controller = controller;
+	}
 
 	@Override
 	public void change(ListView<MovieEntryWrapper> listView) {
@@ -62,6 +69,7 @@ public class DetailsListViewModifier extends ListViewModifier<MovieEntryWrapper>
 			}
 
 			box.getChildren().add(text);
+			controller.addMovieListViewContextMenu(cell);
 			cell.setGraphic(box);
 		});
 		

@@ -5,6 +5,7 @@ import java.io.File;
 import com.jakebellotti.DataConstants;
 import com.jakebellotti.fx.ListViewModifier;
 import com.jakebellotti.model.movie.MovieEntryWrapper;
+import com.jakebellotti.scene.movie.MovieViewController;
 
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -13,6 +14,12 @@ import javafx.scene.layout.HBox;
 import jblib.javafx.JavaFXUtils;
 
 public class TilesLargeListViewModifier extends ListViewModifier<MovieEntryWrapper> {
+	
+	private final MovieViewController controller;
+	
+	public TilesLargeListViewModifier(MovieViewController controller) {
+		this.controller = controller;
+	}
 
 	@Override
 	public void change(ListView<MovieEntryWrapper> listView) {

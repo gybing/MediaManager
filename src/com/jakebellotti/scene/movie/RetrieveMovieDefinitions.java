@@ -9,6 +9,8 @@ import java.util.concurrent.Executors;
 
 import com.jakebellotti.Images;
 import com.jakebellotti.MediaManager;
+import com.jakebellotti.model.ReturnResultWrapper;
+import com.jakebellotti.model.ReturnStatus;
 import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.NewMovieDefinition;
@@ -40,6 +42,7 @@ public class RetrieveMovieDefinitions {
 	private int current = 1;
 
 	private ExecutorService executor = Executors.newFixedThreadPool(1);
+	private Thread retrievalThread;
 
 	@FXML
 	private ProgressBar progressbar;
@@ -58,15 +61,19 @@ public class RetrieveMovieDefinitions {
 	@FXML
 	public void initialize() {
 		this.thisStage.setTitle("Downloading movie definitions");
+		this.thisStage.setOnCloseRequest(e -> {
+			executor.shutdown();
+			requestCancel = true;	
+		});
 		stage.close();
 		
 		
 		this.requestCancelButton.setText("Begin downloading");
 		this.requestCancelButton.setOnMouseClicked(e -> {
-			Thread thread = new Thread(() -> {
+			retrievalThread = new Thread(() -> {
 				beginRetrieving();
 			});
-			thread.start();
+			retrievalThread.start();
 		});
 	}
 
@@ -160,18 +167,22 @@ public class RetrieveMovieDefinitions {
 				});
 			});
 		});
+		
+		executor.shutdown();
 	}
 
 	private Optional<MovieDefinition> downloadDefinition(MovieEntry entry) {
-		Optional<NewMovieDefinition> definition = MediaManager.getMovieDefinitionRetriever().get().scrapeData(entry);
+		Optional<ReturnResultWrapper<ReturnStatus, NewMovieDefinition>> definition = MediaManager.getMovieDefinitionRetriever().get().scrapeData(entry);
 
 		if (definition.isPresent()) {
-			NewMovieDefinition def = definition.get();
-			MovieDefinition storedDefinition = MediaManager.getDatabase().addMovieDefinition(def);
-			MediaManager.getMediaRepository().assignMovieDefinition(storedDefinition.getDatabaseID(), storedDefinition);
-			entry.setMovieDefinitionID(storedDefinition.getDatabaseID());
-			MediaManager.getDatabase().assignMovieDefinitionToEntry(entry, storedDefinition.getDatabaseID());
-			return Optional.of(storedDefinition);
+			if(definition.get().getReturnResult().isPresent()) {
+				NewMovieDefinition def = definition.get().getReturnResult().get();
+				MovieDefinition storedDefinition = MediaManager.getDatabase().addMovieDefinition(def);
+				MediaManager.getMediaRepository().assignMovieDefinition(storedDefinition.getDatabaseID(), storedDefinition);
+				entry.setMovieDefinitionID(storedDefinition.getDatabaseID());
+				MediaManager.getDatabase().assignMovieDefinitionToEntry(entry, storedDefinition.getDatabaseID());
+				return Optional.of(storedDefinition);	
+			}
 		}
 		return Optional.empty();
 	}

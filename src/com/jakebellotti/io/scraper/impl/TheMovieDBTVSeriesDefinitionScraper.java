@@ -15,7 +15,6 @@ import com.jakebellotti.model.tvseries.TVSeriesDefinition;
 import com.jakebellotti.model.tvseries.TVSeriesEntry;
 import com.jakebellotti.model.tvseries.TheMovieDBSeriesSearchEntry;
 
-import jblib.util.NumberUtils;
 
 /**
  *

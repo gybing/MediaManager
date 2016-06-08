@@ -10,6 +10,8 @@ import com.jakebellotti.io.scraper.impl.TheMovieDBTVSeriesDefinitionScraper;
 import com.jakebellotti.lang.Language;
 import com.jakebellotti.lang.LanguagePack;
 import com.jakebellotti.model.MediaRepository;
+import com.jakebellotti.model.ReturnResultWrapper;
+import com.jakebellotti.model.ReturnStatus;
 import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.NewMovieDefinition;
 import com.jakebellotti.model.tvseries.TVSeriesDefinition;
@@ -28,7 +30,7 @@ import javafx.stage.Stage;
 
 public class MediaManager {
 
-	private static DataScraper<MovieEntry, NewMovieDefinition> movieDefinitionRetriever = new OMDBMovieScraper();
+	private static DataScraper<MovieEntry, ReturnResultWrapper<ReturnStatus, NewMovieDefinition>> movieDefinitionRetriever = new OMDBMovieScraper();
 	private static DataScraper<TVSeriesEntry, TVSeriesDefinition> tvSeriesDefinitionRetriever = new TheMovieDBTVSeriesDefinitionScraper();
 	
 	private static final DatabaseConnection database = new DatabaseConnection();
@@ -78,11 +80,11 @@ public class MediaManager {
 		database.connect();
 	}
 
-	public static Optional<DataScraper<MovieEntry, NewMovieDefinition>> getMovieDefinitionRetriever() {
+	public static Optional<DataScraper<MovieEntry, ReturnResultWrapper<ReturnStatus, NewMovieDefinition>>> getMovieDefinitionRetriever() {
 		return Optional.ofNullable(movieDefinitionRetriever);
 	}
 
-	public static void setMovieDefinitionRetriever(DataScraper<MovieEntry, NewMovieDefinition> definitionRetriever) {
+	public static void setMovieDefinitionRetriever(DataScraper<MovieEntry, ReturnResultWrapper<ReturnStatus, NewMovieDefinition>> definitionRetriever) {
 		if (definitionRetriever != null) {
 			MediaManager.movieDefinitionRetriever = definitionRetriever;
 		}

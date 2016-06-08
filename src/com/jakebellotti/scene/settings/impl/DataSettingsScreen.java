@@ -52,9 +52,13 @@ public class DataSettingsScreen extends SettingsScreen {
 		final int movieEntries = MediaManager.getMediaRepository().getLoadedMovieEntries().size();
 		this.movieDataStatusLabel
 				.setText("Currently " + movieEntries + " movie " + (movieEntries == 1 ? "entry" : "entries"));
+		
 		final int movieDefinitions = MediaManager.getMediaRepository().getLoadedMovieDefinitions().size();
 		this.movieDefinitionDataStatusLabel.setText(
 				"Currently " + movieDefinitions + " movie " + (movieDefinitions == 1 ? "definition" : "definitions"));
+		
+		final int seriesEntries = MediaManager.getMediaRepository().getLoadedTVSeries().size();
+		this.tvSeriesStatusLabel.setText("Currently " + seriesEntries + " tv series");
 	}
 
 	/**

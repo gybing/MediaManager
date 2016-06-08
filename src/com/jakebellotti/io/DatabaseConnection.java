@@ -258,6 +258,18 @@ public class DatabaseConnection {
 		}
 		return toReturn;
 	}
+	
+//////////////////////////////////////Movie queries
+	
+	public final boolean deleteMovieEntry(final MovieEntry entry) {
+		final String sql = "DELETE FROM tblMovieEntry WHERE ID="+entry.getDatabaseID();
+		try(PreparedStatement s = conn.prepareStatement(sql)) {
+			return s.executeUpdate() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	/**
 	 * 

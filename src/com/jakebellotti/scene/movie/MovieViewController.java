@@ -1,6 +1,7 @@
 package com.jakebellotti.scene.movie;
 
 import java.awt.Desktop;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +23,10 @@ import com.jakebellotti.MediaManager;
 import com.jakebellotti.Settings;
 import com.jakebellotti.fx.ListViewModifier;
 import com.jakebellotti.fx.impl.*;
+import com.jakebellotti.io.Logger;
 import com.jakebellotti.model.ListOrderer;
+import com.jakebellotti.model.ReturnResultWrapper;
+import com.jakebellotti.model.ReturnStatus;
 import com.jakebellotti.model.filenamecleanser.FileNameCleanserRepository;
 import com.jakebellotti.model.listorderer.movie.MovieAscendingAlphabeticalListOrderer;
 import com.jakebellotti.model.listorderer.movie.MovieAverageScoreListOrderer;
@@ -44,6 +48,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -69,6 +74,8 @@ import jblib.javafx.JavaFXUtils;
  */
 
 public class MovieViewController implements MediaScene {
+
+	private static final Logger logger = new Logger(MovieViewController.class);
 
 	@FXML
 	private AnchorPane root;
@@ -187,10 +194,9 @@ public class MovieViewController implements MediaScene {
 	@FXML
 	public void initialize() {
 		resetMovieInterface();
-		this.viewTypeComboBox.getItems().add(new DetailsListViewModifier());
-		this.viewTypeComboBox.getItems().add(new TilesSmallListViewModifier());
-		this.viewTypeComboBox.getItems().add(new TilesMediumListViewModifier());
-		this.viewTypeComboBox.getItems().add(new TilesLargeListViewModifier());
+		this.viewTypeComboBox.getItems().add(new DetailsListViewModifier(this));
+		this.viewTypeComboBox.getItems().add(new TilesSmallListViewModifier(this));
+		this.viewTypeComboBox.getItems().add(new TilesMediumListViewModifier(this));
 
 		this.orderByComboBox.getItems().add(new MovieAscendingAlphabeticalListOrderer());
 		this.orderByComboBox.getItems().add(new MovieDescendingAlphabeticalListOrderer());
@@ -201,26 +207,7 @@ public class MovieViewController implements MediaScene {
 		this.imdbScoreLabel.setStyle("-fx-text-fill: black;");
 		this.metascoreLabel.setStyle("-fx-text-fill: black;");
 
-		JavaFXUtils.setListViewCellFactory(this.movieActorListView, (cell, actor, c) -> {
-			HBox box = new HBox();
-			Label text = new Label(actor);
-
-			ContextMenu menu = new ContextMenu();
-			MenuItem viewAllMovies = new MenuItem();
-			viewAllMovies.textProperty().bind(Bindings.format("See all movies containing \"%s\"", cell.itemProperty()));
-			// TODO finish feature
-			MenuItem viewActorProfile = new MenuItem();
-			viewActorProfile.textProperty().bind(Bindings.format("See actor profile for \"%s\"", cell.itemProperty()));
-			// TODO finish feature
-
-			menu.getItems().addAll(viewAllMovies, viewActorProfile);
-
-			cell.setContextMenu(menu);
-
-			box.getChildren().add(text);
-			cell.setGraphic(box);
-		});
-
+		setupMovieActorListView();
 		setupSearchTextField();
 
 		// add event handlers
@@ -228,16 +215,13 @@ public class MovieViewController implements MediaScene {
 		// if it doesn't exist, or just open up the regular size
 		this.moviePoster.setCursor(Cursor.HAND);
 
-		this.movieList.getSelectionModel().selectedItemProperty()
-				.addListener((o, oldVal, newVal) -> movieListOnChangeItem(newVal));
-		this.orderByComboBox.getSelectionModel().selectedItemProperty()
-				.addListener((o, oldVal, newVal) -> refreshMovieList(true));
+		this.movieList.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> movieListOnChangeItem(newVal));
+		this.orderByComboBox.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> refreshMovieList(true));
 		this.retrieveDataButton.setOnMouseClicked(this::retrieveDataButtonMouseClicked);
 
 		this.automatedDataButton.setOnMouseClicked(this::automatedDataButtonMouseClicked);
 		this.openMovieButton.setOnMouseClicked(this::openMovieButtonClicked);
-		this.viewTypeComboBox.getSelectionModel().selectedItemProperty()
-				.addListener((o, oldVal, newVal) -> viewTypeComboBoxSelected(oldVal, newVal));
+		this.viewTypeComboBox.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> viewTypeComboBoxSelected(oldVal, newVal));
 
 		this.upMoviesButton.setOnMouseClicked(this::upMoviesButtonClicked);
 		this.downMoviesButton.setOnMouseClicked(this::downMoviesButtonClicked);
@@ -251,6 +235,101 @@ public class MovieViewController implements MediaScene {
 		this.movieList.getSelectionModel().selectFirst();
 	}
 
+	/**
+	 * Adds the context menu to the movie entry list view.
+	 * 
+	 * @param entry
+	 */
+	public void addMovieListViewContextMenu(final ListCell<MovieEntryWrapper> cell) {
+		final ContextMenu contextMenu = new ContextMenu();
+
+		final MenuItem delete = new MenuItem();
+		delete.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
+		delete.setOnAction(this::movieListViewContextMenuDeleteAction);
+
+		contextMenu.getItems().add(delete);
+		cell.setContextMenu(contextMenu);
+	}
+
+	/**
+	 * Activated when the user presses 'delete' on the movie list view context
+	 * menu.
+	 * 
+	 * @param e
+	 */
+	private final void movieListViewContextMenuDeleteAction(ActionEvent e) {
+		// TODO maybe ask the user if they want to add this as an exception, to
+		// be filtered from the file chooser next time they are to attempt to
+		// add another movie
+		final MovieEntryWrapper selected = this.movieList.getSelectionModel().getSelectedItem();
+		if (selected != null) {
+			Alerts.showConfirmationAlert("Delete movie", "You are about to delete this movie",
+					"Are you sure you want to delete " + selected.getMovieEntry().toString() + "?").ifPresent(button -> {
+						if (button == ButtonType.OK || button == ButtonType.YES) {
+							if (MediaManager.getDatabase().deleteMovieEntry(selected.getMovieEntry())) {
+								movieList.getItems().remove(selected);
+								MediaManager.getMediaRepository().getLoadedMovieEntries().remove(selected.getMovieEntry());
+							} else {
+								Alerts.showErrorAlert("Error", "Could not delete movie entry",
+										"The movie entry was unable to be deleted, restart the program and try again.");
+							}
+						}
+					});
+		}
+	}
+
+	/**
+	 * Sets up the movie actor list view, adds the necessary context menu items
+	 * and rendering.
+	 */
+	private final void setupMovieActorListView() {
+		JavaFXUtils.setListViewCellFactory(this.movieActorListView, (cell, actor, c) -> {
+			HBox box = new HBox();
+			Label text = new Label(actor);
+
+			ContextMenu menu = new ContextMenu();
+			MenuItem viewAllMovies = new MenuItem();
+			viewAllMovies.textProperty().bind(Bindings.format("See all movies containing \"%s\"", cell.itemProperty()));
+			viewAllMovies.setOnAction(this::movieActorListViewViewMoviesAction);
+
+			MenuItem viewActorProfile = new MenuItem();
+			viewActorProfile.textProperty().bind(Bindings.format("See actor profile for \"%s\"", cell.itemProperty()));
+			viewActorProfile.setOnAction(this::movieActorListViewViewActorProfileAction);
+
+			menu.getItems().addAll(viewAllMovies, viewActorProfile);
+
+			cell.setContextMenu(menu);
+
+			box.getChildren().add(text);
+			cell.setGraphic(box);
+		});
+	}
+
+	/**
+	 * Activated when the user clicks 'See all movies containing' on the movie
+	 * actor list view.
+	 * 
+	 * @param e
+	 */
+	private final void movieActorListViewViewMoviesAction(ActionEvent e) {
+		// TODO finish feature
+	}
+
+	/**
+	 * Activated when the user clicks 'See actor profile'.
+	 * 
+	 * @param e
+	 */
+	private final void movieActorListViewViewActorProfileAction(ActionEvent e) {
+		// TODO finish feature
+	}
+
+	/**
+	 * Selects the entry above the currently selected one in the movie list
+	 * view.
+	 * 
+	 * @param event
+	 */
 	private final void upMoviesButtonClicked(MouseEvent event) {
 		int selectedIndex = this.movieList.getSelectionModel().getSelectedIndex();
 		if ((selectedIndex - 1) > -1) {
@@ -260,6 +339,12 @@ public class MovieViewController implements MediaScene {
 		this.movieList.requestFocus();
 	}
 
+	/**
+	 * Selects the entry below the currently selected one in the movie list
+	 * view.
+	 * 
+	 * @param event
+	 */
 	private final void downMoviesButtonClicked(MouseEvent event) {
 		int selectedIndex = this.movieList.getSelectionModel().getSelectedIndex();
 		if (selectedIndex != (this.movieList.getItems().size() - 1)) {
@@ -269,6 +354,11 @@ public class MovieViewController implements MediaScene {
 		this.movieList.requestFocus();
 	}
 
+	/**
+	 * Activated when the user selects the automated data button.
+	 * 
+	 * @param event
+	 */
 	private final void automatedDataButtonMouseClicked(MouseEvent event) {
 		// TODO search for movies
 		MovieEntryWrapper selected = this.movieList.getSelectionModel().getSelectedItem();
@@ -278,11 +368,22 @@ public class MovieViewController implements MediaScene {
 		}
 	}
 
-	private final void viewTypeComboBoxSelected(ListViewModifier<MovieEntryWrapper> oldVal,
-			ListViewModifier<MovieEntryWrapper> newVal) {
+	/**
+	 * Activated when an item is selected in the view type combo box, orders the
+	 * movie list view accordingly.
+	 * 
+	 * @param oldVal
+	 * @param newVal
+	 */
+	private final void viewTypeComboBoxSelected(ListViewModifier<MovieEntryWrapper> oldVal, ListViewModifier<MovieEntryWrapper> newVal) {
 		newVal.change(this.movieList);
 	}
 
+	/**
+	 * Activated when the open movie button is clicked.
+	 * 
+	 * @param event
+	 */
 	private final void openMovieButtonClicked(MouseEvent event) {
 		// TODO be able to manage applications
 		// TODO be able to relocate the movie
@@ -320,17 +421,24 @@ public class MovieViewController implements MediaScene {
 			ListOrderer<MovieEntryWrapper> currentOrderer = this.orderByComboBox.getSelectionModel().getSelectedItem();
 			if (currentOrderer != null) {
 				this.movieList.getItems().clear();
-				this.movieList.getItems()
-						.addAll(currentOrderer.order(MediaManager.getMediaRepository().getDisplayedMovieEntries()));
+				this.movieList.getItems().addAll(currentOrderer.order(MediaManager.getMediaRepository().getDisplayedMovieEntries()));
 				this.movieList.getSelectionModel().select(selectedIndex);
 			}
 		}
 	}
 
+	/**
+	 * Activated when a movie is selected in the movie list view.
+	 * 
+	 * @param newEntry
+	 */
 	private void movieListOnChangeItem(MovieEntryWrapper newEntry) {
 		updateMovieInterface(newEntry);
 	}
 
+	/**
+	 * Resets the movie interface to it's original state, clears all data off.
+	 */
 	private void resetMovieInterface() {
 		// TODO finish this
 		this.movieNameLabel.setText("");
@@ -382,8 +490,7 @@ public class MovieViewController implements MediaScene {
 				this.automatedDataButton.setDisable(false);
 			}
 			this.moviePlotTextArea.setText(def.getPlot());
-			this.movieInfoLabel.setText(def.getRated() + "  |  " + def.getRuntime() + "  |  " + def.getGenre() + "  |  "
-					+ def.getReleased());
+			this.movieInfoLabel.setText(def.getRated() + "  |  " + def.getRuntime() + "  |  " + def.getGenre() + "  |  " + def.getReleased());
 			this.movieAuthorLabel.setText("Director(s): " + def.getDirector() + "  |  Writer(s): " + def.getWriter());
 			this.automatedDataLabel.setText("This data was automatically selected.");
 
@@ -418,6 +525,12 @@ public class MovieViewController implements MediaScene {
 		}
 	}
 
+	/**
+	 * Gets the poster image for the given movie entry.
+	 * 
+	 * @param entry
+	 * @return
+	 */
 	private final Image getPosterImage(MovieEntry entry) {
 		if (entry == null) {
 			return null;
@@ -437,12 +550,17 @@ public class MovieViewController implements MediaScene {
 		}
 	}
 
+	/**
+	 * Activated when the user clicks on the 'Retrieve Data' button for the
+	 * selected movie entry.
+	 * 
+	 * @param event
+	 */
 	public void retrieveDataButtonMouseClicked(MouseEvent event) {
 		MovieEntryWrapper selected = this.movieList.getSelectionModel().getSelectedItem();
 		if (selected != null) {
 			if (selected.getMovieEntry().getDefinition().isPresent()) {
-				Optional<ButtonType> alert = Alerts.showConfirmationAlert("Definition exists",
-						"Do you want to override the existing definition?",
+				Optional<ButtonType> alert = Alerts.showConfirmationAlert("Definition exists", "Do you want to override the existing definition?",
 						"Data for the selected movie already exists, and you have chosen to scrape the data for this movie. Do you want to override the existing data?");
 				if (alert.isPresent()) {
 					ButtonType type = alert.get();
@@ -465,28 +583,27 @@ public class MovieViewController implements MediaScene {
 					this.movieList.getItems().set(selectedIndex, null);
 					this.movieList.getItems().set(selectedIndex, selected);
 
-					Platform.runLater(() -> {
-						Thread thread = new Thread(() -> {
-							Optional<NewMovieDefinition> definition = scraper.scrapeData(selected.getMovieEntry());
+					Thread thread = new Thread(() -> {
+						Optional<ReturnResultWrapper<ReturnStatus, NewMovieDefinition>> wrapper = scraper.scrapeData(selected.getMovieEntry());
 
-							if (!definition.isPresent()) {
+						if (wrapper.isPresent()) {
+							ReturnResultWrapper<ReturnStatus, NewMovieDefinition> w = wrapper.get();
+
+							if (!w.getReturnResult().isPresent()) {
 								Platform.runLater(() -> {
 									selected.setShowLoadingImage(false);
 									this.movieList.getItems().set(selectedIndex, null);
 									this.movieList.getItems().set(selectedIndex, selected);
-									Alerts.showErrorAlert("Error", "Definition could not be retrieved",
-											"The definition for the selected movie was not found. Check that the name is correct and you have an active internet connection, or manually enter the data.");
+									Alerts.showErrorAlert("Error", "Definition could not be retrieved", w.getStatus().getDescription());
 								});
 								return;
 							}
 
-							definition.ifPresent(def -> {
+							w.getReturnResult().ifPresent(def -> {
 								MovieDefinition storedDefinition = MediaManager.getDatabase().addMovieDefinition(def);
 								selected.getMovieEntry().setMovieDefinitionID(storedDefinition.getDatabaseID());
-								MediaManager.getMediaRepository()
-										.assignMovieDefinition(storedDefinition.getDatabaseID(), storedDefinition);
-								MediaManager.getDatabase().assignMovieDefinitionToEntry(selected.getMovieEntry(),
-										storedDefinition.getDatabaseID());
+								MediaManager.getMediaRepository().assignMovieDefinition(storedDefinition.getDatabaseID(), storedDefinition);
+								MediaManager.getDatabase().assignMovieDefinitionToEntry(selected.getMovieEntry(), storedDefinition.getDatabaseID());
 								Images.downloadImage(storedDefinition);
 
 								selected.setShowLoadingImage(false);
@@ -496,32 +613,53 @@ public class MovieViewController implements MediaScene {
 									this.updateMovieInterface(this.movieList.getSelectionModel().getSelectedItem());
 								});
 							});
-						});
-						thread.start();
+						}
 					});
+					thread.start();
 				});
 			});
 		}
 	}
 
+	/**
+	 * Adds the meny bar items to the given menu bar.
+	 */
 	public void addMenuBarItems(MenuBar menuBar) {
 		// TODO redo this and remove redundant code
 		Menu fileMenu = new Menu("File");
 		MenuItem indexFile = new MenuItem("Index files");
 		MenuItem indexFolder = new MenuItem("Index a folder");
 		MenuItem retrieveDefinitions = new MenuItem("Retrieve Definitions");
+		MenuItem findDuplicates = new MenuItem("Find Duplicates");
 		MenuItem settings = new MenuItem("Settings");
 		MenuItem closeItem = new MenuItem("Close");
 
 		indexFile.setOnAction(this::indexFileEvent);
 		indexFolder.setOnAction(this::indexAFolderEvent);
 		retrieveDefinitions.setOnAction(this::retrieveDefinitionsEvent);
+		findDuplicates.setOnAction(this::findDuplicatesEvent);
+
 		settings.setOnAction(event -> SettingsWindow.open(MediaManager.getMainFrameStage()));
 		closeItem.setOnAction(event -> Platform.exit());
-		fileMenu.getItems().addAll(indexFile, indexFolder, retrieveDefinitions, settings, closeItem);
+		fileMenu.getItems().addAll(indexFile, indexFolder, retrieveDefinitions, findDuplicates, settings, closeItem);
 		menuBar.getMenus().addAll(fileMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
 	}
 
+	/**
+	 * Finds the duplicate movie entries (with the same definition).
+	 * 
+	 * @param e
+	 */
+	private final void findDuplicatesEvent(ActionEvent e) {
+
+	}
+
+	/**
+	 * Opens a file chooser and lets the user select several files in which to
+	 * add to the database.
+	 * 
+	 * @param e
+	 */
 	private final void indexFileEvent(ActionEvent e) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Choose movie file");
@@ -532,8 +670,7 @@ public class MovieViewController implements MediaScene {
 		}
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Video", fileExtensionOptions));
 		for (String ext : Settings.getVideoFileAssociations()) {
-			fileChooser.getExtensionFilters()
-					.add(new FileChooser.ExtensionFilter(ext.toUpperCase() + " files (*" + ext + ")", "*" + ext));
+			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(ext.toUpperCase() + " files (*" + ext + ")", "*" + ext));
 		}
 
 		final List<File> selectedFiles = fileChooser.showOpenMultipleDialog(MediaManager.getMainFrameStage());
@@ -546,6 +683,11 @@ public class MovieViewController implements MediaScene {
 		}
 	}
 
+	/**
+	 * Opens up the definition retriever and attempts to parse all
+	 * 
+	 * @param e
+	 */
 	private final void retrieveDefinitionsEvent(ActionEvent e) {
 		RetrieveMovieDefinitionsOptions.open(MediaManager.getMainFrameStage());
 	}
@@ -558,8 +700,9 @@ public class MovieViewController implements MediaScene {
 						"The selected directory was not added because it already exists. If you wish to edit this directory, you must do so via the settings.");
 				return;
 			}
-			//TODO check if database constraints handle this anyway
-			//TODO we could reuse this code in some instances, make that possible
+			// TODO check if database constraints handle this anyway
+			// TODO we could reuse this code in some instances, make that
+			// possible
 			ArrayList<File> gatheredFiles = new ArrayList<>();
 			gatheredFiles = scanDirectory(gatheredFiles, directory.getDirectory(), directory.isScanSubdirectories());
 			final ArrayList<String> toRemoveFileNames = MediaManager.getDatabase().getAddedFileNames(gatheredFiles);
@@ -583,8 +726,7 @@ public class MovieViewController implements MediaScene {
 		});
 	}
 
-	private final ArrayList<File> scanDirectory(final ArrayList<File> toReturn, final File start,
-			final boolean recursive) {
+	private final ArrayList<File> scanDirectory(final ArrayList<File> toReturn, final File start, final boolean recursive) {
 		for (final File f : start.listFiles()) {
 			final int periodIndex = f.getName().lastIndexOf(".");
 			if (periodIndex != -1) {

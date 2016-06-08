@@ -80,8 +80,8 @@ public class AddMovieController {
 	@FXML
 	public void initialize() {
 		this.availableFiltersListView.getItems().addAll(this.addMovieWindow.getFilters());
-		
-		//Add the default cleanser
+
+		// Add the default cleanser
 		this.selectedFiltersListView.getItems().add(new DefaultFileNameCleanser());
 
 		// Add event handlers
@@ -91,10 +91,10 @@ public class AddMovieController {
 				.setCellValueFactory(new PropertyValueFactory<TableView<NewMovieEntry>, String>("movieNameBefore"));
 		this.addOneAvailableFiltersButton.setOnMouseClicked(this::addOneAvailableFiltersButtonClicked);
 		this.addAllAvailableFiltersButton.setOnMouseClicked(this::addAllAvailableFiltersButtonClicked);
-		
+
 		this.removeOneSelectedFiltersButton.setOnMouseClicked(this::removeOneSelectedFiltersButtonClicked);
 		this.removeAllSelectedFiltersButton.setOnMouseClicked(this::removeAllSelectedFiltersButtonClicked);
-		
+
 		this.discardEntriesButton.setOnMouseClicked(this::discardEntriesButtonClicked);
 		this.addEntriesButton.setOnMouseClicked(this::addEntriesButtonClicked);
 
@@ -103,16 +103,17 @@ public class AddMovieController {
 		// Add data
 		updateOutputData();
 	}
-	
+
 	private void addEntriesButtonClicked(MouseEvent event) {
+		//TODO show new screen that adds entries to database and shows the status 
 		int added = MediaManager.getDatabase().addMovieEntries(this.outputDataTableView.getItems());
 		this.addMovieWindow.setAddedMovies(added);
 		this.addMovieWindow.getStage().close();
 	}
-	
+
 	private void discardEntriesButtonClicked(MouseEvent event) {
 		this.addMovieWindow.getStage().close();
-		//TODO confirm
+		// TODO confirm
 	}
 
 	private void addOneAvailableFiltersButtonClicked(MouseEvent event) {
@@ -126,7 +127,7 @@ public class AddMovieController {
 
 	private void addAllAvailableFiltersButtonClicked(MouseEvent event) {
 		Iterator<FileNameCleanser> iter = this.availableFiltersListView.getItems().iterator();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			FileNameCleanser current = iter.next();
 			this.selectedFiltersListView.getItems().add(current);
 			iter.remove();
@@ -134,7 +135,7 @@ public class AddMovieController {
 		this.selectedFiltersListView.getSelectionModel().selectLast();
 		updateOutputData();
 	}
-	
+
 	private void removeOneSelectedFiltersButtonClicked(MouseEvent event) {
 		FileNameCleanser selected = this.selectedFiltersListView.getSelectionModel().getSelectedItem();
 		if (selected != null) {
@@ -143,10 +144,10 @@ public class AddMovieController {
 			updateOutputData();
 		}
 	}
-	
+
 	private void removeAllSelectedFiltersButtonClicked(MouseEvent event) {
 		Iterator<FileNameCleanser> iter = this.selectedFiltersListView.getItems().iterator();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			FileNameCleanser current = iter.next();
 			this.availableFiltersListView.getItems().add(current);
 			iter.remove();
@@ -166,9 +167,8 @@ public class AddMovieController {
 	private void updateOutputData() {
 		this.outputDataTableView.getItems().clear();
 		ArrayList<NewMovieEntry> newMovieEntries = new ArrayList<>();
-		this.addMovieWindow.getNewFiles().forEach(file -> {
-			newMovieEntries.add(new NewMovieEntry(file, cleanseStringWithFilters(file.getName())));
-		});
+		this.addMovieWindow.getNewFiles().forEach(
+				file -> newMovieEntries.add(new NewMovieEntry(file, cleanseStringWithFilters(file.getName()))));
 		this.outputDataTableView.getItems().addAll(newMovieEntries);
 	}
 

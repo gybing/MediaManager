@@ -5,6 +5,7 @@ import java.io.File;
 import com.jakebellotti.DataConstants;
 import com.jakebellotti.fx.ListViewModifier;
 import com.jakebellotti.model.movie.MovieEntryWrapper;
+import com.jakebellotti.scene.movie.MovieViewController;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -20,6 +21,12 @@ import jblib.javafx.JavaFXUtils;
  *
  */
 public class TilesSmallListViewModifier extends ListViewModifier<MovieEntryWrapper> {
+	
+	private final MovieViewController controller;
+	
+	public TilesSmallListViewModifier(MovieViewController controller) {
+		this.controller = controller;
+	}
 
 	@Override
 	public void change(ListView<MovieEntryWrapper> listView) {
@@ -34,16 +41,14 @@ public class TilesSmallListViewModifier extends ListViewModifier<MovieEntryWrapp
 				if(posterFile.exists()) {
 					ImageView image = new ImageView();
 					image.setImage(new Image(posterFile.toURI().toString()));
-//					image.setFitHeight(150);
-//					image.setFitWidth(100);
 					image.setFitHeight(75);
 					image.setFitWidth(50);
 					box.getChildren().add(image);
 				}
 			});
 			
-			
 			box.getChildren().addAll(text);
+			controller.addMovieListViewContextMenu(cell);
 			cell.setGraphic(box);
 		});
 	}
