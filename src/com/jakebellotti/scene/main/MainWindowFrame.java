@@ -2,8 +2,6 @@ package com.jakebellotti.scene.main;
 
 import java.io.IOException;
 
-import com.jakebellotti.MediaManager;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -66,17 +64,23 @@ public class MainWindowFrame {
 	public static final Menu getWindowMenu() {
 		if(windowMenu == null) {
 			windowMenu = new Menu("Window");
+			MenuItem recentMedia = new MenuItem("View Recent Media");
 			MenuItem movieView = new MenuItem("Switch To Movie View");
 			MenuItem tvSeriesView = new MenuItem("Switch To TV Series View");
 			MenuItem musicView = new MenuItem("Switch To Music View");
 			
+			recentMedia.setOnAction(MainWindowFrame::recentMediaMenuItemAction);
 			movieView.setOnAction(MainWindowFrame::movieViewMenuItemAction);
 			tvSeriesView.setOnAction(MainWindowFrame::tvSeriesViewMenuItemAction);
 			musicView.setOnAction(MainWindowFrame::musicViewMenuItemAction);
 			
-			windowMenu.getItems().addAll(movieView, tvSeriesView, musicView);
+			windowMenu.getItems().addAll(recentMedia, movieView, tvSeriesView, musicView);
 		}
 		return windowMenu;
+	}
+	
+	private static final void recentMediaMenuItemAction(ActionEvent e) {
+		controller.setAsRecentMedia();
 	}
 	
 	private static final void movieViewMenuItemAction(ActionEvent e) {

@@ -18,6 +18,7 @@ import com.jakebellotti.scene.movie.add.AddMovieWindow;
 import com.jakebellotti.scene.movie.search.MovieSearchScreen;
 import com.jakebellotti.scene.settings.SettingsWindow;
 import com.jakebellotti.DataConstants;
+import com.jakebellotti.FileOpener;
 import com.jakebellotti.Images;
 import com.jakebellotti.MediaManager;
 import com.jakebellotti.Settings;
@@ -389,15 +390,8 @@ public class MovieViewController implements MediaScene {
 		// TODO be able to relocate the movie
 		MovieEntryWrapper selected = this.movieList.getSelectionModel().getSelectedItem();
 		if (selected != null) {
-			try {
-				final File movieFile = selected.getMovieEntry().getFile();
-				if (!movieFile.exists()) {
-					Alerts.showErrorAlert("Could not open movie", "File not found",
-							"Could not open the movie because the file could not be found. Would you like to relocate the movie?");
-				} else
-					Desktop.getDesktop().open(movieFile);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (FileOpener.openMedia(selected.getMovieEntry().getFile())) {
+				MediaManager.getDatabase().insertRecentMovieEntry(selected.getMovieEntry());
 			}
 		}
 	}

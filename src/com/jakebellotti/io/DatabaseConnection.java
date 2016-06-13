@@ -2,11 +2,13 @@ package com.jakebellotti.io;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +18,13 @@ import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolation
 
 import com.jakebellotti.Constants;
 import com.jakebellotti.MediaManager;
+import com.jakebellotti.RecentMediaConstants;
+import com.jakebellotti.model.RecentMediaEntry;
 import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.NewMovieDefinition;
 import com.jakebellotti.model.movie.NewMovieEntry;
+import com.jakebellotti.model.rme.MovieRecentMediaEntry;
 import com.jakebellotti.model.tvseries.TVSeriesDefinition;
 import com.jakebellotti.model.tvseries.TVSeriesEntry;
 import com.jakebellotti.model.tvseries.TVSeriesEpisode;
@@ -72,6 +77,38 @@ public class DatabaseConnection {
 	public final void createRequiredTables() {
 		// TODO properly create all tables
 		// logger.println(createTable(DatabaseTableConstants.createMovieListEntryTable()));
+	}
+	
+	public void insertRecentMovieEntry(MovieEntry entry) {
+		final String sql = "INSERT INTO tblRecentMedia(entryID, mediaType, datePlayed) VALUES(?, ?, ?)";
+		try(PreparedStatement s = conn.prepareStatement(sql)) {
+			s.setInt(1, entry.getDatabaseID());
+			s.setString(2, RecentMediaConstants.MOVIES);
+			s.setDate(3, Date.valueOf(LocalDate.now()));
+			s.execute();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public final ArrayList<RecentMediaEntry> selectRecentMovieEntry() {
+		//TODO finish
+		final ArrayList<RecentMediaEntry> toReturn = new ArrayList<>();
+		final String sql = "SELECT * FROM tblRecentMedia WHERE mediaType = ? ORDER by entryID ASC";
+		try(PreparedStatement s = conn.prepareStatement(sql)) {
+			s.setString(1, RecentMediaConstants.MOVIES);
+			final ResultSet set = s.executeQuery();
+			while(set.next()) {
+				final int id = set.getInt("entryID");
+				final LocalDate date = set.getDate("datePlayed").toLocalDate();
+				
+				toReturn.add(new MovieRecentMediaEntry(id, date));
+			}
+			set.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return toReturn;
 	}
 
 	public boolean insertTVSeriesDefinition(final TVSeriesEntry entry, final TVSeriesDefinition def) {

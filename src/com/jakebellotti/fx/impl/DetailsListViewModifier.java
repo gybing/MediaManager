@@ -59,6 +59,7 @@ public class DetailsListViewModifier extends ListViewModifier<MovieEntryWrapper>
 			
 			if(!movieEntry.getMovieEntry().fileExists()) {
 				//TODO have a closer look at this
+				//TODO cache the file not found image
 				final File fileNotFound = new File(DataConstants.IMAGE_ROOT_FOLDER + "/filenotfound.png");
 				ImageView fileNotFoundImageView = new ImageView();
 				

@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Sat Jun 11 19:12:15 AWST 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0155-3f29-8c12-00000e9f3ab8 
-on database directory J:\___eclipse\workspace\MediaManager\data\db with class loader sun.misc.Launcher$AppClassLoader@3d4eac69 
-Loaded from file:/J:/___eclipse/workspace/MediaManager/lib/derby.jar
+Mon Jun 13 12:41:29 AWST 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0155-4810-81de-00000e946900 
+on database directory F:\___eclipse\workspace\MediaManager\data\db with class loader sun.misc.Launcher$AppClassLoader@42a57993 
+Loaded from file:/F:/___eclipse/workspace/MediaManager/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_66-b18
-user.dir=J:\___eclipse\workspace\MediaManager\lib
+java.runtime.version=1.8.0_72-b15
+user.dir=F:\___eclipse\workspace\MediaManager\lib
 os.name=Windows 7
 os.arch=amd64
 os.version=6.1

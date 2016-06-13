@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
+import com.jakebellotti.MediaManager;
 import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.MovieEntryWrapper;
@@ -63,6 +64,14 @@ public class MediaRepository {
 
 	public final void addMovieEntry(MovieEntry movieEntry) {
 		loadedMovieEntries.add(movieEntry);
+	}
+	
+	public final Optional<MovieEntry> getMovieEntryForID(final int id) {
+		for (MovieEntry e : MediaManager.getMediaRepository().getLoadedMovieEntries()) {
+			if(e.getDatabaseID() == id)
+				return Optional.ofNullable(e);
+		}
+		return Optional.empty();
 	}
 
 	// TV SERIES

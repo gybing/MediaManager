@@ -1,8 +1,8 @@
 package com.jakebellotti.scene.main;
 
-import com.jakebellotti.MediaManager;
 import com.jakebellotti.scene.MediaScene;
 import com.jakebellotti.scene.movie.MovieView;
+import com.jakebellotti.scene.recent.RecentMedia;
 import com.jakebellotti.scene.tvseries.TVSeriesView;
 
 import javafx.fxml.FXML;
@@ -34,8 +34,12 @@ public class MainWindowFrameController {
 
 	@FXML
 	public void initialize() {
-		// TODO determine the screen to show
+		// TODO determine the screen to show, maybe recent media?
 		setAsMovieView();
+	}
+	
+	public void setAsRecentMedia() {
+		setAs(RecentMedia.getAnchorPane(), RecentMedia.getController());
 	}
 
 	public void setAsMovieView() {

@@ -96,3 +96,21 @@ CREATE TABLE tblTVSeriesEpisode(
 	FOREIGN KEY(tvSeriesEpisodeDefinitionID) REFERENCES tblTVSeriesEpisodeDefinition(ID)
 );
 
+CREATE TABLE tblMediaType(
+	ID								VARCHAR(255) NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE tblRecentMedia(
+	ID								INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	entryID							INTEGER NOT NULL,
+	mediaType						VARCHAR(255) NOT NULL,
+	datePlayed						DATE NOT NULL,
+	FOREIGN KEY(mediaType) REFERENCES tblMediaType(ID)
+);
+
+
+/* Populate the tables */
+INSERT INTO tblMediaType(ID) VALUES('TVSeries');
+INSERT INTO tblMediaType(ID) VALUES('Movie');
+INSERT INTO tblMediaType(ID) VALUES('Music');
+
