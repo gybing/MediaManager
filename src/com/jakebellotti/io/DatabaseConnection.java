@@ -92,9 +92,10 @@ public class DatabaseConnection {
 	}
 	
 	public final ArrayList<RecentMediaEntry> selectRecentMovieEntry() {
-		//TODO finish
 		final ArrayList<RecentMediaEntry> toReturn = new ArrayList<>();
-		final String sql = "SELECT * FROM tblRecentMedia WHERE mediaType = ? ORDER by entryID ASC";
+		final ArrayList<Integer> addedEntryIDS = new ArrayList<>();
+		
+		final String sql = "SELECT DISTINCT entryID, ID, mediaType, datePlayed FROM tblRecentMedia WHERE mediaType = ? ORDER by ID DESC";
 		try(PreparedStatement s = conn.prepareStatement(sql)) {
 			s.setString(1, RecentMediaConstants.MOVIES);
 			final ResultSet set = s.executeQuery();
@@ -102,7 +103,10 @@ public class DatabaseConnection {
 				final int id = set.getInt("entryID");
 				final LocalDate date = set.getDate("datePlayed").toLocalDate();
 				
-				toReturn.add(new MovieRecentMediaEntry(id, date));
+				if(! addedEntryIDS.contains(id)) {
+					toReturn.add(new MovieRecentMediaEntry(id, date));
+					addedEntryIDS.add(id);
+				}
 			}
 			set.close();
 		} catch(Exception e) {

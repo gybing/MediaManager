@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Mon Jun 13 12:41:29 AWST 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0155-4810-81de-00000e946900 
+Mon Jun 13 13:57:58 AWST 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0155-4856-88c9-00000e946900 
 on database directory F:\___eclipse\workspace\MediaManager\data\db with class loader sun.misc.Launcher$AppClassLoader@42a57993 
 Loaded from file:/F:/___eclipse/workspace/MediaManager/lib/derby.jar
 java.vendor=Oracle Corporation
@@ -11,3 +11,9 @@ os.arch=amd64
 os.version=6.1
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Mon Jun 13 13:59:08 AWST 2016: Shutting down Derby engine
+----------------------------------------------------------------
+Mon Jun 13 13:59:08 AWST 2016:
+Shutting down instance a816c00e-0155-4856-88c9-00000e946900 on database directory F:\___eclipse\workspace\MediaManager\data\db with class loader sun.misc.Launcher$AppClassLoader@42a57993 
+----------------------------------------------------------------
