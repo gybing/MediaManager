@@ -1,5 +1,6 @@
 package com.jakebellotti.scene.main;
 
+import com.jakebellotti.MediaManager;
 import com.jakebellotti.scene.MediaScene;
 import com.jakebellotti.scene.movie.MovieView;
 import com.jakebellotti.scene.recent.RecentMedia;
@@ -39,14 +40,17 @@ public class MainWindowFrameController {
 	}
 	
 	public void setAsRecentMedia() {
+		MediaManager.getMainFrameStage().setTitle("Media Manager - Recent Media");
 		setAs(RecentMedia.getAnchorPane(), RecentMedia.getController());
 	}
 
 	public void setAsMovieView() {
+		MediaManager.getMainFrameStage().setTitle("Media Manager - Movies");
 		setAs(MovieView.getAnchorPane(), MovieView.getController());
 	}
 
 	public void setAsTVSeriesView() {
+		MediaManager.getMainFrameStage().setTitle("Media Manager - TV Series");
 		setAs(TVSeriesView.getAnchorPane(), TVSeriesView.getController());
 	}
 	

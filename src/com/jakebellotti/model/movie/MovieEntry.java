@@ -24,7 +24,7 @@ public class MovieEntry {
 	/**
 	 * The movie name that was able to be extracted from the file name.
 	 */
-	private final String extractedMovieName;
+	private String extractedMovieName;
 	/**
 	 * The definition of the movie.
 	 */
@@ -51,6 +51,11 @@ public class MovieEntry {
 	public boolean fileExists() {
 		return file.exists();
 	}
+	
+	public void setExtractedMovieName(final String newName) {
+		this.extractedMovieName = newName;
+	}
+	
 	/**
 	 * 
 	 * @return The movie definition.

@@ -41,14 +41,6 @@ public class DetailsListViewModifier extends ListViewModifier<MovieEntryWrapper>
 				text.setStyle("-fx-text-fill: red");
 			}
 
-			ContextMenu menu = new ContextMenu();
-			MenuItem delete = new MenuItem();
-			delete.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
-			menu.getItems().add(delete);
-			// TODO finish feature
-
-			cell.setContextMenu(menu);
-
 			if (movieEntry.isShowLoadingImage()) {
 				ImageView loadingImage = new ImageView();
 				loadingImage.setImage(Images.getLoadingImage());

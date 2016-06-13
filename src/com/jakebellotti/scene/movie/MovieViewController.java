@@ -1,9 +1,6 @@
 package com.jakebellotti.scene.movie;
 
-import java.awt.Desktop;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -248,8 +245,32 @@ public class MovieViewController implements MediaScene {
 		delete.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
 		delete.setOnAction(this::movieListViewContextMenuDeleteAction);
 
-		contextMenu.getItems().add(delete);
+		final MenuItem rename = new MenuItem();
+		rename.textProperty().bind(Bindings.format("Rename \"%s\"", cell.itemProperty()));
+		rename.setOnAction(this::movieListViewContextMenuRenameAction);
+		
+		//TODO maybe add the option to rename the file to what we got from it now
+
+		contextMenu.getItems().addAll(rename, delete);
 		cell.setContextMenu(contextMenu);
+	}
+
+	private final void movieListViewContextMenuRenameAction(ActionEvent e) {
+		final MovieEntryWrapper selected = this.movieList.getSelectionModel().getSelectedItem();
+		if (selected != null) {
+			Optional<String> result = Alerts.showInputAlert(selected.toString(), "Renaming movie", "", "Enter the new movie name: ");
+			result.ifPresent(str -> {
+				final boolean successfullyUpdated = MediaManager.getDatabase().updateMovieEntryName(selected.getMovieEntry(), str);
+				if (successfullyUpdated) {
+					selected.getMovieEntry().setExtractedMovieName(str);
+					final int selectedIndex = this.movieList.getSelectionModel().getSelectedIndex();
+					if (selectedIndex != -1) {
+						this.movieList.getItems().set(selectedIndex, null);
+						this.movieList.getItems().set(selectedIndex, selected);
+					}
+				}
+			});
+		}
 	}
 
 	/**
@@ -441,6 +462,7 @@ public class MovieViewController implements MediaScene {
 		this.movieAuthorLabel.setText("");
 		this.moviePoster.setImage(null);
 		this.automatedDataLabel.setText("No data has been selected yet");
+		automatedDataButton.setText("");
 		this.moviePlotTextArea.clear();
 		this.fileInfoLabel.setText("");
 		this.imdbscoreProgressBar.setProgress(0);
@@ -477,6 +499,8 @@ public class MovieViewController implements MediaScene {
 		this.movieActorListView.getItems().clear();
 		this.movieNameLabel.setText(newEntry.toString());
 		setFileInfo(newEntry);
+		
+		retrieveDataButton.setDisable(newEntry.isShowLoadingImage());
 
 		// Update if there is a definition
 		newEntry.getMovieEntry().getDefinition().ifPresent(def -> {
@@ -576,6 +600,8 @@ public class MovieViewController implements MediaScene {
 					selected.setShowLoadingImage(true);
 					this.movieList.getItems().set(selectedIndex, null);
 					this.movieList.getItems().set(selectedIndex, selected);
+					
+					this.retrieveDataButton.setDisable(true);
 
 					Thread thread = new Thread(() -> {
 						Optional<ReturnResultWrapper<ReturnStatus, NewMovieDefinition>> wrapper = scraper.scrapeData(selected.getMovieEntry());
@@ -588,6 +614,7 @@ public class MovieViewController implements MediaScene {
 									selected.setShowLoadingImage(false);
 									this.movieList.getItems().set(selectedIndex, null);
 									this.movieList.getItems().set(selectedIndex, selected);
+									this.retrieveDataButton.setDisable(false);
 									Alerts.showErrorAlert("Error", "Definition could not be retrieved", w.getStatus().getDescription());
 								});
 								return;
@@ -604,6 +631,7 @@ public class MovieViewController implements MediaScene {
 								Platform.runLater(() -> {
 									this.movieList.getItems().set(selectedIndex, null);
 									this.movieList.getItems().set(selectedIndex, selected);
+									this.retrieveDataButton.setDisable(false);
 									this.updateMovieInterface(this.movieList.getSelectionModel().getSelectedItem());
 								});
 							});

@@ -46,6 +46,7 @@ import javafx.scene.control.Alert.AlertType;
  */
 
 public class DatabaseConnection {
+//	TODO separate queries, inserts etc. into different classes
 
 	private static final String DATABASE_LOC = "./data/db/";
 	private static final Logger logger = new Logger(DatabaseConnection.class);
@@ -301,6 +302,19 @@ public class DatabaseConnection {
 	}
 	
 //////////////////////////////////////Movie queries
+	
+	public final boolean updateMovieEntryName(final MovieEntry entry, final String newName) {
+		final String sql = "UPDATE tblMovieEntry SET extractedMovieName = ? WHERE ID = ?";
+		try(PreparedStatement s = conn.prepareStatement(sql)) {
+			s.setString(1, newName);
+			s.setInt(2, entry.getDatabaseID());
+			
+			return s.executeUpdate() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 	public final boolean deleteMovieEntry(final MovieEntry entry) {
 		final String sql = "DELETE FROM tblMovieEntry WHERE ID="+entry.getDatabaseID();

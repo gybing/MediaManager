@@ -1,1 +1,3 @@
-When indexing a file that contains an apostrophe, it will come up with the escaped '' until the user restarts and it has trouble parsing data for the movie.
+>>Should use a JavaFX loading circle instead of an image later on.
+>>When bulk downloading movie definitions, if it fails to download one because of there being no internet connection, it will still continue on.
+>>When a movie has been deleted, it still shows up in the recent media, and the event handler for the button is still set
