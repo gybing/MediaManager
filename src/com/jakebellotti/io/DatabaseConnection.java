@@ -361,8 +361,9 @@ public class DatabaseConnection {
 		int added = 0;
 		for (NewMovieEntry entry : newEntries) {
 			try {
-				final String fileLocation = entry.getFileLocation().getAbsolutePath().replace("'", "''");
-				final String fileName = entry.getMovieName().replace("'", "''");
+//				IWONDER is this change correct? does it fix escaped single quotes
+//				final String fileLocation = entry.getFileLocation().getAbsolutePath().replace("'", "''");
+//				final String fileName = entry.getMovieName().replace("'", "''");
 
 				builder.insertString("fileLocation", entry.getFileLocation());
 				builder.insertString("extractedMovieName", entry.getMovieName());
@@ -372,7 +373,7 @@ public class DatabaseConnection {
 				if (rs.next()) {
 					final String id = rs.getString(1);
 					try {
-						MovieEntry newEntry = new MovieEntry(Integer.parseInt(id), fileLocation, fileName,
+						MovieEntry newEntry = new MovieEntry(Integer.parseInt(id), entry.getFileLocation().getAbsolutePath(), entry.getMovieName(),
 								Constants.NO_MOVIE_DEFINITION);
 						MediaManager.getMediaRepository().addMovieEntry(newEntry);
 						added++;

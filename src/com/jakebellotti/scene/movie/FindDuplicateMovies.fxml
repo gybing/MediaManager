@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane minHeight="448.0" minWidth="415.0" prefHeight="418.0" prefWidth="415.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65">
+   <children>
+      <ListView fx:id="movieTitleListView" layoutX="5.0" layoutY="25.0" prefHeight="250.0" prefWidth="200.0" />
+      <ListView fx:id="duplicateListView" layoutX="210.0" layoutY="25.0" prefHeight="250.0" prefWidth="200.0" />
+      <Label alignment="CENTER" layoutX="5.0" layoutY="4.0" prefHeight="17.0" prefWidth="200.0" text="Movie Title">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="210.0" layoutY="4.0" prefHeight="17.0" prefWidth="200.0" text="Duplicates">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="5.0" layoutY="282.0" prefHeight="20.0" prefWidth="410.0" text="Selected movie">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="5.0" layoutY="307.0" text="File Location:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="5.0" layoutY="327.0" prefHeight="20.0" prefWidth="81.0" text="File Name:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="5.0" layoutY="347.0" prefHeight="20.0" prefWidth="81.0" text="File Size:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Separator layoutY="280.0" prefHeight="4.0" prefWidth="415.0" />
+      <Separator layoutY="301.0" prefHeight="4.0" prefWidth="415.0" />
+      <Label fx:id="selectedFileLocationLabel" layoutX="95.0" layoutY="307.0" prefHeight="20.0" prefWidth="315.0" text="c://movielol">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="selectedFileNameLabel" layoutX="95.0" layoutY="327.0" prefHeight="20.0" prefWidth="315.0" text="movielol.mp4">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="selectedFileSizeLabel" layoutX="95.0" layoutY="347.0" prefHeight="20.0" prefWidth="315.0" text="623mb">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Button layoutX="5.0" layoutY="411.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="405.0" text="Close">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="openMovieButton" layoutX="5.0" layoutY="367.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="405.0" text="Open Movie">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

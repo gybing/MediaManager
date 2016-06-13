@@ -1,0 +1,1 @@
+When indexing a file that contains an apostrophe, it will come up with the escaped '' until the user restarts and it has trouble parsing data for the movie.

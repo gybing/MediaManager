@@ -1,0 +1,111 @@
+body {
+	background-color:					#858585;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.movie-div {
+	margin:								auto;
+	margin-bottom:						2px;
+	width:								90%;
+}
+
+.title-div {
+	width:								100%;
+	height:								40px;
+	background-image:					linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);
+	border:								2px solid black;
+	cursor:								pointer;
+	border:								solid 3px white;
+	border-radius:						20px;
+}
+
+.title-div h3 {
+	color:								white;
+	line-height:						0px;
+	text-align:							center;
+}
+
+.title-div-wrapper {
+	background-color:					yellow;
+	width:								100%;
+}
+
+.data-div {
+	width:								99%;
+	margin:								auto;
+	background-color:					black;
+	transition-duration:				0.4s;
+	border-bottom-left-radius:			15px;
+	border-bottom-right-radius:			15px;
+	overflow:							hidden;
+}
+
+.p-div {
+	height:								100%;
+	background-color:					red;
+	z-index:							999999999;
+	display: 							inline-block;
+}
+
+.test-p {
+	color:							white;
+	font-size:						30px;
+	display:						inline-block;
+	position:		static;
+}
+
+.data-div-image {
+	height:								100%;
+	text-align:							left !important;
+	cursor:								pointer;
+	display:							inline-block;
+}
+
+#view-image-div {
+	z-index:							1000;
+	width:								100vw;
+	height:								100vh;
+	background-color:					rgba(0, 0, 0, 0.7);
+	position:							absolute;
+	top:								0px;
+	left:								0px;
+}
+
+#view-image-popup-div {
+	z-index:							1000;
+	width:								30vw;
+	height:								60vh;
+	position:							absolute;
+	top:								0px;
+	left:								35%;
+}
+
+#view-image-popup-div-image{
+	display:							block;
+	margin:								auto;
+	max-height:							100vh;
+	max-width:							100vw;
+}
+
+#search-text-field {
+	margin:								auto;
+	display:							block;
+	width:								50%;
+	text-align:							center;
+	margin-bottom:						5px;
+	font-size:							30px;
+	border-radius:						20px;
+	padding-left:						10px;
+	padding-right:						10px;
+	outline:							none;
+	background:							-webkit-linear-gradient(top, #2d2d2d 1%,#3e3e3e 100%);
+	border: 							solid 2px #4f4f4f;
+	color:								white;
+}
+
+#content-div {
+}
