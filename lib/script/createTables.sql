@@ -28,6 +28,7 @@ CREATE TABLE tblMovieEntry(
 	ID 							INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
 	fileLocation				VARCHAR(255) UNIQUE,
 	extractedMovieName			VARCHAR(255) DEFAULT NULL,
+	lastScrapeStatusCode		INTEGER DEFAULT 0,
 	assignedMovieDefinitionID	INTEGER DEFAULT NULL,
 	FOREIGN KEY(assignedMovieDefinitionID) REFERENCES tblMovieDefinition(ID)
 );

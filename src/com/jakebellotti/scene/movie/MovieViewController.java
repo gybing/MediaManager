@@ -651,29 +651,39 @@ public class MovieViewController implements MediaScene {
 		Menu fileMenu = new Menu("File");
 		MenuItem indexFile = new MenuItem("Index files");
 		MenuItem indexFolder = new MenuItem("Index a folder");
-		MenuItem retrieveDefinitions = new MenuItem("Retrieve Definitions");
-		MenuItem findDuplicates = new MenuItem("Find Duplicates");
 		MenuItem settings = new MenuItem("Settings");
 		MenuItem closeItem = new MenuItem("Close");
+		
+		Menu toolsMenu = new Menu("Tools");
+		MenuItem retrieveDefinitions = new MenuItem("Retrieve Definitions");
+		MenuItem findDuplicates = new MenuItem("Find Duplicates");
+		MenuItem bulkRenamer = new MenuItem("Bulk Renamer");
 
 		indexFile.setOnAction(this::indexFileEvent);
 		indexFolder.setOnAction(this::indexAFolderEvent);
 		retrieveDefinitions.setOnAction(this::retrieveDefinitionsEvent);
 		findDuplicates.setOnAction(this::findDuplicatesEvent);
+		bulkRenamer.setOnAction(this::bulkRenamerEvent);
 
 		settings.setOnAction(event -> SettingsWindow.open(MediaManager.getMainFrameStage()));
 		closeItem.setOnAction(event -> Platform.exit());
-		fileMenu.getItems().addAll(indexFile, indexFolder, retrieveDefinitions, findDuplicates, settings, closeItem);
-		menuBar.getMenus().addAll(fileMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
+		
+		fileMenu.getItems().addAll(indexFile, indexFolder,  settings, closeItem);
+		toolsMenu.getItems().addAll(retrieveDefinitions, findDuplicates, bulkRenamer);
+		menuBar.getMenus().addAll(fileMenu, toolsMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
 	}
 
+	private final void bulkRenamerEvent(ActionEvent e) {
+		//TODO finish bulk renamer
+	}
+	
 	/**
 	 * Finds the duplicate movie entries (with the same definition).
 	 * 
 	 * @param e
 	 */
 	private final void findDuplicatesEvent(ActionEvent e) {
-
+		//TODO finish finding duplicates
 	}
 
 	/**

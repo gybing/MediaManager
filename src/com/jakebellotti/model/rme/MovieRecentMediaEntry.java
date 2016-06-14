@@ -23,18 +23,17 @@ public class MovieRecentMediaEntry extends RecentMediaEntry {
 
 	@Override
 	public void onSelect(Button button) {
-		String buttonText = "Open Movie";
 		Optional<MovieEntry> e = MediaManager.getMediaRepository().getMovieEntryForID(getDatabaseID());
-		if (e.isPresent()) {
-			buttonText = "Open '" + e.get().toString() + "'";
-			button.setOnMouseClicked(file -> {
-//				TODO should we also record opening this file in the database?
-				FileOpener.openMedia(e.get().getFile());
-			});
-		}
-		
-		button.setText(buttonText);
 		button.setDisable(false);
+		if (e.isPresent()) {
+			button.setText("Open '" + e.get().toString() + "'");
+		} else {
+			button.setText("Open Movie");
+		}
+		button.setOnMouseClicked(file -> {
+//			TODO should we also record opening this file in the database?
+			FileOpener.openMedia(e.get().getFile());
+		});
 	}
 
 	@Override
