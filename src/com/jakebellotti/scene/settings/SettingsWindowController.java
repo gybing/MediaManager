@@ -73,7 +73,21 @@ public class SettingsWindowController {
 
 		if (newValue != null) {
 			this.settingsWindowContentPane.getChildren().clear();
-			this.settingsWindowContentPane.getChildren().add(newValue.getScene());
+			final AnchorPane currentScene = newValue.getScene();
+			this.settingsWindowContentPane.getChildren().add(currentScene);
+			
+			currentScene.setPrefWidth(settingsWindowContentPane.getWidth());
+			currentScene.setPrefHeight(settingsWindowContentPane.getHeight());
+			
+			settingsWindowContentPane.widthProperty().addListener((c) -> {
+				currentScene.setPrefWidth(settingsWindowContentPane.getWidth());
+			});
+			
+			settingsWindowContentPane.heightProperty().addListener((c) -> {
+				currentScene.setPrefHeight(settingsWindowContentPane.getHeight());
+			});
+
+			
 			this.currentSettingScreen = newValue;
 			this.settingCategoryLabel.setText(newValue.getName());
 		}

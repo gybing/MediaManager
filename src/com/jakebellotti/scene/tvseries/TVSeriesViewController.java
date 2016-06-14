@@ -200,7 +200,7 @@ public class TVSeriesViewController implements MediaScene {
 	private final void resetData() {
 		this.seriesNameLabel.setText("");
 		this.posterImage.setImage(null);
-		this.backdropImageView.setImage(getCatOnTacoFlyingThroughSpaceGif());
+//		this.backdropImageView.setImage(getCatOnTacoFlyingThroughSpaceGif());
 		this.contentAnchorPane.getChildren().clear();
 	}
 

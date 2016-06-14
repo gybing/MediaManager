@@ -5,13 +5,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ListView fx:id="settingCategoryListView" prefHeight="560.0" prefWidth="200.0" />
-      <Pane layoutX="200.0" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: gray; -fx-border-color: black;">
+      <ListView fx:id="settingCategoryListView" prefHeight="560.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <StackPane layoutX="200.0" style="-fx-background-color: gray; -fx-border-color: black;" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="settingCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="600.0" style="-fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , 2);" text="File Associations" textAlignment="CENTER" textFill="WHITE">
                <font>
@@ -19,9 +19,9 @@
                </font>
             </Label>
          </children>
-      </Pane>
-      <AnchorPane fx:id="settingsWindowContentPane" layoutX="200.0" layoutY="40.0" prefHeight="520.0" prefWidth="600.0" />
-      <ButtonBar layoutY="560.0" prefHeight="40.0" prefWidth="800.0" style="-fx-background-color: gray; -fx-border-color: black;">
+      </StackPane>
+      <AnchorPane fx:id="settingsWindowContentPane" layoutX="200.0" layoutY="40.0" prefHeight="520.0" prefWidth="600.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
+      <ButtonBar layoutY="560.0" prefHeight="40.0" prefWidth="800.0" style="-fx-background-color: gray; -fx-border-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <buttons>
             <Button fx:id="applySettingsButton" mnemonicParsing="false" text="Apply Settings">
                <font>

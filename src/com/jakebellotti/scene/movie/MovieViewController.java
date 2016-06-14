@@ -41,6 +41,7 @@ import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -60,6 +61,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import jblib.javafx.Alerts;
 import jblib.javafx.JavaFXUtils;
 
@@ -658,21 +661,27 @@ public class MovieViewController implements MediaScene {
 		MenuItem retrieveDefinitions = new MenuItem("Retrieve Definitions");
 		MenuItem findDuplicates = new MenuItem("Find Duplicates");
 		MenuItem bulkRenamer = new MenuItem("Bulk Renamer");
-
+		MenuItem htmlExporter = new MenuItem("Export To HTML");
+		
 		indexFile.setOnAction(this::indexFileEvent);
 		indexFolder.setOnAction(this::indexAFolderEvent);
 		retrieveDefinitions.setOnAction(this::retrieveDefinitionsEvent);
 		findDuplicates.setOnAction(this::findDuplicatesEvent);
 		bulkRenamer.setOnAction(this::bulkRenamerEvent);
+		htmlExporter.setOnAction(this::htmlExportEvent);
 
 		settings.setOnAction(event -> SettingsWindow.open(MediaManager.getMainFrameStage()));
 		closeItem.setOnAction(event -> Platform.exit());
 		
 		fileMenu.getItems().addAll(indexFile, indexFolder,  settings, closeItem);
-		toolsMenu.getItems().addAll(retrieveDefinitions, findDuplicates, bulkRenamer);
+		toolsMenu.getItems().addAll(retrieveDefinitions, findDuplicates, bulkRenamer, htmlExporter);
 		menuBar.getMenus().addAll(fileMenu, toolsMenu, MainWindowFrame.getWindowMenu(), MainWindowFrame.getHelpMenu());
 	}
 
+	private final void htmlExportEvent(ActionEvent e) {
+		
+	}
+	
 	private final void bulkRenamerEvent(ActionEvent e) {
 		//TODO finish bulk renamer
 	}
@@ -683,7 +692,13 @@ public class MovieViewController implements MediaScene {
 	 * @param e
 	 */
 	private final void findDuplicatesEvent(ActionEvent e) {
-		//TODO finish finding duplicates
+		final Stage stage = new Stage();
+		stage.setScene(new Scene(FindDuplicateMovies.getAnchorPane()));
+		stage.initOwner(MediaManager.getMainFrameStage());
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.sizeToScene();
+		stage.setTitle("Find Duplicate Movies");
+		stage.show();
 	}
 
 	/**

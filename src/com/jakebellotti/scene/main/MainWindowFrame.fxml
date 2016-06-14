@@ -12,9 +12,9 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <StackPane fx:id="contentWindow" layoutY="33.0" prefHeight="617.0" prefWidth="1300.0" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0" />
-      <StackPane fx:id="menuBarPane" prefHeight="35.0" prefWidth="1300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <StackPane fx:id="menuBarPane" minHeight="35.0" prefHeight="35.0" prefWidth="1300.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <MenuBar fx:id="menuBar">
+            <MenuBar fx:id="menuBar" minHeight="35.0" minWidth="1300.0" style="-fx-font-size: 15px;">
                <menus>
                   <Menu mnemonicParsing="false" text="File">
                      <items>

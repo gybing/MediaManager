@@ -3,12 +3,12 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane minHeight="520.0" minWidth="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),        linear-gradient(#020b02, #3a3a3a),        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);">
+      <StackPane layoutY="-1.0" style="-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),        linear-gradient(#020b02, #3a3a3a),        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
          <children>
             <Label alignment="CENTER" minHeight="40.0" minWidth="600.0" prefWidth="0.0" style="-fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , -1 ); -fx-text-fill: white;" text="Movie Data">
                <font>
@@ -16,9 +16,9 @@
                </font>
             </Label>
          </children>
-      </Pane>
-      <Button fx:id="resetAllMovieDataButton" layoutX="473.0" layoutY="42.0" maxHeight="25.0" maxWidth="90.0" mnemonicParsing="false" text="Reset All Data" />
-      <Pane layoutY="95.0" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),        linear-gradient(#020b02, #3a3a3a),        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);">
+      </StackPane>
+      <Button fx:id="resetAllMovieDataButton" layoutX="473.0" layoutY="42.0" maxHeight="25.0" maxWidth="90.0" mnemonicParsing="false" text="Reset All Data" AnchorPane.rightAnchor="37.0" />
+      <StackPane layoutY="94.0" style="-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),        linear-gradient(#020b02, #3a3a3a),        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="94.0">
          <children>
             <Label alignment="CENTER" minHeight="40.0" minWidth="600.0" prefWidth="0.0" style="-fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , -1 ); -fx-text-fill: white;" text="TV Series Data">
                <font>
@@ -26,9 +26,9 @@
                </font>
             </Label>
          </children>
-      </Pane>
-      <Button fx:id="resetAllTVSeriesButton" layoutX="473.0" layoutY="138.0" maxHeight="25.0" maxWidth="90.0" mnemonicParsing="false" text="Reset All Data" />
-      <Pane layoutY="166.0" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),        linear-gradient(#020b02, #3a3a3a),        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);">
+      </StackPane>
+      <Button fx:id="resetAllTVSeriesButton" layoutX="473.0" layoutY="138.0" maxHeight="25.0" maxWidth="90.0" mnemonicParsing="false" text="Reset All Data" AnchorPane.rightAnchor="37.0" />
+      <StackPane layoutY="165.0" style="-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),        linear-gradient(#020b02, #3a3a3a),        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="165.0">
          <children>
             <Label alignment="CENTER" minHeight="40.0" minWidth="600.0" prefWidth="0.0" style="-fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , -1 ); -fx-text-fill: white;" text="Music Data">
                <font>
@@ -36,10 +36,10 @@
                </font>
             </Label>
          </children>
-      </Pane>
-      <Label fx:id="movieDataStatusLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="6.0" layoutY="47.0" prefHeight="21.0" prefWidth="460.0" text="Currently 1,236 entries" />
-      <Label fx:id="tvSeriesStatusLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="6.0" layoutY="140.0" prefHeight="21.0" prefWidth="460.0" text="Currently 5 series, 56 episodes" />
-      <Button fx:id="resetAllMovieDefinitionButton" layoutX="473.0" layoutY="68.0" maxHeight="25.0" maxWidth="90.0" mnemonicParsing="false" text="Reset All Data" />
-      <Label fx:id="movieDefinitionDataStatusLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="6.0" layoutY="70.0" prefHeight="21.0" prefWidth="460.0" text="Currently 1,236 entries" />
+      </StackPane>
+      <Label fx:id="movieDataStatusLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="6.0" layoutY="47.0" prefHeight="21.0" prefWidth="460.0" text="Currently 1,236 entries" AnchorPane.rightAnchor="134.0" />
+      <Label fx:id="tvSeriesStatusLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="6.0" layoutY="140.0" prefHeight="21.0" prefWidth="460.0" text="Currently 5 series, 56 episodes" AnchorPane.rightAnchor="134.0" />
+      <Button fx:id="resetAllMovieDefinitionButton" layoutX="473.0" layoutY="68.0" maxHeight="25.0" maxWidth="90.0" mnemonicParsing="false" text="Reset All Data" AnchorPane.rightAnchor="37.0" />
+      <Label fx:id="movieDefinitionDataStatusLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="6.0" layoutY="70.0" prefHeight="21.0" prefWidth="460.0" text="Currently 1,236 entries" AnchorPane.rightAnchor="134.0" />
    </children>
 </AnchorPane>

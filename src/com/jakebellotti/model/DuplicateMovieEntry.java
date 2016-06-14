@@ -1,4 +1,4 @@
-package com.jakebellotti.scene.movie;
+package com.jakebellotti.model;
 
 import java.util.ArrayList;
 
