@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import com.jakebellotti.MediaManager;
-import com.jakebellotti.model.DuplicateMovieEntry;
+import com.jakebellotti.model.movie.DuplicateMovieEntry;
 import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
 

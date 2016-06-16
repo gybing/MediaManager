@@ -137,6 +137,14 @@ public class MediaRepository {
 		return loadedTVSeries;
 	}
 
+	public void addMovieEntryFilter(final ListFilter<MovieEntry> filter) {
+		movieEntryFilters.add(filter);
+	}
+	
+	public ArrayList<ListFilter<MovieEntry>> getMovieEntryFilters() {
+		return movieEntryFilters;
+	}
+	
 	/**
 	 * Tests a MovieEntry object against all of the ListFilter objects to
 	 * determine whether or not this MovieEntry should be added.
@@ -146,6 +154,8 @@ public class MediaRepository {
 	 */
 	private final boolean shouldAddMovieEntry(MovieEntry movieEntry) {
 		for (ListFilter<MovieEntry> currentFilter : movieEntryFilters) {
+			if(currentFilter == null)
+				continue;
 			if (!currentFilter.shouldAdd(movieEntry))
 				return false;
 		}

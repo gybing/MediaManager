@@ -10,8 +10,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
@@ -78,6 +82,24 @@ public class DatabaseConnection {
 	public final void createRequiredTables() {
 		// TODO properly create all tables
 		// logger.println(createTable(DatabaseTableConstants.createMovieListEntryTable()));
+	}
+	
+	public final Set<String> getUniqueMovieGenres() {
+		Set<String> toReturn = new HashSet<>();		
+		
+		try(Statement s = conn.createStatement()) {
+			ResultSet set = s.executeQuery("SELECT DISTINCT genre FROM tblMovieDefinition");
+			while(set.next()) {
+				String genreString = set.getString("genre");
+				String[] genres = genreString.split(",");
+				for(String genre: genres)
+					toReturn.add(genre.trim());
+			}
+			set.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new TreeSet<String>(toReturn);
 	}
 	
 	public void insertRecentMovieEntry(MovieEntry entry) {

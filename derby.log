@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Tue Jun 14 11:42:55 AWST 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0155-4d01-4158-00000d433c38 
+Thu Jun 16 14:36:12 AWST 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0155-57ec-9b5e-00000d433700 
 on database directory F:\___eclipse\workspace\MediaManager\data\db with class loader sun.misc.Launcher$AppClassLoader@73d16e93 
 Loaded from file:/F:/___eclipse/workspace/MediaManager/lib/derby.jar
 java.vendor=Oracle Corporation

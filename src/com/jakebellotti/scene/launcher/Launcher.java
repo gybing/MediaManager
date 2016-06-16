@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
 import javafx.stage.Stage;
 
 /**
@@ -29,7 +30,7 @@ public class Launcher extends Application {
 		launcherLoader.setController(MediaManager.getMaincontroller());
 		
 		
-		MediaManager.getMainFrameStage().setScene(new Scene(root));
+		MediaManager.getMainFrameStage().setScene(new Scene(root, 500, 500, false, SceneAntialiasing.BALANCED));
 		MediaManager.getMainFrameStage().show();
 	}
 

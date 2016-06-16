@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.derby.iapi.services.monitor.ModuleSupportable;
 import org.controlsfx.control.textfield.TextFields;
 
 import com.jakebellotti.scene.MediaScene;
@@ -23,6 +24,7 @@ import com.jakebellotti.fx.ListViewModifier;
 import com.jakebellotti.fx.impl.*;
 import com.jakebellotti.io.Logger;
 import com.jakebellotti.model.ListOrderer;
+import com.jakebellotti.model.MediaRepository;
 import com.jakebellotti.model.ReturnResultWrapper;
 import com.jakebellotti.model.ReturnStatus;
 import com.jakebellotti.model.filenamecleanser.FileNameCleanserRepository;
@@ -226,6 +228,8 @@ public class MovieViewController implements MediaScene {
 
 		this.upMoviesButton.setOnMouseClicked(this::upMoviesButtonClicked);
 		this.downMoviesButton.setOnMouseClicked(this::downMoviesButtonClicked);
+		manageFiltersButton.setOnMouseClicked(this::manageFiltersButtonClicked);
+		resetFiltersButton.setOnMouseClicked(this::resetFiltersButtonClicked);
 
 		// Add data
 		refreshMovieList(false);
@@ -234,6 +238,19 @@ public class MovieViewController implements MediaScene {
 		this.orderByComboBox.getSelectionModel().selectFirst();
 		this.viewTypeComboBox.getSelectionModel().selectFirst();
 		this.movieList.getSelectionModel().selectFirst();
+	}
+	
+	private final void resetFiltersButtonClicked(MouseEvent e) {
+		//TODO reset search text
+		MovieScenes.resetMovieFilters();
+		MediaManager.getMediaRepository().getMovieEntryFilters().clear();
+		searchTextField.setText(null);
+		
+		refresh();
+	}
+	
+	private final void manageFiltersButtonClicked(MouseEvent e) {
+		MovieScenes.openFilterMoviesAnchorPane();
 	}
 
 	/**
@@ -496,6 +513,7 @@ public class MovieViewController implements MediaScene {
 			return;
 		}
 		this.moviePoster.setImage(this.getPosterImage(newEntry.getMovieEntry()));
+		this.automatedDataButton.setText("Select Another One");
 
 		// Update regardless of there being a definition
 		this.moviePlotTextArea.clear();
@@ -809,7 +827,7 @@ public class MovieViewController implements MediaScene {
 		this.searchTextField = newSearchTextField;
 		this.root.getChildren().add(this.searchTextField);
 		this.searchTextField.textProperty().addListener(e -> {
-			MediaManager.getMediaRepository().setMovieSearchText(this.searchTextField.getText().trim());
+			MediaManager.getMediaRepository().setMovieSearchText(searchTextField.getText() == null? "": searchTextField.getText().trim());
 			this.refreshMovieList(true);
 		});
 	}

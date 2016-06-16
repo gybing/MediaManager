@@ -2,13 +2,17 @@ package com.jakebellotti.scene.main;
 
 import java.io.IOException;
 
+import com.jakebellotti.MediaManager;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -30,7 +34,9 @@ public class MainWindowFrame {
 			stage.hide();
 			loader.setController(controller);
 			final Parent root = loader.load(MainWindowFrame.class.getResource("MainWindowFrame.fxml").openStream());
-			stage.setScene(new Scene(root));
+			//stage.setScene(new Scene(root));
+			
+			stage.setScene(new Scene(root, 1300, 685, false, SceneAntialiasing.BALANCED));
 			stage.setResizable(true);
 			
 			stage.show();
@@ -50,6 +56,7 @@ public class MainWindowFrame {
 		if(helpMenu == null) {
 			helpMenu = new Menu("Help");
 			MenuItem about = new MenuItem("About");
+			about.setOnAction(MainWindowFrame::aboutAction);
 			helpMenu.getItems().addAll(about);
 		}
 		return helpMenu;
@@ -76,6 +83,16 @@ public class MainWindowFrame {
 			windowMenu.getItems().addAll(recentMedia, movieView, tvSeriesView, musicView);
 		}
 		return windowMenu;
+	}
+	
+	private static final void aboutAction(ActionEvent e) {
+		final Stage stage = new Stage();
+		stage.setScene(new Scene(AboutPage.getAnchorPane()));
+		stage.sizeToScene();
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(MediaManager.getMainFrameStage());
+		stage.setTitle("Media Manager - About");
+		stage.show();
 	}
 	
 	private static final void recentMediaMenuItemAction(ActionEvent e) {

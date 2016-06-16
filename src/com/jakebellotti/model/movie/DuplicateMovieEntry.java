@@ -1,9 +1,6 @@
-package com.jakebellotti.model;
+package com.jakebellotti.model.movie;
 
 import java.util.ArrayList;
-
-import com.jakebellotti.model.movie.MovieDefinition;
-import com.jakebellotti.model.movie.MovieEntry;
 
 /**
  *
