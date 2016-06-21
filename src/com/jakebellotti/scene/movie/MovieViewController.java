@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.derby.iapi.services.monitor.ModuleSupportable;
 import org.controlsfx.control.textfield.TextFields;
 
 import com.jakebellotti.scene.MediaScene;
@@ -24,19 +23,14 @@ import com.jakebellotti.fx.ListViewModifier;
 import com.jakebellotti.fx.impl.*;
 import com.jakebellotti.io.Logger;
 import com.jakebellotti.model.ListOrderer;
-import com.jakebellotti.model.MediaRepository;
 import com.jakebellotti.model.ReturnResultWrapper;
 import com.jakebellotti.model.ReturnStatus;
 import com.jakebellotti.model.filenamecleanser.FileNameCleanserRepository;
-import com.jakebellotti.model.listorderer.movie.MovieAscendingAlphabeticalListOrderer;
-import com.jakebellotti.model.listorderer.movie.MovieAverageScoreListOrderer;
-import com.jakebellotti.model.listorderer.movie.MovieDescendingAlphabeticalListOrderer;
-import com.jakebellotti.model.listorderer.movie.MovieIMDBScoreListOrderer;
-import com.jakebellotti.model.listorderer.movie.MovieMetascoreListOrderer;
 import com.jakebellotti.model.movie.MovieDefinition;
 import com.jakebellotti.model.movie.MovieEntry;
 import com.jakebellotti.model.movie.MovieEntryWrapper;
 import com.jakebellotti.model.movie.NewMovieDefinition;
+import com.jakebellotti.plugin.MovieListOrdererRepository;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -201,11 +195,10 @@ public class MovieViewController implements MediaScene {
 		this.viewTypeComboBox.getItems().add(new TilesSmallListViewModifier(this));
 		this.viewTypeComboBox.getItems().add(new TilesMediumListViewModifier(this));
 
-		this.orderByComboBox.getItems().add(new MovieAscendingAlphabeticalListOrderer());
-		this.orderByComboBox.getItems().add(new MovieDescendingAlphabeticalListOrderer());
-		this.orderByComboBox.getItems().add(new MovieIMDBScoreListOrderer());
-		this.orderByComboBox.getItems().add(new MovieMetascoreListOrderer());
-		this.orderByComboBox.getItems().add(new MovieAverageScoreListOrderer());
+		//PLUGIN insert all loaded from repository
+		//PLUGIN support ordering of movie orders
+		this.orderByComboBox.getItems().addAll(MovieListOrdererRepository.getOrderers());
+//		this.orderByComboBox.getItems().add(new MovieAverageScoreListOrderer());
 
 		this.imdbScoreLabel.setStyle("-fx-text-fill: black;");
 		this.metascoreLabel.setStyle("-fx-text-fill: black;");

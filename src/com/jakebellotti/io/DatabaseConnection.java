@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -84,11 +83,29 @@ public class DatabaseConnection {
 		// logger.println(createTable(DatabaseTableConstants.createMovieListEntryTable()));
 	}
 	
+	public final Set<String> getUniqueMovieActors() {
+		Set<String> toReturn = new HashSet<>();		
+		try(Statement s = conn.createStatement()) {
+			String query = "SELECT DISTINCT tblMovieDefinition.actors FROM tblMovieEntry INNER JOIN tblMovieDefinition ON tblMovieEntry.assignedMovieDefinitionID = tblMovieDefinition.ID";
+			ResultSet set = s.executeQuery(query);
+			while(set.next()) {
+				String actorString = set.getString("actors");
+				String[] actors = actorString.split(",");
+				for(String actor: actors)
+					toReturn.add(actor.trim());
+			}
+			set.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new TreeSet<String>(toReturn);
+	}
+	
 	public final Set<String> getUniqueMovieGenres() {
 		Set<String> toReturn = new HashSet<>();		
 		
 		try(Statement s = conn.createStatement()) {
-			ResultSet set = s.executeQuery("SELECT DISTINCT genre FROM tblMovieDefinition");
+			ResultSet set = s.executeQuery("SELECT DISTINCT tblMovieDefinition.genre FROM tblMovieEntry INNER JOIN tblMovieDefinition ON tblMovieEntry.assignedMovieDefinitionID = tblMovieDefinition.ID");
 			while(set.next()) {
 				String genreString = set.getString("genre");
 				String[] genres = genreString.split(",");

@@ -73,6 +73,7 @@ public class LauncherController {
 		loadingScreen.addTask(new SettingsIOSaveLoadingTask());
 		loadingScreen.addTask(new DeserializeIndexedMediaLoadingTask());
 		loadingScreen.addTask(new DeserializeMediaDataLoadingTask());
+		loadingScreen.addTask(new GroovyScriptsLoadingTask());
 		loadingScreen.addTask(new FinishingDelayLoadingTask());
 		//TODO scan indexed directories if needed here for new media
 		
